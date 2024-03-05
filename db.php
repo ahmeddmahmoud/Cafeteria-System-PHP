@@ -1,76 +1,50 @@
 <?php
-
-class Database
+class DB
 {
-    private $servername = "localhost";
-    private $username = "root";
+    private $host = "localhost";
+    private $user = "root";
+    private $dbname = "cafeteria_DB";
     private $password = "";
-    private $dbname = "os44";
-    public $conn;
+    private $connection;
 
-    // Constructor
-    public function __construct()
+    function __construct()
     {
-        $this->conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname);
-
-        if ($this->conn->connect_error) {
-            die(json_encode( //sends json object with status and message
-                array(
-                    "status" => "Faile,Connection faliure",
-                    "message" => "Connection failed: " . $this->conn->connect_error
-                )
-            ));
+        $this->connection = new mysqli($this->host, $this->user, $this->password, $this->dbname);
+        if ($this->connection->connect_error) {
+            die("Connection failed: " . $this->connection->connect_error);
         }
     }
 
-    // Create Record
-    public function createRecord($tableName, $data)
+    function getData($tableName, $condition = "1")
     {
-        $columns = implode(', ', array_keys($data));
-        $values = "'" . implode("', '", array_values($data)) . "'";
-        $sql = "INSERT INTO $tableName ($columns) VALUES ($values)";
-        return $this->conn->query($sql);
+        $result = $this->connection->query("SELECT * FROM $tableName WHERE $condition");
+        if (!$result) {
+            die("Error fetching data: " . $this->connection->error);
+        }
+        return $result;
     }
 
-    // Read Record
-    public function readRecord($tableName, $condition = "")
+    function updateData($tableName, $setValues, $condition = "1")
     {
-        $sql = "SELECT * FROM $tableName";
-        if ($condition != "") {
-            $sql .= " WHERE $condition";
+        $sql = "UPDATE $tableName SET $setValues WHERE $condition";
+        if ($this->connection->query($sql) === FALSE) {
+            die("Error updating data: " . $this->connection->error);
         }
-        $result = $this->conn->query($sql);
-        $records = [];
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                $records[] = $row;
-            }
-        }
-        return $records;
     }
 
-    // Update Record
-    public function updateRecord($tableName, $data, $condition)
+    function insertInto($tableName, $columnNames, $values)
     {
-        $set = '';
-        foreach ($data as $key => $value) {
-            $set .= "$key = '$value', ";
+        $sql = "INSERT INTO $tableName $columnNames VALUES $values";
+        if ($this->connection->query($sql) === FALSE) {
+            die("Error inserting data: " . $this->connection->error);
         }
-        $set = rtrim($set, ', ');
-        $sql = "UPDATE $tableName SET $set WHERE $condition";
-        return $this->conn->query($sql);
     }
 
-    // Delete Record
-    public function deleteRecord($tableName, $condition)
+    function delete($tableName, $condition = "1")
     {
         $sql = "DELETE FROM $tableName WHERE $condition";
-        return $this->conn->query($sql);
-    }
-
-    // Destructor
-    public function __destruct()
-    {
-        $this->conn->close();
+        if ($this->connection->query($sql) === FALSE) {
+            die("Error deleting data: " . $this->connection->error);
+        }
     }
 }
