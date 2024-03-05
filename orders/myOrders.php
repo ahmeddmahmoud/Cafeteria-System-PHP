@@ -6,7 +6,7 @@ require_once '../db.php';
 //if this page loaded with info from before
 // if ($page == 'filterOrders.php') {
 // }
-$db = new Database();
+$db = new db();
 $table = 'UserOrdersInfo'; //In fact this is a view not a table
 //to ve changed Waiting on AWAD
 //*********************** */
