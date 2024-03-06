@@ -2,9 +2,9 @@
 class DB
 {
     private $host = "localhost";
-    private $user = "root";
-    private $dbname = "cafeteria_DB";
-    private $password = "";
+    private $user = "php";
+    private $dbname = "cafe";
+    private $password = "1234";
     private $connection;
 
     function __construct()
