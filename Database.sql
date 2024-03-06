@@ -51,10 +51,13 @@ CREATE TABLE `orders` (
   `date` timestamp NOT NULL,
   `status` varchar(50) NOT NULL,
   `notes` text,
+  `room_no` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
+  KEY `fk_room_no` (`room_no`),
+  CONSTRAINT `fk_room_no` FOREIGN KEY (`room_no`) REFERENCES `rooms` (`room_no`) ON DELETE CASCADE,
   CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `chk_status` CHECK ((`status` in (_cp850'processing',_cp850'out for delivery',_cp850'done')))
+  CONSTRAINT `chk_status` CHECK ((`status` in (_utf8mb4'processing',_utf8mb4'out for delivery',_utf8mb4'done')))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -143,6 +146,7 @@ CREATE TABLE `rooms` (
 
 LOCK TABLES `rooms` WRITE;
 /*!40000 ALTER TABLE `rooms` DISABLE KEYS */;
+INSERT INTO `rooms` VALUES (1,101),(2,102),(3,103);
 /*!40000 ALTER TABLE `rooms` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -158,14 +162,14 @@ CREATE TABLE `user` (
   `name` varchar(100) NOT NULL,
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `room_no` int NOT NULL,
+  `room_no` int DEFAULT NULL,
   `image` varchar(255) NOT NULL,
   `role` enum('admin','user') NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   KEY `room_no` (`room_no`),
   CONSTRAINT `user_ibfk_1` FOREIGN KEY (`room_no`) REFERENCES `rooms` (`room_no`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -174,6 +178,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES (3,'John Doe','john@example.com','password123',NULL,'image1.jpg','admin'),(4,'Jane Smith','jane@example.com','pass456',NULL,'image2.jpg','user'),(5,'Mohamed Awad','mohamed.awad.elgammal@gmail.com','123',NULL,'image3.jpg','user');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -186,4 +191,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-03-06 16:30:22
+-- Dump completed on 2024-03-06 18:43:42
