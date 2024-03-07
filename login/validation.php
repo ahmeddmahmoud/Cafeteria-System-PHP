@@ -17,7 +17,7 @@ try {
 
     if (count($errors) > 0) {
         $errors = json_encode($errors);
-        header("location:login.php?error=" . $errors);
+        header("location:login.php?errors=" . $errors);
         exit(); // Stop further execution after redirection
     } else {
 
@@ -53,7 +53,7 @@ try {
             }
             exit();
         } else {
-            header("Location: login.php?error=1");
+            header("Location: login.php?errors=1");
             exit();
         }
 

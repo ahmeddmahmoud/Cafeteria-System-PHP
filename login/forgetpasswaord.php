@@ -59,6 +59,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["check-email"])) {
 
         // Save the code in a session variable
         $_SESSION['reset_code'] = $code;
+        $_SESSION['email'] = $email;
+
 
         // Send the code to the user's email
         $subject = "Password Reset Code";
@@ -66,6 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["check-email"])) {
         $sender = "From: mohamed.awad.elgammal@gmail.com";
         if (mail($email, $subject, $message, $sender)) {
             echo "We've sent a password reset code to your email - $email";
+            header("Location: updatePassword.php?email=" . urlencode($email));
         } else {
             echo "Failed to send the code. Please try again later.";
         }
