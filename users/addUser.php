@@ -6,13 +6,17 @@ function validateData($data) {
     $data = htmlspecialchars($data);
     return $data;
 }
+require "../db.php";
+$db  = new Db();
+$db->__construct();
+$connection = $db->get_connection();
 
 
-$connection = new mysqli("localhost", "root", "12345m", "cafe_Db");
-if ($connection->connect_error) {
-    die("connection failed");
 
-}
+// if ($connection->connect_error) {
+//     die("connection failed");
+
+// }
 $name = $_POST['name']; 
 $email = $_POST['email'];   
 $password = $_POST['password'];
@@ -27,8 +31,8 @@ echo "</br>";
 
 echo $name;
 try {
-    $stm = $connection->prepare("INSERT INTO user (name, email, password, room_no, ext, image) VALUES (?,?,?, ?, ?, ?)");
-    $stm->execute(array($name, $email, $password, $Room_No, $Ext, $imageName));
+    $stm = $connection->prepare("INSERT INTO user (name, email, password,  image) VALUES (?,?,?, ?)");
+    $stm->execute(array($name, $email, $password, $imageName));
     
 
 

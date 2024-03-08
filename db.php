@@ -14,6 +14,9 @@ class DB
             die("Connection failed: " . $this->connection->connect_error);
         }
     }
+    function get_connection() {
+        return $this->connection;
+    }
 
     function getData($tableName, $condition = "1")
     {
