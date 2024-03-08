@@ -33,6 +33,14 @@
 
 
 <?php
+require_once '../db.php';
+try {
+    $db = new DB();
+} catch (Exception $e) {
+    // Handle the database connection error gracefully by redirecting to the login page
+    header("Location: login.php?error=Invalid_dbConnection");
+    exit();
+}
 session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["update_password"])) {
@@ -41,36 +49,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["update_password"])) {
     $email =  $_SESSION['email'];
 
     if ($_SESSION['reset_code'] == $reset_code) {
-        // Reset code is valid, hash the new password
-        // $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
-
         // Update the password in the database
-        $connection = new mysqli("localhost", "root", "gg4019268", "cafeteria_db");
 
-        if ($connection->connect_error) {
-            die("Connection failed: " . $connection->connect_error);
-        }
-
+        // $sql=$db->updateData("user", "password = ?"," email = ?");
+        // $sql = $db->updateData("user", "password = '$new_password'", "email = '$email'");
         $sql = "UPDATE user SET password = ? WHERE email = ?";
-        $stmt = $connection->prepare($sql);
+        $stmt = $db->getConnection()->prepare($sql);
         $stmt->bind_param("ss", $new_password, $email);
         $stmt->execute();
 
         if ($stmt->affected_rows > 0) {
-            echo "Password updated successfully.";
+            // echo "Password updated successfully.";
+            header("Location: login.php"); 
         } else {
             echo "Failed to update password.";
-            echo $email;
+            // echo $email;
         }
 
         // Close connection
         $stmt->close();
-        $connection->close();
+        $db->getConnection()->close();
     } else {
         echo "Invalid reset code.";
     }
 } else {
-    echo "Form submission error.";
+    // echo "Form submission error.";
 }
 ?>
 
