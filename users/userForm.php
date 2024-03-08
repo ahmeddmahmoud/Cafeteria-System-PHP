@@ -16,7 +16,7 @@
         </div>
         <div class="mb-3">
             <label for="password">Confirm Password</label>
-            <input type="password" name="password" class="form-control">
+            <input type="password" class="form-control">
         </div>
         <div class="mb-3">
             <label for="Room No">Room No.</label>
@@ -30,7 +30,7 @@
             <label for="image">Profile Picture</label>
             <input type="file" class="form-control" name="image">
         </div>
-            <button type="submit" value="save" name="save" class="btn btn-primary my-3">Save</button>
+            <button type="submit" value="add" name="add" class="btn btn-primary my-3">Save</button>
             <button type="button" class="btn btn-danger ms-5">Cancel</button>
     </form>
 
