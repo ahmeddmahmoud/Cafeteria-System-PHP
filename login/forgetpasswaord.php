@@ -31,23 +31,26 @@
 ?>
 
 <?php
-
+require_once '../db.php';
+try {
+    $db = new DB();
+} catch (Exception $e) {
+    // Handle the database connection error gracefully by redirecting to the login page
+    header("Location: login.php?error=Invalid_dbConnection");
+    exit();
+}
 session_start();
 
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["check-email"])) {
     // Retrieve the email entered by the user
     $email = $_POST["email"];
-    $connection = new mysqli("localhost", "root", "gg4019268", "cafeteria_DB");
-
-
-    if ($connection->connect_error) {
-        die("Connection failed: " . $connection->connect_error);
-    }
 
     // Prepare and execute the query to check if the email exists in the database
+    
+    // $result=$db->getData("user","email ={$_POST['email']}}");
     $sql = "SELECT * FROM user WHERE email = ?";
-    $stmt = $connection->prepare($sql);
+    $stmt = $db->getConnection()->prepare($sql);
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -78,6 +81,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["check-email"])) {
 
     // Close connection
     $stmt->close();
-    $connection->close();
+    // $connection->close();
 }
 ?>

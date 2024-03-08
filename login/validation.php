@@ -1,4 +1,15 @@
 <?php
+require_once '../db.php';
+
+try {
+    $db = new DB();
+} catch (Exception $e) {
+    // Handle the database connection error gracefully by redirecting to the login page
+    header("Location: login.php?error=Invalid_dbConnection");
+    exit();
+}
+
+
 $errors = [];
 // var_dump($_POST);
 $email = validate_data($_POST['email']);
@@ -13,25 +24,19 @@ try {
         $errors["password"] = "Please enter a password.";
     }
 
-    // You can add more validations as needed for other fields
-
     if (count($errors) > 0) {
         $errors = json_encode($errors);
         header("location:login.php?errors=" . $errors);
         exit(); // Stop further execution after redirection
     } else {
 
-        // Perform database operations securely (consider using prepared statements)
-        $connection = new mysqli("localhost", "root", "gg4019268", "cafeteria_DB");
-        if ($connection->connect_errno) {
-            throw new Exception("Failed to connect to MySQL: " . $connection->connect_error);
-        }
+        $result=$db->getData("user","email='$email' AND password='$password'");
 
-        $query = "SELECT * FROM user WHERE email='$email' AND password='$password'";
-        $result = $connection->query($query);
+        // $query = "SELECT * FROM user WHERE email='$email' AND password='$password'";
+        // $result = $connection->query($query);
 
         if (!$result) {
-            throw new Exception("Query failed: " . $connection->error);
+            header("Location: login.php?errors=db_error");
         }
 
         $data = $result->fetch_array(MYSQLI_ASSOC);
@@ -44,7 +49,10 @@ try {
             $_SESSION['email'] = $data['email'];
             $_SESSION['name'] = $data['name'];
             $_SESSION['id'] = $data['id'];
-            $_SESSION['role'] = $data['role']; 
+            $_SESSION['role'] = $data['role'];
+            $_SESSION['image'] = $data['image'];
+            $_SESSION['room_no'] = $data['room_no']; 
+
 
             if ($_SESSION['role'] == 'admin') {
                 header("Location: admin_dashboard.php"); 
@@ -61,7 +69,7 @@ try {
         $connection->close();
     }
 } catch (Exception $e) {
-    var_dump($e->getMessage());
+    header("Location: login.php?errors=db_error");
 }
 
 function validate_data($data)
