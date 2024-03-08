@@ -53,5 +53,17 @@ class DB {
     function update_data($tableName,$setData,$condition){
         return $this->connection->query("update $tableName set $setData where $condition");   
     }
+
+    function getDataPagination($tableName, $condition = "1", $limit, $offset ) {
+        $result = $this->connection->query("SELECT * FROM $tableName WHERE $condition limit $limit offset $offset");
+        if (!$result) {
+            die("Error fetching data: " . $this->connection->error);
+        }
+        return $result;
+    }
+
+    function getCount($tableName){
+        return $this->connection->query("select COUNT(*) as total FROM $tableName");   
+    }
 }
 ?>
