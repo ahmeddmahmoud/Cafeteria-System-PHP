@@ -1,6 +1,6 @@
 <?php
 $errors = [];
-var_dump($_POST);
+// var_dump($_POST);
 $email = validate_data($_POST['email']);
 $password = validate_data($_POST['password']); // Include password validation
 
@@ -53,6 +53,7 @@ try {
             }
             exit();
         } else {
+            
             header("Location: login.php?errors=1");
             exit();
         }
