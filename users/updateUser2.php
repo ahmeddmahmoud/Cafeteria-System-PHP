@@ -7,13 +7,13 @@ $password = $_POST['password'];
 $Room_No = $_POST['room_no'];
 $Ext = $_POST['ext'];
 
-$image=$_FILES['image'];
-$imgName=$_FILES['image']['name'];
+// $image=$_FILES['image'];
+// $imgName=$_FILES['image']['name'];
 $imageNameF = $_POST['image'];
 
 
 require "../db.php";
-$db = new Db();
+$db = new DB();
 $db->__construct();
 session_start();
 $oldRoom = $_SESSION['roomNo'];

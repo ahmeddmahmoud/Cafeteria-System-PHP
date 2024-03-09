@@ -25,7 +25,7 @@ $_SESSION['roomNo'] = $roomNo;
 
 
 <div class="container">
-    <form action="updateUser2.php" method="post">
+    <form action="updateUser2.php" method="post" enctype="multipart/form-data">
         <div class="mb-3">
             <label for="">ID</label>
             <input type="text" name="id" class="form-control" value="<?= $result['id'] ?>" readonly>
