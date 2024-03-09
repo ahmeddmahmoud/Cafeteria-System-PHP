@@ -18,14 +18,17 @@ $result = $data -> fetch_array(MYSQLI_ASSOC);
         <div class="mb-3">
             <label for="">ID</label>
             <input type="text" name="id" class="form-control" value="<? $result['id'] ?>" readonly>
+            
         </div>
         <div class="mb-3">
             <label>Name</label>
             <input type="text" name="name" class="form-control" value="<? $result['name'] ?>" >
+            <p class="text-danger"><?php if(isset($errors['name'])) echo $errors['name']; ?></p>
         </div>
         <div class="mb-3">
             <label for="email">Email</label>
             <input type="email" name="email" class="form-control" value="<? $result['email'] ?>">
+            <p class="text-danger"><?php if(isset($errors['email'])) echo $errors['email']; ?></p>
         </div>
         <div class="mb-3">
             <label for="password">Password</label>
@@ -38,6 +41,7 @@ $result = $data -> fetch_array(MYSQLI_ASSOC);
         <div class="mb-3">
             <label for="Room No">Room No.</label>
             <input type="text" name="room_no" class="form-control" value="<? $result['room_no'] ?>">
+            <p class="text-danger"><?php if(isset($errors['room_no'])) echo $errors['room_no']; ?></p>
         </div>
         <div class="mb-3">
             <label for="Ext">Ext.</label>
