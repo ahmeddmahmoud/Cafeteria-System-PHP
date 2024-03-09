@@ -8,12 +8,14 @@ echo $id;
 require "../db.php";
 $db = new DB();
 $db->__construct();
-$data = $db->select_data("user", "id = '$id'");
+// $data = $db->select_data("user", "id = '$id'");
+$data = $db->getData("user");
 $result = $data->fetch_array(MYSQLI_ASSOC);
 var_dump($result);
 // die();
 $roomNo = $result['room_no'];
-$roomData = $db->select_data("rooms", "room_no = '$roomNo' ");
+// $roomData = $db->select_data("rooms", "room_no = '$roomNo' ");
+$roomData = $db->getData("rooms", "1", "room_no = '$roomNo' ");
 $roomResult = $roomData->fetch_array(MYSQLI_ASSOC);
 echo "</br>";
 var_dump($roomResult);
@@ -63,8 +65,8 @@ $_SESSION['roomNo'] = $roomNo;
             <input type="file" class="form-control" name="image">
             <p class="text-danger"><?php if (isset($errors['image'])) echo $errors['image']; ?></p>
         </div>
-            <button type="submit"  class="btn btn-primary my-3" name="update" value="update">Save</button>
-            <button type="button" class="btn btn-danger ms-5" >Cancel</button>
+        <button type="submit" class="btn btn-primary my-3" name="update" value="update">Save</button>
+        <button type="button" class="btn btn-danger ms-5">Cancel</button>
     </form>
 
 </div>

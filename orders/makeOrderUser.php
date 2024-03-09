@@ -7,9 +7,14 @@ session_start();
 $image = "../imgs/users/" . $_SESSION['image'];
 $userName = $_SESSION['name'];
 $userID = $_SESSION['id'];
-$lastOrderID = $obj->getData("orders", "user_id={$userID} order by id desc limit 1", "id")->fetch_assoc()['id'];
-$lastOrder = $obj->getData("orders_product as o_p, product as p", "p.id = o_p.product_id 
+try {
+  $lastOrderID = $obj->getData("orders", "user_id={$userID} order by id desc limit 1", "id")->fetch_assoc()['id'];
+  $lastOrder = $obj->getData("orders_product as o_p, product as p", "p.id = o_p.product_id 
 and o_p.order_id={$lastOrderID}", "p.name,p.image")->fetch_all(MYSQLI_ASSOC);
+} catch (Exception $e) {
+  echo "oops";
+  $lastOrder = "Empry";
+}
 // echo "<pre>";
 // var_dump($rooms);
 // echo "</pre>";
@@ -87,16 +92,21 @@ and o_p.order_id={$lastOrderID}", "p.name,p.image")->fetch_all(MYSQLI_ASSOC);
     <div class=" col-7 h-50 row ">
       <div class="last row h-50 mb-2">
         <?php
-        for ($i = 0; $i < count($lastOrder); $i++) {
-          echo "<div class=' card col-3 mb-2  text-center'>";
-          foreach ($lastOrder[$i] as $key => $value) {
-            if ($key == 'image') echo "<img class='h-75 w-75' src='../imgs/products/$value'>";
+        if ($lastOrder != "") {
+          for ($i = 0; $i <  count($lastOrder); $i++) {
+            echo "<div class=' card col-3 mb-2  text-center'>";
+            foreach ($lastOrder[$i] as $key => $value) {
+              if ($key == 'image') echo "<img class='h-75 w-75' src='../imgs/products/$value'>";
+            }
+            foreach ($lastOrder[$i] as $key => $value) {
+              if ($key == "name") echo "<h4>$value</h4> ";
+            }
+            echo "</div>";
           }
-          foreach ($lastOrder[$i] as $key => $value) {
-            if ($key == "name") echo "<h4>$value</h4> ";
-          }
-          echo "</div>";
+        } else {
+          echo "No orders yet";
         }
+
         // die();
         ?>
       </div>
