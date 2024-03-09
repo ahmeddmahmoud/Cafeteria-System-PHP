@@ -4,35 +4,42 @@
 <?php
 
 $id  = $_GET['id'];
+echo $id;
 require "../db.php";
 $db = new DB();
 $db->__construct();
-$data = $db->getData("users" , "id = '$id'");
+$data = $db->select_data("user" , "id = '$id'");
 $result = $data -> fetch_array(MYSQLI_ASSOC);
+
+$roomNo = $result['room_no'];
+$roomData = $db->select_data("rooms", "room_no = '$roomNo' ");
+$roomResult = $roomData->fetch_array(MYSQLI_ASSOC);
+echo "</br>";
+var_dump($roomResult);
 
 ?>
 
 
 <div class="container">
-    <form action="" method="post">
+    <form action="addUser.php" method="post">
         <div class="mb-3">
             <label for="">ID</label>
-            <input type="text" name="id" class="form-control" value="<? $result['id'] ?>" readonly>
+            <input type="text" name="id" class="form-control" value="<?= $result['id'] ?>" readonly>
             
         </div>
         <div class="mb-3">
             <label>Name</label>
-            <input type="text" name="name" class="form-control" value="<? $result['name'] ?>" >
+            <input type="text" name="name" class="form-control" value="<?= $result['name'] ?>" >
             <p class="text-danger"><?php if(isset($errors['name'])) echo $errors['name']; ?></p>
         </div>
         <div class="mb-3">
             <label for="email">Email</label>
-            <input type="email" name="email" class="form-control" value="<? $result['email'] ?>">
+            <input type="email" name="email" class="form-control" value="<?= $result['email'] ?>">
             <p class="text-danger"><?php if(isset($errors['email'])) echo $errors['email']; ?></p>
         </div>
         <div class="mb-3">
             <label for="password">Password</label>
-            <input type="password" name="password" class="form-control" value="<? $result['password'] ?>">
+            <input type="password" name="password" class="form-control" value="<?= $result['password'] ?>">
         </div>
         <div class="mb-3">
             <label for="password">Confirm Password</label>
@@ -40,15 +47,15 @@ $result = $data -> fetch_array(MYSQLI_ASSOC);
         </div>
         <div class="mb-3">
             <label for="Room No">Room No.</label>
-            <input type="text" name="room_no" class="form-control" value="<? $result['room_no'] ?>">
+            <input type="text" name="room_no" class="form-control" value="<?= $result['room_no'] ?>">
             <p class="text-danger"><?php if(isset($errors['room_no'])) echo $errors['room_no']; ?></p>
         </div>
         <div class="mb-3">
             <label for="Ext">Ext.</label>
-            <input type="text" name="ext" class="form-control" value="<? $result['ext'] ?>">
+            <input type="text" name="ext" class="form-control" value="<?= $roomResult['ext'] ?>">
         </div>
         <div class="mb-3">
-            <label for="image">Profile Picture</label value="<? $result['image'] ?>">
+            <label for="image">Profile Picture</label value="<?= $result['image'] ?>">
             <input type="file" class="form-control" name="image">
             <p class="text-danger"><?php if (isset($errors['image'])) echo $errors['image']; ?></p>
         </div>

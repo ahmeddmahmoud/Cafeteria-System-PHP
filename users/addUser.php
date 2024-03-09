@@ -17,7 +17,7 @@ $errors = [];
 //     die("connection failed");
 
 // }
-//$id = $_POST['id'];
+$id = $_POST['id'];
 $name = validateData($_POST['name']); 
 $email =validateData($_POST['email']);   
 
