@@ -13,7 +13,7 @@ $imageNameF = $_POST['image'];
 
 
 require "../db.php";
-$db = new DB();
+$db = new Db();
 $db->__construct();
 session_start();
 $oldRoom = $_SESSION['roomNo'];

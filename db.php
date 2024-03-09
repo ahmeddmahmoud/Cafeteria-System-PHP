@@ -53,5 +53,27 @@ class DB {
             die("Error deleting data: " . $this->connection->error);
         }
     }
+    function update_data($tableName,$setData,$condition){
+        return $this->connection->query("update $tableName set $setData where $condition");
+        
+    }
+    function select_data($tableName,$condition=""){
+       
+        return $this->connection->query("select * from $tableName $condition");
+    }
+    function insert_data($tableName,$colNames,$data){
+        
+        return $this->connection->query("insert into $tableName ($colNames) values ($data)");
+    }
+    function getDataPagination($tableName, $condition = "1", $limit, $offset ) {
+        $result = $this->connection->query("SELECT * FROM $tableName WHERE $condition limit $limit offset $offset");
+        if (!$result) {
+            die("Error fetching data: " . $this->connection->error);
+        }
+        return $result;
+    }
+    function getCount($tableName){
+        return $this->connection->query("select COUNT(*) as total FROM $tableName");   
+    }
 }
 ?>
