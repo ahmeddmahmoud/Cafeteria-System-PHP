@@ -60,11 +60,28 @@ and o_p.order_id={$lastOrderID}", "p.name,p.image")->fetch_all(MYSQLI_ASSOC);
             <a class="nav-link " aria-current="page" href="#">Home</a>
           </li>
           <li class="nav-item ">
-            <a class="nav-link" href="./myOrders.php">My Orders</a>
+            <a class="nav-link" href="./myorders.php">My Orders</a>
           </li>
         </ul>
       </div>
     </div>
+  </nav>
+  ?>
+  </a>
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link " aria-current="page" href="#">Home</a>
+      </li>
+      <li class="nav-item ">
+        <a class="nav-link" href="./myOrders.php">My Orders</a>
+      </li>
+    </ul>
+  </div>
+  </div>
   </nav>
   <section class="row g-0 mt-4 justify-content-evenly">
     <div class=" col-7 h-50 row ">
