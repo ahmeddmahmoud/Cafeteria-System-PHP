@@ -55,9 +55,9 @@ try {
 
 
             if ($_SESSION['role'] == 'admin') {
-                header("Location: admin_dashboard.php"); 
+                header("Location: ../orders/makeOrderAdmin.php"); 
             } else {
-                header("Location: user_dashboard.php");
+                header("Location: ../orders/makeOrderUser.php");
             }
             exit();
         } else {

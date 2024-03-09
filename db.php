@@ -1,8 +1,8 @@
 <?php
 class DB {
     private $host = "localhost";
-    private $user = "php";
-    private $dbname = "cafe";
+    private $user = "root";
+    private $dbname = "cafee";
     private $password = "1234";
     private $connection;
 
@@ -12,9 +12,9 @@ class DB {
             die("Connection failed: " . $this->connection->connect_error);
         }
     }
-
-    function getData($tableName, $condition = "1") {
-        $result = $this->connection->query("SELECT * FROM $tableName WHERE $condition");
+    function getData($tableName, $condition = "1", $column="*") {
+        // echo "SELECT $column FROM $tableName WHERE $condition";
+        $result = $this->connection->query("SELECT $column FROM $tableName WHERE $condition");
         if (!$result) {
             die("Error fetching data: " . $this->connection->error);
         }
