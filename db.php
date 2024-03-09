@@ -20,6 +20,14 @@ class DB {
         }
         return $result;
     }
+
+    function getDataSpec($column , $tableName,$condition = "1") {
+        $result = $this->connection->query("SELECT $column FROM $tableName WHERE $condition");
+        if (!$result) {
+            die("Error fetching data: " . $this->connection->error);
+        }
+        return $result;
+    }
     
     function getConnection() {
         return $this->connection;
@@ -37,7 +45,6 @@ class DB {
         if ($this->connection->query($sql) === FALSE) {
             die("Error inserting data: " . $this->connection->error);
         }
-        
     }
 
     function delete($tableName, $condition = "1") {
@@ -45,29 +52,6 @@ class DB {
         if ($this->connection->query($sql) === FALSE) {
             die("Error deleting data: " . $this->connection->error);
         }
-    }
-    function insert_data($tableName,$colNames,$data){
-        
-        return $this->connection->query("insert into $tableName ($colNames) values ($data)");
-    }
-    function update_data($tableName,$setData,$condition){
-        return $this->connection->query("update $tableName set $setData where $condition");   
-    }
-
-    function getDataPagination($tableName, $condition = "1", $limit, $offset ) {
-        $result = $this->connection->query("SELECT * FROM $tableName WHERE $condition limit $limit offset $offset");
-        if (!$result) {
-            die("Error fetching data: " . $this->connection->error);
-        }
-        return $result;
-    }
-
-    function getCount($tableName){
-        return $this->connection->query("select COUNT(*) as total FROM $tableName");   
-    }
-    function select_data($tableName,$condition=""){
-        
-        return $this->connection->query("select * from $tableName where $condition");
     }
 }
 ?>
