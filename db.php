@@ -65,5 +65,9 @@ class DB {
     function getCount($tableName){
         return $this->connection->query("select COUNT(*) as total FROM $tableName");   
     }
+    function select_data($tableName,$condition=""){
+        
+        return $this->connection->query("select * from $tableName where $condition");
+    }
 }
 ?>
