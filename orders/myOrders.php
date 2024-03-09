@@ -1,22 +1,32 @@
 <?php
-require_once '../db.php';
-// session_start();
-//get the page that redirected to this page
-//if this page loaded with info from before
-$db = new DB();
-$table = 'order_details_view'; //In fact this is a view not a table
-//to ve changed Waiting on AWAD
-//*********************** */
-// if (isset($_SESSION['login'])) {
-// if (isset($_SESSION['login'])) { 
-//     $name = $_SESSION['name'];
-//     $user_id = $_SESSION['user_id'];
-// } else {
-//     //set cookie msg 
-//     setcookie("msg", "You are not logged in, plz login first");
-//     header("Location: ../login/login.php");
-// }
-// 
+try {
+    require_once '../db.php';
+
+    $db = new DB();
+    $table = 'order_details_view';
+
+    // Check if session is started
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+
+    // Check if user is logged in
+    if (isset($_SESSION['login'])) {
+        $name = $_SESSION['name'];
+        $user_id = $_SESSION['id'];
+    } else {
+        // Redirect to login page if user is not logged in
+        setcookie("msg", "You are not logged in, please login first");
+        header("Location: ../login/login.php");
+        exit(); // Stop further execution
+    }
+
+    // Retrieve orders based on user ID and date range
+    $orders = $db->getData($table, "user_id = '$user_id'");
+} catch (Exception $e) {
+    // Handle exceptions
+    echo "Error: " . $e->getMessage();
+}
 ?>
 
 <!-- Table -->
@@ -24,7 +34,7 @@ $table = 'order_details_view'; //In fact this is a view not a table
 // $query = "SELECT * FROM UserOrdersInfo WHERE user_id = " . $_SESSION['user_id'];
 $filter_condition = "user_id =1 AND DATE(order_date) BETWEEN '2024-03-01' AND '2024-03-25'"; //to be changed with variable dates
 $crrentDate = date("Y-m-d");
-$orders = $db->getData($table);
+// $orders = $db->getData($table);
 ?>
 
 <!DOCTYPE html>
@@ -86,9 +96,9 @@ $orders = $db->getData($table);
             <input type="date" class="form-control" id="end_date" name="end_date" max="<?php echo $crrentDate ?>">
         </div>
     </form>
-    <button onclick="filterOrders()" class="btn btn-primary  " style="height: fit-content;">Filter</button>
+    <button onclick="filterOrders()" class="btn btn-primary my-2 " style="height: fit-content;">Filter</button>
 
-    <h2 class="h2">My Orders</h2>
+    <h2 class="h2 my-5">My Orders</h2>
 
 
     <?php
@@ -139,7 +149,7 @@ HTML;
     }
 
     echo "<hr>";
-    echo "<div class='total-container'>";
+    echo "<div class='total-container order-info'>";
     echo "<h3>Total</h3>";
     echo "<div class='total-price'>$totalPrice</div>";
     echo "</div>";
