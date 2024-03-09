@@ -7,9 +7,14 @@ session_start();
 $image = "../imgs/users/" . $_SESSION['image'];
 $userName = $_SESSION['name'];
 $userID = $_SESSION['id'];
-$lastOrderID = $obj->getData("orders", "user_id={$userID} order by id desc limit 1", "id")->fetch_assoc()['id'];
-$lastOrder = $obj->getData("orders_product as o_p, product as p", "p.id = o_p.product_id 
+try {
+  $lastOrderID = $obj->getData("orders", "user_id={$userID} order by id desc limit 1", "id")->fetch_assoc()['id'];
+  $lastOrder = $obj->getData("orders_product as o_p, product as p", "p.id = o_p.product_id 
 and o_p.order_id={$lastOrderID}", "p.name,p.image")->fetch_all(MYSQLI_ASSOC);
+} catch (Exception $e) {
+  echo "oops";
+  $lastOrder = "Empry";
+}
 // echo "<pre>";
 // var_dump($rooms);
 // echo "</pre>";
@@ -35,10 +40,11 @@ and o_p.order_id={$lastOrderID}", "p.name,p.image")->fetch_all(MYSQLI_ASSOC);
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
-    <title>Order</title>
-  </head>
+  <title>Order</title>
+</head>
+
 <body>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
       <a class="navbar-brand" href="#">
         <?php
@@ -65,6 +71,7 @@ and o_p.order_id={$lastOrderID}", "p.name,p.image")->fetch_all(MYSQLI_ASSOC);
       </div>
     </div>
   </nav>
+  ?>
   </a>
   <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -85,16 +92,21 @@ and o_p.order_id={$lastOrderID}", "p.name,p.image")->fetch_all(MYSQLI_ASSOC);
     <div class=" col-7 h-50 row ">
       <div class="last row h-50 mb-2">
         <?php
-        for ($i = 0; $i < count($lastOrder); $i++) {
-          echo "<div class=' card col-3 mb-2  text-center'>";
-          foreach ($lastOrder[$i] as $key => $value) {
-            if ($key == 'image') echo "<img class='h-75 w-75' src='../imgs/products/$value'>";
+        if ($lastOrder != "") {
+          for ($i = 0; $i <  count($lastOrder); $i++) {
+            echo "<div class=' card col-3 mb-2  text-center'>";
+            foreach ($lastOrder[$i] as $key => $value) {
+              if ($key == 'image') echo "<img class='h-75 w-75' src='../imgs/products/$value'>";
+            }
+            foreach ($lastOrder[$i] as $key => $value) {
+              if ($key == "name") echo "<h4>$value</h4> ";
+            }
+            echo "</div>";
           }
-          foreach ($lastOrder[$i] as $key => $value) {
-            if ($key == "name") echo "<h4>$value</h4> ";
-          }
-          echo "</div>";
+        } else {
+          echo "No orders yet";
         }
+
         // die();
         ?>
       </div>
