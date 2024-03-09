@@ -8,9 +8,10 @@ echo $id;
 require "../db.php";
 $db = new DB();
 $db->__construct();
-$data = $db->select_data("user" , "id = '$id'");
-$result = $data -> fetch_array(MYSQLI_ASSOC);
-
+$data = $db->select_data("user", "id = '$id'");
+$result = $data->fetch_array(MYSQLI_ASSOC);
+var_dump($result);
+// die();
 $roomNo = $result['room_no'];
 $roomData = $db->select_data("rooms", "room_no = '$roomNo' ");
 $roomResult = $roomData->fetch_array(MYSQLI_ASSOC);
@@ -25,17 +26,17 @@ var_dump($roomResult);
         <div class="mb-3">
             <label for="">ID</label>
             <input type="text" name="id" class="form-control" value="<?= $result['id'] ?>" readonly>
-            
+
         </div>
         <div class="mb-3">
             <label>Name</label>
-            <input type="text" name="name" class="form-control" value="<?= $result['name'] ?>" >
-            <p class="text-danger"><?php if(isset($errors['name'])) echo $errors['name']; ?></p>
+            <input type="text" name="name" class="form-control" value="<?= $result['name'] ?>">
+            <p class="text-danger"><?php if (isset($errors['name'])) echo $errors['name']; ?></p>
         </div>
         <div class="mb-3">
             <label for="email">Email</label>
             <input type="email" name="email" class="form-control" value="<?= $result['email'] ?>">
-            <p class="text-danger"><?php if(isset($errors['email'])) echo $errors['email']; ?></p>
+            <p class="text-danger"><?php if (isset($errors['email'])) echo $errors['email']; ?></p>
         </div>
         <div class="mb-3">
             <label for="password">Password</label>
@@ -48,7 +49,7 @@ var_dump($roomResult);
         <div class="mb-3">
             <label for="Room No">Room No.</label>
             <input type="text" name="room_no" class="form-control" value="<?= $result['room_no'] ?>">
-            <p class="text-danger"><?php if(isset($errors['room_no'])) echo $errors['room_no']; ?></p>
+            <p class="text-danger"><?php if (isset($errors['room_no'])) echo $errors['room_no']; ?></p>
         </div>
         <div class="mb-3">
             <label for="Ext">Ext.</label>
@@ -59,8 +60,8 @@ var_dump($roomResult);
             <input type="file" class="form-control" name="image">
             <p class="text-danger"><?php if (isset($errors['image'])) echo $errors['image']; ?></p>
         </div>
-            <button type="submit" value="save" name="save" class="btn btn-primary my-3">Save</button>
-            <button type="button" class="btn btn-danger ms-5" name="update" value="update">Cancel</button>
+        <button type="submit" value="save" name="save" class="btn btn-primary my-3">Save</button>
+        <button type="button" class="btn btn-danger ms-5" name="update" value="update">Cancel</button>
     </form>
 
 </div>
