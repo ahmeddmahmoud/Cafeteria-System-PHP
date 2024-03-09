@@ -16,12 +16,15 @@ $roomData = $db->select_data("rooms", "room_no = '$roomNo' ");
 $roomResult = $roomData->fetch_array(MYSQLI_ASSOC);
 echo "</br>";
 var_dump($roomResult);
+session_start();
+$_SESSION['roomNo'] = $roomNo;
+
 
 ?>
 
 
 <div class="container">
-    <form action="addUser.php" method="post">
+    <form action="updateUser2.php" method="post">
         <div class="mb-3">
             <label for="">ID</label>
             <input type="text" name="id" class="form-control" value="<?= $result['id'] ?>" readonly>
@@ -43,7 +46,7 @@ var_dump($roomResult);
         </div>
         <div class="mb-3">
             <label for="password">Confirm Password</label>
-            <input type="password" class="form-control">
+            <input type="password" name="confirm_password" class="form-control">
         </div>
         <div class="mb-3">
             <label for="Room No">Room No.</label>
@@ -59,8 +62,8 @@ var_dump($roomResult);
             <input type="file" class="form-control" name="image">
             <p class="text-danger"><?php if (isset($errors['image'])) echo $errors['image']; ?></p>
         </div>
-            <button type="submit" value="save" name="save" class="btn btn-primary my-3">Save</button>
-            <button type="button" class="btn btn-danger ms-5" name="update" value="update">Cancel</button>
+            <button type="submit"  class="btn btn-primary my-3" name="update" value="update">Save</button>
+            <button type="button" class="btn btn-danger ms-5" >Cancel</button>
     </form>
 
 </div>
