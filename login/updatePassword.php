@@ -1,3 +1,51 @@
+<?php
+require_once '../db.php';
+try {
+    $db = new DB();
+} catch (Exception $e) {
+    // Handle the database connection error gracefully by redirecting to the login page
+    header("Location: login.php?error=Invalid_dbConnection");
+    exit();
+}
+session_start();
+
+$errorMessage = ""; // Define errorMessage variable in the global scope
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["update_password"])) {
+    $reset_code = $_POST["reset_code"];
+    $new_password = $_POST["new_password"];
+    $email =  $_SESSION['email'];
+
+    if ($_SESSION['reset_code'] == $reset_code) {
+        // Update the password in the database
+
+        // $sql=$db->updateData("user", "password = ?"," email = ?");
+        // $sql = $db->updateData("user", "password = '$new_password'", "email = '$email'");
+        $sql = "UPDATE user SET password = ? WHERE email = ?";
+        $stmt = $db->getConnection()->prepare($sql);
+        $stmt->bind_param("ss", $new_password, $email);
+        $stmt->execute();
+
+        if ($stmt->affected_rows > 0) {
+            // echo "Password updated successfully.";
+            header("Location: login.php"); 
+        } else {
+            $errorMessage = "Failed to update password.";
+            // echo $email;
+        }
+
+        // Close connection
+        $stmt->close();
+        $db->getConnection()->close();
+    } else {
+        
+        $errorMessage = "Invalid reset code.";
+    }
+} else {
+    // echo "Form submission error.";
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,55 +73,14 @@
                         <input class="form-control button" type="submit" name="update_password" value="Update Password">
                     </div>
                 </form>
+                <!-- Error message display area -->
+                <?php if (!empty($errorMessage)): ?>
+                    <div class="alert alert-danger" role="alert">
+                        <?php echo $errorMessage; ?>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>
 </body>
 </html>
-
-
-<?php
-require_once '../db.php';
-try {
-    $db = new DB();
-} catch (Exception $e) {
-    // Handle the database connection error gracefully by redirecting to the login page
-    header("Location: login.php?error=Invalid_dbConnection");
-    exit();
-}
-session_start();
-
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["update_password"])) {
-    $reset_code = $_POST["reset_code"];
-    $new_password = $_POST["new_password"];
-    $email =  $_SESSION['email'];
-
-    if ($_SESSION['reset_code'] == $reset_code) {
-        // Update the password in the database
-
-        // $sql=$db->updateData("user", "password = ?"," email = ?");
-        // $sql = $db->updateData("user", "password = '$new_password'", "email = '$email'");
-        $sql = "UPDATE user SET password = ? WHERE email = ?";
-        $stmt = $db->getConnection()->prepare($sql);
-        $stmt->bind_param("ss", $new_password, $email);
-        $stmt->execute();
-
-        if ($stmt->affected_rows > 0) {
-            // echo "Password updated successfully.";
-            header("Location: login.php"); 
-        } else {
-            echo "Failed to update password.";
-            // echo $email;
-        }
-
-        // Close connection
-        $stmt->close();
-        $db->getConnection()->close();
-    } else {
-        echo "Invalid reset code.";
-    }
-} else {
-    // echo "Form submission error.";
-}
-?>
-
