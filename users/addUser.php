@@ -46,7 +46,7 @@ try {
         $errors['email'] = "Invalid email";
     }
     //check password length
-    if (strlen($password) < 6){
+    if (strlen($password) < 6) {
         $errors['password'] = "Password must be at least 6 characters";
     }
     // if ($password !== $confirmPassword){
@@ -59,18 +59,18 @@ try {
         $errors['ext'] = "Ext. must be numeric";
     }
     if ($_FILES['image']['error'] !== UPLOAD_ERR_OK) {
-    // There was an error uploading the file
-    $errors['image'] = "Image upload failed. ";
+        // There was an error uploading the file
+        $errors['image'] = "Image upload failed. ";
     }
 
 
 
-    if (count($errors) > 0){
+    if (count($errors) > 0) {
         $errors = json_encode($errors);
-        if (isset($_POST['add'])){
-            header("location: userForm.php?errors=".$errors);
-        }else {
-            header("location: updateUser.php?errors=".$errors);
+        if (isset($_POST['add'])) {
+            header("location: userForm.php?errors=" . $errors);
+        } else {
+            header("location: updateUser.php?errors=" . $errors);
         }
         
         
@@ -87,22 +87,6 @@ try {
             $db->update_data("user" , "name = '$name' , email = '$email' , password = '$password' , room_no = '$Room_No'", "id = '$id'");
         }
     }
-
-
-    
-    
-    
-    
-    
-
-
-}catch(Exception $e) {    
+} catch (Exception $e) {
     echo $e->getMessage();
-
 }
-
-
-
-
-
-?>
