@@ -38,7 +38,7 @@ and o_p.order_id={$lastOrderID}","p.name,p.image")->fetch_all(MYSQLI_ASSOC);
     <title>Order</title>
   </head>
   <body>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
   <div class="container">
     <a class="navbar-brand" href="#">
       <?php 
