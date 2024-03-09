@@ -59,7 +59,7 @@ and o_p.order_id={$lastOrderID}","p.name,p.image")->fetch_all(MYSQLI_ASSOC);
           <a class="nav-link " aria-current="page" href="#">Home</a>
         </li>
         <li class="nav-item ">
-          <a class="nav-link" href="#">My Orders</a>
+          <a class="nav-link" href="./myorders.php">My Orders</a>
         </li>
       </ul>
     </div>
