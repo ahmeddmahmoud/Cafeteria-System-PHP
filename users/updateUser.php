@@ -50,6 +50,7 @@ $result = $data -> fetch_array(MYSQLI_ASSOC);
         <div class="mb-3">
             <label for="image">Profile Picture</label value="<? $result['image'] ?>">
             <input type="file" class="form-control" name="image">
+            <p class="text-danger"><?php if (isset($errors['image'])) echo $errors['image']; ?></p>
         </div>
             <button type="submit" value="save" name="save" class="btn btn-primary my-3">Save</button>
             <button type="button" class="btn btn-danger ms-5" name="update" value="update">Cancel</button>

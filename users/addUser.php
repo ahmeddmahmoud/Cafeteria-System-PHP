@@ -22,13 +22,14 @@ $name = validateData($_POST['name']);
 $email =validateData($_POST['email']);   
 
 $password = validateData($_POST['password']);
+$confirmPassword=validateData($_POST['confirm_password']);
 echo $_POST['password'];
 $Room_No = validateData($_POST['room_no']);
 $Ext = validateData($_POST['ext']);
 //var_dump($_FILES);
 $source = $_FILES['image']['tmp_name'];
 $imageName = $_FILES['image']['name'];
-move_uploaded_file($source , "../imgs/./$imageName");
+move_uploaded_file($source , "../imgs/users/".$imageName);
 //var_dump(move_uploaded_file($source , "../imgs/./$imageName"));
 echo "</br>";
 
@@ -45,15 +46,30 @@ try {
     if (strlen($password) < 6){
         $errors['password'] = "Password must be at least 6 characters";
     }
+    if ($password !== $confirmPassword){
+        $errors['confirm_password'] = "Password does not match";
+    }
     if (!is_numeric($Room_No)) {
         $errors['room_no'] = "Room No. must be numeric";
     }
     if (!is_numeric($Ext)) {
         $errors['ext'] = "Ext. must be numeric";
     }
+    if ($_FILES['image']['error'] !== UPLOAD_ERR_OK) {
+    // There was an error uploading the file
+    $errors['image'] = "Image upload failed. ";
+    }
+
+
+
     if (count($errors) > 0){
         $errors = json_encode($errors);
-        header("location: userForm.php?errors=".$errors);
+        if (isset($_POST['add'])){
+            header("location: userForm.php?errors=".$errors);
+        }else {
+            header("location: updateUser.php?errors=".$errors);
+        }
+        
     }else {
         if (isset($_POST['add'])) {
             $db->insert_data("rooms" , "room_no , ext" , "'$Room_No' , '$Ext'");
