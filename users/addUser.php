@@ -1,39 +1,39 @@
 <?php
 require "../db.php";
-// function validateData($data)
-// {
-//     $data = trim($data);
-//     $data = addslashes($data);
-//     $data = htmlspecialchars($data);
-//     return $data;
-// }
-var_dump($_POST);
-echo "here";
-die();
+function validateData($data) {
+    $data = trim($data);
+    $data = addslashes($data);
+    $data = htmlspecialchars($data);
+    return $data;
+}
+
 $db  = new Db();
 $db->__construct();
 $errors = [];
-//$connection = $db->get_connection();
 
-
-// if ($connection->connect_error) {
-//     die("connection failed");
-
-// }
 $id = $_POST['id'];
-// $name = validateData($_POST['name']);
-// $email = validateData($_POST['email']);
 
-// $password = validateData($_POST['password']);
-// $confirmPassword = validateData($_POST['confirm_password']);
-echo $_POST['password'];
-// $Room_No = validateData($_POST['room_no']);
-// $Ext = validateData($_POST['ext']);
-//var_dump($_FILES);
+$name = validateData($_POST['name']); 
+echo $name;
+echo "</br>";
+$email =validateData($_POST['email']);   
+
+$password = validateData($_POST['password']);
+$confirmPassword=validateData($_POST['confirm_password']);
+
+$Room_No = validateData($_POST['room_no']);
+echo $Room_No;
+echo "</br>";
+
+$Ext = validateData($_POST['ext']);
+echo $Ext;
+echo "</br>";
+
+//var_dump($_FILES);/
 $source = $_FILES['image']['tmp_name'];
 $imageName = $_FILES['image']['name'];
-move_uploaded_file($source, "../imgs/users/" . $imageName);
-//var_dump(move_uploaded_file($source , "../imgs/./$imageName"));
+move_uploaded_file($source , "../imgs/users/".$imageName);
+
 echo "</br>";
 
 //echo $name;
@@ -49,9 +49,9 @@ try {
     if (strlen($password) < 6) {
         $errors['password'] = "Password must be at least 6 characters";
     }
-    if ($password !== $confirmPassword) {
-        $errors['confirm_password'] = "Password does not match";
-    }
+    // if ($password !== $confirmPassword){
+    //     $errors['confirm_password'] = "Password does not match";
+    // }
     if (!is_numeric($Room_No)) {
         $errors['room_no'] = "Room No. must be numeric";
     }
@@ -72,13 +72,19 @@ try {
         } else {
             header("location: updateUser.php?errors=" . $errors);
         }
-    } else {
+        
+        
+    }else {
+       
         if (isset($_POST['add'])) {
-            $db->insert_data("rooms", "room_no , ext", "'$Room_No' , '$Ext'");
-            $db->insert_data("user", "name , email , password , room_no, image , role", "'$name' , '$email' , '$password'  , '$Room_No', '$imageName' , 'user'");
-        } elseif (isset($_POST['update'])) {
-            $db->update_data("rooms", "room_no = '$Room_No' , ext = '$Ext'", "room_no = '$Room_No'");
-            $db->update_data("user", "name = '$name' , email = '$email' , password = '$password' , room_no = '$Room_No' , image = '$imageName'", "id = '$id'");
+            $db->insert_data("rooms" , "room_no , ext" , "'$Room_No' , '$Ext'");
+            $db->insert_data("user" , "name , email , password , room_no, image , role" , "'$name' , '$email' , '$password'  , '$Room_No', '$imageName' , 'user'");  
+        }
+        
+        elseif(isset($_POST['update'])){
+        
+            $db->update_data("rooms" , "room_no = '$Room_No' , ext = '$Ext'" , "room_no = '$Room_No'");
+            $db->update_data("user" , "name = '$name' , email = '$email' , password = '$password' , room_no = '$Room_No'", "id = '$id'");
         }
     }
 } catch (Exception $e) {
