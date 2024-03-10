@@ -3,7 +3,11 @@ require("../db.php");
 session_start();
 $obj=new DB();
 $notes=$_POST["notes"];
-$roomNum=$_POST["roomNum"];
+if(isset($_POST["roomNum"])){
+  $roomNum=$_POST["roomNum"];
+}else{
+  $roomNum=$_SESSION['room_no'];
+}
 if(isset($_POST["userNameByAdmin"])){
   $userName=$_POST["userNameByAdmin"];
   $userID=$obj->getData("user","name='$userName'","id")->fetch_all(MYSQLI_ASSOC)[0]['id'];
