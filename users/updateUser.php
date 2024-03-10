@@ -4,21 +4,21 @@
 <?php
 
 $id  = $_GET['id'];
-echo $id;
+
 require "../db.php";
 $db = new DB();
 $db->__construct();
 // $data = $db->select_data("user", "id = '$id'");
 $data = $db->getData("user" , "id = '$id' ");
 $result = $data->fetch_array(MYSQLI_ASSOC);
-var_dump($result);
+
 // die();
 $roomNo = $result['room_no'];
 // $roomData = $db->select_data("rooms", "room_no = '$roomNo' ");
 $roomData = $db->getData("rooms",  "room_no = '$roomNo' ");
 $roomResult = $roomData->fetch_array(MYSQLI_ASSOC);
 echo "</br>";
-var_dump($roomResult);
+
 session_start();
 $_SESSION['roomNo'] = $roomNo;
 
@@ -27,7 +27,7 @@ $_SESSION['roomNo'] = $roomNo;
 
 
 <div class="container">
-    <form action="updateUser2.php" method="post">
+    <form action="updateUser2.php" method="post" enctype="multipart/form-data">
         <div class="mb-3">
             <label for="">ID</label>
             <input type="text" name="id" class="form-control" value="<?= $result['id'] ?>" readonly>

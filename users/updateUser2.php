@@ -8,7 +8,7 @@ $Room_No = $_POST['room_no'];
 $Ext = $_POST['ext'];
 
 $image=$_FILES['image'];
-$imgName=$_FILES['image']['name'];
+$imageName=$_FILES['image']['name'];
 //$imageName = $_POST['image'];
 
 
