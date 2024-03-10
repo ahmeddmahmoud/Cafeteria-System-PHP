@@ -4,21 +4,29 @@
 $errors = [];
 if(isset($_GET['errors'])){
    $errors = json_decode($_GET['errors'],true);
-//    var_dump($errors);
+   var_dump($errors);
 }
 ?>
-
-
 
 <form action="validation.php" method="POST" class="my-5 row g-3 needs-validation w-50 mx-auto" >
     <div class="row">
     <div class="form-floating mb-2">
-                <?php if (!empty($errors)): ?>
-                    <div class="alert alert-danger">
-                        <?php echo "invalid email or password";?>
-                    </div>
-                <?php endif; ?>
-                </div>            
+        <?php if (!empty($errors)): ?>
+            <div class="alert alert-danger">
+        <?php
+        // Check if $errors['connection'] is set and is an array
+        if (isset($errors['connection']) ) {
+            echo "Please connect to another Database";
+        } else {
+            // Check for invalid email or password
+            echo "Invalid email or password";
+        }
+        ?>
+    </div>
+        <?php endif; ?>
+    </div>
+
+         
         <div class="form-floating mb-2">
             <input type="text" class="form-control" id="email" placeholder="Email"  name="email">
             <label for="email" class="px-4">Email</label>
