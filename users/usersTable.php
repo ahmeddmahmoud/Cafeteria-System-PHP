@@ -3,6 +3,8 @@ include_once '../db.php'; // Include the DB class file
 
 $db = new DB(); // Create an instance of the DB class
 
+session_start();
+
 // Pagination Variables
 $limit = 6; // Number of records per page
 $page = isset($_GET['page']) ? $_GET['page'] : 1; // Current page number
@@ -19,6 +21,19 @@ $total_pages = ceil($total_records / $limit);
 $result = $db->getDataPagination("user u INNER JOIN rooms r ON u.room_no = r.room_no", "1", $limit, $offset);
 
 ?>
+<style>
+    .userimg {
+            width: 50px;
+            border-radius: 50%;
+            height: 50px;
+        }
+
+        .allproduct img {
+            cursor: pointer;
+            margin: auto;
+            display: inline-block;
+        }
+</style>
 <!doctype html>
 <html lang="en">
 
@@ -29,18 +44,7 @@ $result = $db->getDataPagination("user u INNER JOIN rooms r ON u.room_no = r.roo
 </head>
 
 <body>
-    <nav class="navbar d-flex justify-content-between " style="background-color: #e3f2fd;">
-        <div class="d-flex justify-align-content-between gap-3 px-5 ">
-            <a href="#">Home</a>
-            <a href="#">Products</a>
-            <a href="#">Users</a>
-            <a href="#">Manual Orders</a>
-            <a href="#">Checks</a>
-        </div>
-        <div>
-            <a href="#" class="px-5">Admin</a>
-        </div>
-    </nav>
+<?PHP include "../components/nav.php" ?>
 
     <div class="d-flex justify-content-around m-2 align-items-center ">
         <p class="fs-3 fw-bold ">All Users</p><button type="button" class="btn btn-primary">Add User</button>
@@ -48,7 +52,7 @@ $result = $db->getDataPagination("user u INNER JOIN rooms r ON u.room_no = r.roo
     </div>
 
     <div class="mx-5 my-2 text-center ">
-        <table class="table">
+        <table class="table table-striped">
             <thead>
                 <tr>
                     <th>Name</th>

@@ -56,7 +56,7 @@ HTML;
 
 echo <<<HTML
         <li class="nav-item mx-4">
-          <a class="nav-link $activeClass btn btn-danger text-light" aria-current="page" href="../login/logout.php">Logout</a>
+          <a class=" $activeClass btn btn-danger text-light" aria-current="page" href="../login/logout.php">Logout</a>
         </li>
 HTML;
 

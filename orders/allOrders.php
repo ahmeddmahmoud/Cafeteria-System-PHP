@@ -5,6 +5,7 @@ require_once '../db.php';
 //if this page loaded with info from before
 $db = new DB();
 $table = 'order_details_view'; //In fact this is a view not a table
+session_start();
 //to ve changed Waiting on AWAD
 //*********************** */
 // if (isset($_SESSION['login'])) {
@@ -73,11 +74,23 @@ $productsImgsPath = "../imgs/products/";
         .actions {
             margin-top: 10px;
         }
+        .userimg {
+            width: 50px;
+            border-radius: 50%;
+            height: 50px;
+        }
+
+        .allproduct img {
+            cursor: pointer;
+            margin: auto;
+            display: inline-block;
+        }
     </style>
 </head>
-
-<body class="container">
-    <form class="row">
+<?PHP include "../components/nav.php" ?>
+<body class="">
+<div class="container">
+    <form class="row ">
         <div class=" form-group col">
             <label for="start_date">Start Date:</label>
             <input type="date" class="form-control" id="start_date" name="start_date">
@@ -154,7 +167,7 @@ HTML;
     ?>
 
 
-
+</div>
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.min.js" integrity="sha512-ykZ1QQr0Jy/4ZkvKuqWn4iF3lqPZyij9iRv6sGqLRdTPkY69YX6+7wvVGmsdBbiIfN/8OdsI7HABjvEok6ZopQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
