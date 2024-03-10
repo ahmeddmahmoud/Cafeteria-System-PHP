@@ -1,10 +1,13 @@
 <?php
 require_once '../db.php';
+$errors = [];
 try {
     $db = new DB();
 } catch (Exception $e) {
     // Handle the database connection error gracefully by redirecting to the login page
-    header("Location: login.php?error=Invalid_dbConnection");
+    $errors["connection"] = 1;
+    $errors = json_encode($errors);
+    header("location:login.php?errors=" . $errors);
     exit();
 }
 session_start();

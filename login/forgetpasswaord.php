@@ -9,7 +9,34 @@
 <body>
     <div class="container">
         <div class="row">
-            <div class="col-md-4 offset-md-4 form">
+        <div class="col-md-4 offset-md-4 form">
+        <?php
+            session_start(); // Start the session
+            // Check if the session variable is set
+            if (isset($_SESSION['wrong_email']) && $_SESSION['wrong_email']) {
+                // Display the error message
+                echo '<div class="form-floating mb-2">';
+                echo '<div class="alert alert-danger">';
+                echo "This email doesn’t found in Database";
+                echo '</div>';
+                echo '</div>';
+                
+                // Unset the session variable to avoid showing the message again on subsequent page loads
+                unset($_SESSION['wrong_email']);
+
+            }else if (isset($_SESSION['failed_sent']) && $_SESSION['failed_sent']){
+                    // Display the error message
+                    echo '<div class="form-floating mb-2">';
+                    echo '<div class="alert alert-danger">';
+                    echo "Failed to send the code. Please try again later.";
+                    echo '</div>';
+                    echo '</div>';
+                    
+                    // Unset the session variable to avoid showing the message again on subsequent page loads
+                    unset($_SESSION['failed_sent']);
+                }
+            
+            ?>
                 <form action="" method="POST" autocomplete="off">
                     <h2 class="text-center">Forgot Password</h2>
                     <p class="text-center">Enter your email address</p>
@@ -29,18 +56,18 @@
 <?php
 // echo $_post['email'];
 ?>
-
 <?php
 require_once '../db.php';
 try {
     $db = new DB();
+    $errors = [];
 } catch (Exception $e) {
     // Handle the database connection error gracefully by redirecting to the login page
-    header("Location: login.php?error=Invalid_dbConnection");
+    $errors["connection"] = 1;
+    $errors = json_encode($errors);
+    header("location:login.php?errors=" . $errors);
     exit();
 }
-session_start();
-
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["check-email"])) {
     // Retrieve the email entered by the user
@@ -73,14 +100,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["check-email"])) {
             echo "We've sent a password reset code to your email - $email";
             header("Location: updatePassword.php?email=" . urlencode($email));
         } else {
-            echo "Failed to send the code. Please try again later.";
+            $_SESSION['failed_sent'] = true;
+            header("Location: forgetpasswaord.php");
+            // echo "Failed to send the code. Please try again later.";
+            
         }
     } else {
-        echo "Email does not exist in the database. Please enter a valid email.";
+        $_SESSION['wrong_email'] = true;
+        header("Location: forgetpasswaord.php");
+        // echo "Email does not exist in the database. Please enter a valid email.";
     }
-
-    // Close connection
     $stmt->close();
-    // $connection->close();
+
 }
 ?>
