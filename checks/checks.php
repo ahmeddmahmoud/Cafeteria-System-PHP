@@ -105,4 +105,8 @@ require_once './checkall.php';
             userOrdersTableBody.insertAdjacentHTML('beforeend', row);
         });
     }
+    document.addEventListener("DOMContentLoaded", function() {
+            filterOrders(); 
+        });
+    
 </script>
