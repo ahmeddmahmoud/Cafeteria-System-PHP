@@ -19,9 +19,8 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
             exit();
         }
         $category=strtolower($category);
-        $result = $db->select_data("category", "name = '$category'");
+        $result = $db->getData("category", "name = '$category'");
         if ($result->num_rows > 0) {
-
             setcookie("errMsg","Category already exists!");
             header('Location: categoryForm.php');
             exit();
