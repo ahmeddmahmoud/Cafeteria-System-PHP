@@ -1,23 +1,25 @@
 <?php
 require("../db.php");
 $obj = new DB();
+session_start();
+// Check if user is logged in
+if (isset($_SESSION['id'])) {
+  $name = $_SESSION['name'];
+  $user_id = $_SESSION['id'];
+} else {
+  // Redirect to login page if user is not logged in
+  setcookie("msg", "You are not logged in, please login first");
+  header("Location: ../login/login.php");
+  exit(); // Stop further execution
+}
+
 $data = $obj->getData("product")->fetch_all(MYSQLI_ASSOC);
 $rooms = $obj->getData("rooms", "1", "room_no")->fetch_all(MYSQLI_ASSOC);
 $userNames = $obj->getData("user", "role!='admin'", "name")->fetch_all(MYSQLI_ASSOC);
-// echo"<pre>";
-// var_dump($userNames);
-// echo"</pre>";
-// die();
-session_start();
+
 $image = "../imgs/users/" . $_SESSION['image'];
 $userName = $_SESSION['name'];
 $userID = $_SESSION['id'];
-// $lastOrderID=$obj->getData("orders","user_id={$userID} order by id desc limit 1","id")->fetch_assoc()['id'];
-// $lastOrder=$obj->getData("orders_product as o_p, product as p", "p.id = o_p.product_id 
-// and o_p.order_id={$lastOrderID}","p.name,p.image")->fetch_all(MYSQLI_ASSOC);
-// echo"<pre>";
-// var_dump($userNames[0]['name']);
-// echo"</pre>";
 
 ?>
 <style>
@@ -48,34 +50,6 @@ $userID = $_SESSION['id'];
 
 <body>
   <?php include '../components/nav.php'; ?>
-  <!-- <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="container">
-    <a class="navbar-brand" href="#">
-      // if(isset($_SESSION["image"])){
-      //   echo "<img src='{$image}' class='userimg' >";
-      // }
-      //   if(isset($_SESSION["name"])){
-      //     echo "<span class='ms-2'>{$userName}</span>";
-      //   }
-      include "../components/nav.php";
-      // 
-      ?>
-    </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link " aria-current="page" href="#">Home</a>
-        </li>
-        <li class="nav-item ">
-          <a class="nav-link" href="#">My Orders</a>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav> -->
   <section class="row g-0 mt-4 justify-content-evenly">
     <div class=" col-7 h-50 row ">
       <hr>
@@ -153,6 +127,7 @@ $userID = $_SESSION['id'];
 </body>
 
 </html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.min.js" integrity="sha512-ykZ1QQr0Jy/4ZkvKuqWn4iF3lqPZyij9iRv6sGqLRdTPkY69YX6+7wvVGmsdBbiIfN/8OdsI7HABjvEok6ZopQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
   let cards = document.querySelectorAll(".productcard img");
   let table = document.querySelector(".table-striped tbody");

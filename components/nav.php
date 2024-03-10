@@ -43,10 +43,10 @@ if ($_SESSION['role'] === 'admin') {
           <a class="nav-link" href="../orders/allOrders.php">Manual Order</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="../orders/allOrders.php">Products</a>
+          <a class="nav-link" href="../orders/makeOrderAdmin.php">Products</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="../orders/allOrders.php">Users</a>
+          <a class="nav-link" href="../users/usersTable.php">Users</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="../orders/allOrders.php">Checks</a>
@@ -55,7 +55,7 @@ HTML;
 }
 
 echo <<<HTML
-        <li class="nav-item ">
+        <li class="nav-item mx-4">
           <a class="nav-link $activeClass btn btn-danger text-light" aria-current="page" href="../login/logout.php">Logout</a>
         </li>
 HTML;

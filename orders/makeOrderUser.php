@@ -1,10 +1,22 @@
 <?php
 require("../db.php");
 $obj = new DB();
-$data = $obj->getData("product")->fetch_all(MYSQLI_ASSOC);
-$rooms = $obj->getData("rooms", "1", "room_no")->fetch_all(MYSQLI_ASSOC);
 session_start();
-$image = "../imgs/users/" . $_SESSION['image'];
+
+// Check if user is logged in
+if (isset($_SESSION['id'])) {
+  $name = $_SESSION['name'];
+  $user_id = $_SESSION['id'];
+} else {
+  // Redirect to login page if user is not logged in
+  setcookie("msg", "You are not logged in, please login first");
+  header("Location: ../login/login.php");
+  exit(); // Stop further execution
+}
+
+$productData = $obj->getData("product")->fetch_all(MYSQLI_ASSOC);
+$roomsNums = $obj->getData("rooms", "1", "room_no")->fetch_all(MYSQLI_ASSOC);
+$userImage = "../imgs/users/" . $_SESSION['image'];
 $userName = $_SESSION['name'];
 $userID = $_SESSION['id'];
 $lastOrderID = $obj->getData("orders", "user_id={$userID} order by id desc limit 1", "id");
@@ -42,49 +54,7 @@ if($lastOrderID!=null){
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container">
-      <a class="navbar-brand" href="#">
-        <?php
-        if (isset($_SESSION["image"])) {
-          echo "<img src='{$image}' class='userimg' >";
-        }
-        if (isset($_SESSION["name"])) {
-          echo "<span class='ms-2'>{$userName}</span>";
-        }
-        ?>
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link " aria-current="page" href="#">Home</a>
-          </li>
-          <li class="nav-item ">
-            <a class="nav-link" href="./myorders.php">My Orders</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-  </a>
-  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link " aria-current="page" href="#">Home</a>
-      </li>
-      <li class="nav-item ">
-        <a class="nav-link" href="./myOrders.php">My Orders</a>
-      </li>
-    </ul>
-  </div>
-  </div>
-  </nav>
+    <?PHP include "../components/nav.php" ?>
   <section class="row g-0 mt-4 justify-content-evenly">
     <div class=" col-7 h-50 row ">
       <div class="last row h-50 mb-2">
@@ -109,7 +79,7 @@ if($lastOrderID!=null){
       <hr>
       <div class="allproduct row">
         <?php
-        foreach ($data as $row) {
+        foreach ($productData as $row) {
           echo "<div class='productcard card col-3 mb-2  text-center'>";
           foreach ($row as $key => $value) {
             if ($key == 'image') echo "<img class='h-75 w-75' src='../imgs/products/$value'>";
@@ -153,8 +123,8 @@ if($lastOrderID!=null){
             <select name="roomNum" id="" class="form-select my-1">
               <option value="" disabled selected>Select room</option>
               <?php
-              for ($i = 0; $i < count($rooms); $i++) {
-                echo "<option value='{$rooms[$i]['room_no']}'>{$rooms[$i]['room_no']}</option>";
+              for ($i = 0; $i < count($roomsNums); $i++) {
+                echo "<option value='{$roomsNums[$i]['room_no']}'>{$roomsNums[$i]['room_no']}</option>";
               }
               ?>
             </select>
@@ -172,6 +142,7 @@ if($lastOrderID!=null){
 </body>
 
 </html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.min.js" integrity="sha512-ykZ1QQr0Jy/4ZkvKuqWn4iF3lqPZyij9iRv6sGqLRdTPkY69YX6+7wvVGmsdBbiIfN/8OdsI7HABjvEok6ZopQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
   let cards = document.querySelectorAll(".productcard img");
   let table = document.querySelector(".table-striped tbody");
