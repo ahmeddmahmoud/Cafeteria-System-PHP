@@ -103,10 +103,10 @@ $productsImgsPath = "../imgs/products/";
         $nextStatus = $row['status'];
         if ($nextStatus == 'processing') {
             $nextStatus = 'Deliver';
-            $changeStatusButton =  "<a href='../orders/changeOrderStatus.php?id={$row['order_id']}&status={$row['status']}' class='btn btn-primary mx-auto'>$nextStatus</a>";
+            $changeStatusButton =  "<a href='../orders/changeOrderStatus.php?id={$row['order_id']}&status={$row['status']}' class='btn btn-warning mx-auto'>$nextStatus</a>";
         } elseif ($nexStatus = 'out for delivery') {
             $nextStatus = 'Finish';
-            $changeStatusButton =  "<a href='../orders/changeOrderStatus.php?id={$row['order_id']}&status={$row['status']}' class='btn btn-primary mx-auto'>$nextStatus</a>";
+            $changeStatusButton =  "<a href='../orders/changeOrderStatus.php?id={$row['order_id']}&status={$row['status']}' class='btn btn-success mx-auto'>$nextStatus</a>";
         }
 
         // Initialize the cancel button HTML
