@@ -5,7 +5,6 @@ include_once '../db.php';
 $db = new DB(); 
 // Query to fetch total number of records
 $result = $db->getData("category");
-
 ?>
 
 <!doctype html>
@@ -54,7 +53,7 @@ $result = $db->getData("category");
                 echo "<p>There are no categories available.</p>";
             } else {
                 while ($row = $result->fetch_assoc()) {
-                    echo "<div class='category-item'>" . $row['name'] . "</div>";
+                    echo "<div class='category-item'>" . ucwords($row['name']) . "</div>";
                 }
             }
             ?>
@@ -66,39 +65,44 @@ $result = $db->getData("category");
             <h1>Add New Category</h1>
         </div>
         <div>
-            <form action="" method="post" class="needs-validation" novalidate>
+            <form action="addCategory.php" method="post" class="needs-validation" novalidate>
                 <div>
                     <label class="col-12 form-label text-center ">Category</label>
                     <input type="text" name="category" class="form-control" required >
-                    <div class="invalid-feedback">
-                        Please add a category
-                    </div>
+                    <?php
+                        if(isset($_COOKIE['errMsg'])){
+                        $errorMessage = $_COOKIE['errMsg'];
+                        echo "<p class='text-danger my-0 '>$errorMessage</p>";
+                        setcookie('errMsg', '', time() -1);
+                        }
+                    ?>
+
+                    <p class="invalid-feedback text-danger my-0 " style="font-size:16px">
+                        Please add a category!
+                    </p>
                 </div>
-                <div class="col-12 text-center my-2">
+                <div class="col-12 text-center">
                     <button class="btn btn-primary" type="submit">Add Category</button>
                 </div>
             </form>
         </div>
     </section>
+
     <script>
         (() => {
-  'use strict'
+        'use strict'
+        const forms = document.querySelectorAll('.needs-validation')
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+            }
 
-  // Fetch all the forms we want to apply custom Bootstrap validation styles to
-  const forms = document.querySelectorAll('.needs-validation')
-
-  // Loop over them and prevent submission
-  Array.from(forms).forEach(form => {
-    form.addEventListener('submit', event => {
-      if (!form.checkValidity()) {
-        event.preventDefault()
-        event.stopPropagation()
-      }
-
-      form.classList.add('was-validated')
-    }, false)
-  })
-})()
+            form.classList.add('was-validated')
+            }, false)
+        })
+        })()
     </script>
 </body>
 </html>

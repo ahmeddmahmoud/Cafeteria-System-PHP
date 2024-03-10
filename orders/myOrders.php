@@ -11,7 +11,7 @@ try {
     }
 
     // Check if user is logged in
-    if (isset($_SESSION['login'])) {
+    if (isset($_SESSION['id'])) {
         $name = $_SESSION['name'];
         $user_id = $_SESSION['id'];
     } else {
@@ -46,6 +46,7 @@ $crrentDate = date("Y-m-d");
     <!-- file imports -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" integrity="sha512-jnSuA4Ss2PkkikSOLtYs8BlYIeeIK1h99ty4YfvRPAlzr377vr3CXDb7sb7eEEBYjDtcYj+AjBH3FLv5uSJuXg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>My orders</title>
+    <link rel="stylesheet" href="../style/nav.css">
     <style>
         /* Styles for order */
         .order {
@@ -85,36 +86,39 @@ $crrentDate = date("Y-m-d");
     </style>
 </head>
 
-<body class="container">
-    <form class="row">
-        <div class=" form-group col">
-            <label for="start_date">Start Date:</label>
-            <input type="date" class="form-control" id="start_date" name="start_date">
-        </div>
-        <div class=" form-group col">
-            <label for="end_date">End Date:</label>
-            <input type="date" class="form-control" id="end_date" name="end_date" max="<?php echo $crrentDate ?>">
-        </div>
-    </form>
-    <button onclick="filterOrders()" class="btn btn-primary my-2 " style="height: fit-content;">Filter</button>
+<body class="">
+    <?PHP include "../components/nav.php" ?>
+    <main class="container">
+        <form class="row">
+            <div class=" form-group col">
+                <label for="start_date">Start Date:</label>
+                <input type="date" class="form-control" id="start_date" name="start_date">
+            </div>
+            <div class=" form-group col">
+                <label for="end_date">End Date:</label>
+                <input type="date" class="form-control" id="end_date" name="end_date" max="<?php echo $crrentDate ?>">
+            </div>
+        </form>
 
-    <h2 class="h2 my-5">My Orders</h2>
+        <button onclick="filterOrders()" class="btn btn-primary my-2 " style="height: fit-content;">Filter</button>
+
+        <h2 class="h2 my-5">My Orders</h2>
 
 
-    <?php
-    $totalPrice = 0;
+        <?php
+        $totalPrice = 0;
 
-    foreach ($orders as $row) {
-        // Splitting item quantities, prices, and images into arrays
-        $quantityArr = explode(",", $row['item_quantities']);
-        $priceArr = explode(",", $row['item_prices']);
-        $imgArr = explode(",", $row['item_images']);
+        foreach ($orders as $row) {
+            // Splitting item quantities, prices, and images into arrays
+            $quantityArr = explode(",", $row['item_quantities']);
+            $priceArr = explode(",", $row['item_prices']);
+            $imgArr = explode(",", $row['item_images']);
 
-        // Initialize the cancel button HTML
-        $cancelButton = ($row['status'] == 'processing') ? "<a href='../orders/deleteOrder.php?id={$row['order_id']}' class='btn btn-danger mx-auto'>Cancel</a>" : '';
+            // Initialize the cancel button HTML
+            $cancelButton = ($row['status'] == 'processing') ? "<a href='../orders/deleteOrder.php?id={$row['order_id']}' class='btn btn-danger mx-auto'>Cancel</a>" : '';
 
-        // Output each order using heredoc syntax
-        echo <<<HTML
+            // Output each order using heredoc syntax
+            echo <<<HTML
     <div class='order'>
         <div class='order-info'>
             <p class='date'>Date: {$row['order_date']}</p>
@@ -129,36 +133,36 @@ $crrentDate = date("Y-m-d");
         <!-- Output product details (image, quantity, price) in a div -->
         <div class='product-details' style='display:none;'>
 HTML;
-        foreach ($imgArr as $key => $image) {
-            $quantity = $quantityArr[$key];
-            $price = $priceArr[$key];
+            foreach ($imgArr as $key => $image) {
+                $quantity = $quantityArr[$key];
+                $price = $priceArr[$key];
 
-            echo <<<HTML
+                echo <<<HTML
             <div class='product'>
                 <img src='$image' alt='Product Image' style='width: 100px; height: auto;'>
                 <p>Quantity: $quantity</p>
                 <p>Price: $price</p>
             </div> <!-- Closing div for product -->
 HTML;
+            }
+            echo "</div> <!-- Closing div for product-details -->";
+            echo "</div> <!-- Closing div for order -->";
+
+            // Accumulate total price
+            $totalPrice += $row['total_amount'];
         }
-        echo "</div> <!-- Closing div for product-details -->";
-        echo "</div> <!-- Closing div for order -->";
 
-        // Accumulate total price
-        $totalPrice += $row['total_amount'];
-    }
-
-    echo "<hr>";
-    echo "<div class='total-container order-info'>";
-    echo "<h3>Total</h3>";
-    echo "<div class='total-price'>$totalPrice</div>";
-    echo "</div>";
-    ?>
+        echo "<hr>";
+        echo "<div class='total-container order-info'>";
+        echo "<h3>Total</h3>";
+        echo "<div class='total-price'>$totalPrice</div>";
+        echo "</div>";
+        ?>
 
 
 
 
-
+    </main>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.min.js" integrity="sha512-ykZ1QQr0Jy/4ZkvKuqWn4iF3lqPZyij9iRv6sGqLRdTPkY69YX6+7wvVGmsdBbiIfN/8OdsI7HABjvEok6ZopQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>

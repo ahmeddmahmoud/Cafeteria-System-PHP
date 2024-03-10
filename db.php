@@ -16,7 +16,7 @@ class DB
     }
     function getData($tableName, $condition = "1", $column = "*")
     {
-        echo "SELECT $column FROM $tableName WHERE $condition";
+        //echo "SELECT $column FROM $tableName WHERE $condition";
         $result = $this->connection->query("SELECT $column FROM $tableName WHERE $condition");
         if (!$result) {
             die("Error fetching data: " . $this->connection->error);

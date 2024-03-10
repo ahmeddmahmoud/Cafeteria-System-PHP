@@ -32,7 +32,7 @@ try {
         exit(); // Stop further execution after redirection
     } else {
 
-        $result=$db->getData("user","email='$email' AND password='$password'");
+        $result = $db->getData("user", "email='$email' AND password='$password'");
 
         // $query = "SELECT * FROM user WHERE email='$email' AND password='$password'";
         // $result = $connection->query($query);
@@ -53,17 +53,17 @@ try {
             $_SESSION['id'] = $data['id'];
             $_SESSION['role'] = $data['role'];
             $_SESSION['image'] = $data['image'];
-            $_SESSION['room_no'] = $data['room_no']; 
+            $_SESSION['room_no'] = $data['room_no'];
 
 
             if ($_SESSION['role'] == 'admin') {
-                header("Location: admin_dashboard.php"); 
+                header("Location: ../orders/makeOrderAdmin.php");
             } else {
-                header("Location: user_dashboard.php");
+                header("Location: ../orders/makeOrderUser.php");
             }
             exit();
         } else {
-            
+
             header("Location: login.php?errors=1");
             exit();
         }
@@ -81,4 +81,3 @@ function validate_data($data)
     $data = htmlspecialchars($data);
     return $data;
 }
-?>

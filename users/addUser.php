@@ -36,12 +36,15 @@ $imageName = $_FILES['image']['name'];
 move_uploaded_file($source, "../imgs/users/" . $imageName);
 
 echo "</br>";
+session_start();
+$oldRoom = $_SESSION['roomNo'];
 
 //echo $name;
 try {
-    if (strlen($name) < 3 || !preg_match("/^[a-zA-Z]+$/", $name)) {
-        $errors['name'] = "Name must be at least 3 characters and characters only";
-    }
+    if (strlen($name) < 3 || !preg_match("/^[a-zA-Z\s]+$/", $name)) {
+    $errors['name'] = "Name must be at least 3 characters and contain only alphabetic characters";
+}
+
     // check email validation
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors['email'] = "Invalid email";
@@ -76,12 +79,11 @@ try {
     } else {
 
         if (isset($_POST['add'])) {
-            // $db->insert_data("rooms" , "room_no , ext" , "'$Room_No' , '$Ext'");
+             $db->insert_data("rooms" , "room_no , ext" , "'$Room_No' , '$Ext'");
             $db->insert_data("user", "name , email , password , room_no, image , role", "'$name' , '$email' , '$password'  , '$Room_No', '$imageName' , 'user'");
         } elseif (isset($_POST['update'])) {
-
-            $db->update_data("rooms", "room_no = '$Room_No' , ext = '$Ext'", "room_no = '$Room_No'");
-            $db->update_data("user", "name = '$name' , email = '$email' , password = '$password' , room_no = '$Room_No'", "id = '$id'");
+ $db->update_data("rooms" , "room_no = '$Room_No' , ext = '$Ext'" , "room_no = '$oldRoom'");
+     $db->update_data("user" , "name = '$name' , email = '$email' , password = '$password' , room_no = '$Room_No' , image = '$imageName'", "id = '$id'");
         }
     }
 } catch (Exception $e) {

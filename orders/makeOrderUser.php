@@ -22,12 +22,15 @@ and o_p.order_id={$lastOrderID}", "p.name,p.image")->fetch_all(MYSQLI_ASSOC);
 ?>
 <style>
   .userimg {
-    width: 30px;
-    height: 30px;
+    width: 50px;
+    border-radius: 50%;
+    height: 50px;
   }
 
   .allproduct img {
     cursor: pointer;
+    margin: auto;
+    display: inline-block;
   }
 </style>
 <link rel="stylesheet" href="main.css">
@@ -71,7 +74,6 @@ and o_p.order_id={$lastOrderID}", "p.name,p.image")->fetch_all(MYSQLI_ASSOC);
       </div>
     </div>
   </nav>
-  ?>
   </a>
   <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
