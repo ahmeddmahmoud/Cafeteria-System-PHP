@@ -56,13 +56,13 @@ try {
 
 
             if ($_SESSION['role'] == 'admin') {
-                header("Location: ../orders/makeOrderAdmin.php"); 
+                header("Location: ../orders/makeOrderAdmin.php");
             } else {
                 header("Location: ../orders/makeOrderUser.php");
             }
             exit();
         } else {
-
+            setcookie("errMsg", "Email Or Passwor Incorrect");
             header("Location: login.php?errors=1");
             exit();
         }
