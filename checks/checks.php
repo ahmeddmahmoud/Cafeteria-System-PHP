@@ -162,5 +162,9 @@ require './checkall.php';
         });
         });
     }
+    document.addEventListener("DOMContentLoaded", function() {
+            filterOrders(); 
+        });
+    
 </script>
 
