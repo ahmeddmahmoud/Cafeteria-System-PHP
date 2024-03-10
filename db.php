@@ -83,8 +83,19 @@ class DB
         }
         return $result;
     }
+<<<<<<< HEAD
+
+    function getCount($tableName){
+        return $this->connection->query("select COUNT(*) as total FROM $tableName");   
+    }
+    
+    function select_data($tableName,$condition=""){
+        
+        return $this->connection->query("select * from $tableName where $condition");
+=======
     function getCount($tableName)
     {
         return $this->connection->query("select COUNT(*) as total FROM $tableName");
+>>>>>>> 11b9e2d6d53b87aa63d604ac80aef7a52f8ef9b4
     }
 }
