@@ -1,6 +1,6 @@
 <?php
-require_once '../db.php';
-require_once './checkall.php';
+require '../db.php';
+require './checkall.php';
 ?>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <div class="container">
@@ -33,7 +33,7 @@ require_once './checkall.php';
             </form>
         </div>
     </div>
-    <div class="row mt-5">
+    <div class="row mt-2">
         <div class="col-md-6 offset-md-3">
             <h2>User Orders</h2>
             <table class="table">
@@ -44,8 +44,11 @@ require_once './checkall.php';
                 </tr>
                 </thead>
                 <tbody id="userOrdersTableBody">
-                </tbody>
+                </tbody>                  
             </table>
+            <div class="order-details" style="display:none;"></div>
+            
+
         </div>
     </div>
 </div>
@@ -53,6 +56,9 @@ require_once './checkall.php';
 <script>
     // Retrieve user orders from PHP variable
     const userOrders = <?php echo $userOrdersJson; ?>;  //get data from json string
+    const ordersDate = <?php echo $ordersDateJson; ?>;  //get data from json string
+    const orderDetails = <?php echo $detailsJson; ?>;  //get data from json string
+    console.log(orderDetails);
 
     function filterOrders() {
         const dateFrom = document.getElementById('date_from').value;
@@ -82,27 +88,79 @@ require_once './checkall.php';
         });
 
         // Update table with filtered user orders
-        updateOrdersTable(filteredOrders);
+        updateOrdersTable(filteredOrders,ordersDate,orderDetails);
     }
 
     // Function to display all orders
     function displayAllOrders() {
-        updateOrdersTable(userOrders);
+        updateOrdersTable(userOrders, ordersDate, orderDetails);
     }
 
     // Function to update the orders table
-    function updateOrdersTable(orders) {
+    function updateOrdersTable(orders, ordersDate, orderDetails) {
+  
         const userOrdersTableBody = document.getElementById('userOrdersTableBody');
         userOrdersTableBody.innerHTML = '';    // Clear the existing content in the table body
-
         orders.forEach(order => {
             const row = `
                 <tr>
-                    <td>${order['name']}</td>
-                    <td>${order['total_price']}</td>
+                    <td>
+                        <button class="show-details-btn btn btn-info" data-userid="${order['id']}">+</button> ${order['name']}
+                    </td>
+                    <td>${order['total_price']}
+                    </td>
                 </tr>
             `;
             userOrdersTableBody.insertAdjacentHTML('beforeend', row);
         });
+        const showDetailsButtons = document.querySelectorAll('.show-details-btn');
+        showDetailsButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const userId = this.getAttribute('data-userid');
+                const orderDetailsDiv = document.querySelector('.order-details');
+            
+                // Find orders associated with the user ID
+                const userOrders = ordersDate.filter(order => order['user_id'] === userId);
+
+                // Generate HTML to display order date and amount
+                let orderDetailsHTML = '<table class="table" border=2><tr><th>Order Date</th><th>Amount</th></tr>';
+                userOrders.forEach(order => {
+                    orderDetailsHTML += `<tr><td><button class="btn btn-secondary showOrder" data-userid="${order['user_id']}" data-orderDate="${order['date']}" >+</button> ${order['date']}</td><td>${order['total_price']}</td></tr>`;
+                });
+                orderDetailsHTML += '<tr><td colspan=2 class="text-center"><div class="contain d-flex justify-content-around align-items-center"></div></td></tr><tr><td colspan=2 class="text-center"> <button id="close" class="btn btn-danger">Close</button></td></tr></table>';
+                
+                // Update the order details div
+                orderDetailsDiv.innerHTML = orderDetailsHTML;
+                orderDetailsDiv.style.display = 'block';
+                const closeButton = document.getElementById('close');
+                closeButton.addEventListener('click', function() {
+                    orderDetailsDiv.style.display = 'none';
+                });
+
+                const showOrderButtons = document.querySelectorAll('.showOrder');
+                showOrderButtons.forEach(showButton => {
+                    showButton.addEventListener('click', function() {
+                        const orderUserid = this.getAttribute('data-userid');
+                        const containerEle = document.querySelector('.contain');
+                        const orderDate= this.getAttribute('data-orderDate');
+                        const order = orderDetails.filter(order => order['user_id'] === orderUserid && order['date'] === orderDate);
+                        let orderDetailsContent='';
+                        order.forEach(order => {
+                             orderDetailsContent += `
+                                <div>
+                                <img src="../imgs/products/${order['product_image']}" style="max-width: 100px;">
+                                    <p>${order['product_name']}</p>
+                                    <p>Quantity: ${order['quantity']}</p>
+                                    <p>Price: ${order['product_price']}</p>
+                                </div>
+                            `;
+                            // Append the order details to the existing content
+                            containerEle.innerHTML=orderDetailsContent;
+                        });
+                    });
+                });
+        });
+        });
     }
 </script>
+
