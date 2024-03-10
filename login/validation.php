@@ -47,7 +47,6 @@ try {
             }
             // Store user data in session
             $_SESSION['email'] = $data['email'];
-            $_SESSION['login'] = true;
             $_SESSION['name'] = $data['name'];
             $_SESSION['id'] = $data['id'];
             $_SESSION['role'] = $data['role'];
@@ -58,11 +57,11 @@ try {
             if ($_SESSION['role'] == 'admin') {
                 header("Location: ../orders/makeOrderAdmin.php");
             } else {
-                header("Location: ../orders/makeOrderUser.php");
+                header("Location: user_dashboard.php");
             }
             exit();
         } else {
-            setcookie("errMsg", "Email Or Passwor Incorrect");
+
             header("Location: login.php?errors=1");
             exit();
         }

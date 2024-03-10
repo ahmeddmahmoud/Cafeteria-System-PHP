@@ -9,13 +9,13 @@ require "../db.php";
 $db = new DB();
 $db->__construct();
 // $data = $db->select_data("user", "id = '$id'");
-$data = $db->getData("user");
+$data = $db->getData("user" , "id = '$id' ");
 $result = $data->fetch_array(MYSQLI_ASSOC);
 var_dump($result);
 // die();
 $roomNo = $result['room_no'];
 // $roomData = $db->select_data("rooms", "room_no = '$roomNo' ");
-$roomData = $db->getData("rooms", "1", "room_no = '$roomNo' ");
+$roomData = $db->getData("rooms",  "room_no = '$roomNo' ");
 $roomResult = $roomData->fetch_array(MYSQLI_ASSOC);
 echo "</br>";
 var_dump($roomResult);
@@ -61,8 +61,8 @@ $_SESSION['roomNo'] = $roomNo;
             <input type="text" name="ext" class="form-control" value="<?= $roomResult['ext'] ?>">
         </div>
         <div class="mb-3">
-            <label for="image">Profile Picture</label value="<?= $result['image'] ?>">
-            <input type="file" class="form-control" name="image">
+            <label for="image">Profile Picture</label >
+            <input type="file" class="form-control" name="image" value="<?= $result['image'] ?>">
             <p class="text-danger"><?php if (isset($errors['image'])) echo $errors['image']; ?></p>
         </div>
         <button type="submit" class="btn btn-primary my-3" name="update" value="update">Save</button>

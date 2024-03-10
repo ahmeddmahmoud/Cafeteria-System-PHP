@@ -34,9 +34,9 @@ require_once './checkall.php';
                         ?>
                     </select>
                 </div>
-                <input type="hidden" name="selected_user" id="selected_user" value="">
+                <!-- <input type="hidden" name="selected_user" id="selected_user" value="">
                 <input type="hidden" name="selected_date_from" id="selected_date_from" value="">
-                <input type="hidden" name="selected_date_to" id="selected_date_to" value="">
+                <input type="hidden" name="selected_date_to" id="selected_date_to" value=""> -->
             </form>
         </div>
     </div>
@@ -83,6 +83,23 @@ require_once './checkall.php';
                             <td><?php echo $userTotalPrice; ?></td>
                         </tr>
                     <?php endif; ?>
+                     <!-- Fake data for testing filter function -->
+                     <div class="row mt-5">
+                <div class="col-md-6 offset-md-3">
+                    <h2>Fake Orders</h2>
+                    <div id="fake_orders">
+                        <?php
+                        foreach ($fakeOrders as $order) {
+                            echo '<div class="fake-order">';
+                            echo '<h3>User: ' . $order['user'] . '</h3>';
+                            echo '<p>Date: ' . $order['date'] . '</p>';
+                            echo '<p>Total Price: ' . $order['total_price'] . '</p>';
+                            echo '</div>';
+                        }
+                        ?>
+                    </div>
+                </div>
+    </div>
                 </tbody>
             </table>
         </div>
@@ -90,17 +107,23 @@ require_once './checkall.php';
 </div>
 <script>
     function filterOrders() {
-        // Get the selected user and date range values
-        var selectedUserId = document.getElementById('user').value;
         var dateFrom = document.getElementById('date_from').value;
         var dateTo = document.getElementById('date_to').value;
+        var fakeOrders = document.querySelectorAll('.fake-order');
 
-        // Update the form fields with the selected values
-        document.getElementById('selected_user').value = selectedUserId;
-        document.getElementById('selected_date_from').value = dateFrom;
-        document.getElementById('selected_date_to').value = dateTo;
-
-        // Submit the form to trigger PHP processing
-        document.querySelector('form').submit();
+        fakeOrders.forEach(function(order) {
+            var orderDateText = order.querySelector('p').innerText.split(': ')[1]; // Extracting date as text
+            var orderDate = new Date(orderDateText); // Parsing date string into Date object
+            var fromDate = new Date(dateFrom);
+            var toDate = new Date(dateTo);
+            
+            if (dateFrom && dateTo) {
+                if (orderDate >= fromDate && orderDate <= toDate) {
+                    order.style.display = 'block';
+                } else {
+                    order.style.display = 'none';
+                }
+            }
+        });
     }
 </script>

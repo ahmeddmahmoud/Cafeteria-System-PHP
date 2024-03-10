@@ -8,7 +8,7 @@ function validateData($data)
     return $data;
 }
 
-$db  = new Db();
+$db  = new DB();
 $db->__construct();
 $errors = [];
 
@@ -50,9 +50,9 @@ try {
     if (strlen($password) < 6) {
         $errors['password'] = "Password must be at least 6 characters";
     }
-    // if ($password !== $confirmPassword){
-    //     $errors['confirm_password'] = "Password does not match";
-    // }
+    if ($password !== $confirmPassword){
+        $errors['confirm_password'] = "Password does not match";
+    }
     if (!is_numeric($Room_No)) {
         $errors['room_no'] = "Room No. must be numeric";
     }

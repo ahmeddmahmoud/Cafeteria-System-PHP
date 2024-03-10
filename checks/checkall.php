@@ -1,5 +1,6 @@
 <?php
 require_once '../db.php';
+require_once './checkall.php';
 
 try {
     $db = new DB();
@@ -8,6 +9,15 @@ try {
     header("Location: login.php?error=Invalid_dbConnection");
     exit();
 }
+
+// Fetch fake orders data from the database or any other source
+$fakeOrders = array(
+    array("user" => "John Doe", "date" => "2024-03-01", "total_price" => "$50"),
+    array("user" => "Jane Smith", "date" => "2024-01-05", "total_price" => "$100"),
+    array("user" => "Michael Johnson", "date" => "2024-03-10", "total_price" => "$75"),
+    array("user" => "Emily Davis", "date" => "2024-11-15", "total_price" => "$120")
+);
+
 
 // Retrieve user data from the database along with their orders count
 $usersResult = $db->getConnection()->query("SELECT u.id, u.name , o.date
@@ -29,14 +39,12 @@ $selectedUserId = isset($_POST['user']) ? $_POST['user'] : null;
 $userTotalPrice = 0;
 
 // Fetch total price for the selected user if one is selected
-if (!empty($selectedUserId)) { // Check if a user is selected /I select one user
+if (!empty($selectedUserId)) { // Check if a user is selected
     if ($selectedUserId !== 'all') { // Check if the selected user is not "Show All"
         // Fetch total price
-        $dateFrom = isset($_POST['selected_date_from']) ? $_POST['selected_date_from'] : null;
-        $dateTo = isset($_POST['selected_date_to']) ? $_POST['selected_date_to'] : null;
-        var_dump($dateFrom);
-        var_dump($dateTo);
-
+        $dateFrom = isset($_POST['date_from']) ? $_POST['date_from'] : null;
+        $dateTo = isset($_POST['date_to']) ? $_POST['date_to'] : null;
+        
         // Construct the SQL query with date filters
         $query = "SELECT u.id,
                          u.name,
