@@ -7,18 +7,13 @@ session_start();
 $image = "../imgs/users/" . $_SESSION['image'];
 $userName = $_SESSION['name'];
 $userID = $_SESSION['id'];
-try {
-  $lastOrderID = $obj->getData("orders", "user_id={$userID} order by id desc limit 1", "id")->fetch_assoc()['id'];
+$lastOrderID = $obj->getData("orders", "user_id={$userID} order by id desc limit 1", "id");
+$lastOrderID=$lastOrderID->fetch_assoc();
+if($lastOrderID!=null){
+  $lastOrderID=$lastOrderID['id'];
   $lastOrder = $obj->getData("orders_product as o_p, product as p", "p.id = o_p.product_id 
-and o_p.order_id={$lastOrderID}", "p.name,p.image")->fetch_all(MYSQLI_ASSOC);
-} catch (Exception $e) {
-  echo "oops";
-  $lastOrder = "Empry";
+  and o_p.order_id={$lastOrderID}", "p.name,p.image")->fetch_all(MYSQLI_ASSOC);
 }
-// echo "<pre>";
-// var_dump($rooms);
-// echo "</pre>";
-// die();
 ?>
 <style>
   .userimg {
@@ -94,7 +89,8 @@ and o_p.order_id={$lastOrderID}", "p.name,p.image")->fetch_all(MYSQLI_ASSOC);
     <div class=" col-7 h-50 row ">
       <div class="last row h-50 mb-2">
         <?php
-        if ($lastOrder != "") {
+        if(isset($lastOrder)){
+          echo "<h4 class='text-center'>Your last order was: </h4>";
           for ($i = 0; $i <  count($lastOrder); $i++) {
             echo "<div class=' card col-3 mb-2  text-center'>";
             foreach ($lastOrder[$i] as $key => $value) {
@@ -105,11 +101,9 @@ and o_p.order_id={$lastOrderID}", "p.name,p.image")->fetch_all(MYSQLI_ASSOC);
             }
             echo "</div>";
           }
-        } else {
-          echo "No orders yet";
+        }else{
+          echo "<h4 class='text-center'>No last Order to Show</h4>";
         }
-
-        // die();
         ?>
       </div>
       <hr>
