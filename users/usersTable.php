@@ -4,6 +4,16 @@ include_once '../db.php'; // Include the DB class file
 $db = new DB(); // Create an instance of the DB class
 
 session_start();
+// Check if user is logged in
+if (isset($_SESSION['id'])) {
+    $name = $_SESSION['name'];
+    $user_id = $_SESSION['id'];
+} else {
+    // Redirect to login page if user is not logged in
+    setcookie("msg", "You are not logged in, please login first");
+    header("Location: ../login/login.php");
+    exit(); // Stop further execution
+}
 
 // Pagination Variables
 $limit = 6; // Number of records per page
@@ -22,17 +32,17 @@ $result = $db->getDataPagination("user u INNER JOIN rooms r ON u.room_no = r.roo
 
 ?>
 <style>
-    .userimg {
-            width: 50px;
-            border-radius: 50%;
-            height: 50px;
-        }
+.userimg {
+    width: 50px;
+    border-radius: 50%;
+    height: 50px;
+}
 
-        .allproduct img {
-            cursor: pointer;
-            margin: auto;
-            display: inline-block;
-        }
+.allproduct img {
+    cursor: pointer;
+    margin: auto;
+    display: inline-block;
+}
 </style>
 <!doctype html>
 <html lang="en">
@@ -44,7 +54,7 @@ $result = $db->getDataPagination("user u INNER JOIN rooms r ON u.room_no = r.roo
 </head>
 
 <body>
-<?PHP include "../components/nav.php" ?>
+    <?PHP include "../components/nav.php" ?>
 
     <div class="d-flex justify-content-around m-2 align-items-center ">
         <p class="fs-3 fw-bold ">All Users</p><button type="button" class="btn btn-primary">Add User</button>
