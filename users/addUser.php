@@ -12,10 +12,10 @@ $db  = new DB();
 $db->__construct();
 $errors = [];
 
-// $id = $_POST['id'];
+$id = $_POST['id'];
 
 $name = validateData($_POST['name']);
-echo $name;
+//echo $name;
 echo "</br>";
 $email = validateData($_POST['email']);
 
@@ -73,7 +73,7 @@ try {
         $errors = json_encode($errors);
         if (isset($_POST['add'])) {
             header("location: userForm.php?errors=" . $errors);
-        } else {
+        } else if(isset($_POST['update'])) {
             header("location: updateUser.php?errors=" . $errors);
         }
     } else {

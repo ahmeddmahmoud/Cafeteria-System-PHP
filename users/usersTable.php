@@ -73,6 +73,7 @@ $result = $db->getDataPagination("user u INNER JOIN rooms r ON u.room_no = r.roo
                         echo "<td>
                         <a href='updateUser.php?id={$row['id']}' class='btn btn-warning'>Edit</a>
                         <a href='deleteUser.php?id={$row['id']}&page=$page' class='btn btn-danger'>Delete</a>
+                        
                         </td>";
                         echo "</tr>";
                     }

@@ -22,12 +22,17 @@ echo "</br>";
 session_start();
 $_SESSION['roomNo'] = $roomNo;
 
+if (isset($_GET['errors'])) {
+    $errors = json_decode($_GET['errors'], true); // Decode the JSON string into an associative array
+    echo "hello from update";
+}
+
 
 ?>
 
 
 <div class="container">
-    <form action="updateUser2.php" method="post" enctype="multipart/form-data">
+    <form action="addUser.php" method="post" enctype="multipart/form-data">
         <div class="mb-3">
             <label for="">ID</label>
             <input type="text" name="id" class="form-control" value="<?= $result['id'] ?>" readonly>
@@ -59,6 +64,7 @@ $_SESSION['roomNo'] = $roomNo;
         <div class="mb-3">
             <label for="Ext">Ext.</label>
             <input type="text" name="ext" class="form-control" value="<?= $roomResult['ext'] ?>">
+            <p class="text-danger"><?php if (isset($errors['ext'])) echo $errors['ext']; ?></p>
         </div>
         <div class="mb-3">
             <label for="image">Profile Picture</label >
