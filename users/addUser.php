@@ -74,7 +74,7 @@ try {
         if (isset($_POST['add'])) {
             header("location: userForm.php?errors=" . $errors);
         } else if(isset($_POST['update'])) {
-            header("location: updateUser.php?errors=" . $errors);
+            header("location: updateUser.php?errors=" . $errors."&id=" . $id);
         }
     } else {
 
