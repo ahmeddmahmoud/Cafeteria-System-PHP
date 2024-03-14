@@ -12,7 +12,7 @@ $db  = new DB();
 $db->__construct();
 $errors = [];
 
-$id = $_POST['id'];
+
 
 $name = validateData($_POST['name']);
 //echo $name;
@@ -23,11 +23,11 @@ $password = validateData($_POST['password']);
 $confirmPassword = validateData($_POST['confirm_password']);
 
 $Room_No = validateData($_POST['room_no']);
-echo $Room_No;
+
 echo "</br>";
 
 $Ext = validateData($_POST['ext']);
-echo $Ext;
+
 echo "</br>";
 
 //var_dump($_FILES);/
@@ -36,8 +36,13 @@ $imageName = $_FILES['image']['name'];
 move_uploaded_file($source, "../imgs/users/" . $imageName);
 
 echo "</br>";
+// for update
+if (isset($_POST['update'])){
+    $id = $_POST['id'];
 session_start();
 $oldRoom = $_SESSION['roomNo'];
+}
+
 
 //echo $name;
 try {
@@ -82,8 +87,8 @@ try {
              $db->insert_data("rooms" , "room_no , ext" , "'$Room_No' , '$Ext'");
             $db->insert_data("user", "name , email , password , room_no, image , role", "'$name' , '$email' , '$password'  , '$Room_No', '$imageName' , 'user'");
         } elseif (isset($_POST['update'])) {
- $db->update_data("rooms" , "room_no = '$Room_No' , ext = '$Ext'" , "room_no = '$oldRoom'");
-     $db->update_data("user" , "name = '$name' , email = '$email' , password = '$password' , room_no = '$Room_No' , image = '$imageName'", "id = '$id'");
+            $db->update_data("rooms" , "room_no = '$Room_No' , ext = '$Ext'" , "room_no = '$oldRoom'");
+            $db->update_data("user" , "name = '$name' , email = '$email' , password = '$password' , room_no = '$Room_No' , image = '$imageName'", "id = '$id'");
         }
     }
 } catch (Exception $e) {
