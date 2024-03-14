@@ -4,8 +4,8 @@ include_once '../db.php'; // Include the DB class file
 $db = new DB(); // Create an instance of the DB class
 
 session_start();
-// Check if user is logged in
-if (isset($_SESSION['id'])) {
+// Check if admin is logged in
+    if ($_SESSION['role'] == 'admin') {
     $name = $_SESSION['name'];
     $user_id = $_SESSION['id'];
 } else {
@@ -45,7 +45,8 @@ $result = $db->getDataPagination("product", "1", $limit, $offset);
     <?PHP include "../components/nav.php" ?>
 
     <div class="d-flex justify-content-between mx-5 mt-1 align-items-center ">
-        <p class="fs-3 fw-bold ">All Products</p><button type="button" class="btn btn-primary">Add Product</button>
+        <p class="fs-3 fw-bold ">All Products</p>
+        <a href="productForm.php" class="btn btn-primary">Add Product</a>
     </div>
 
     <div class="mx-5 my-1 text-center ">
@@ -65,9 +66,9 @@ $result = $db->getDataPagination("product", "1", $limit, $offset);
                         echo "<td>".$row['name']."</td>";
                         echo "<td>".$row['price']."</td>";
                         echo "<td><img src='../imgs/products/{$row['image']}' class='rounded-circle' width='100' height='100'/></td>";
-                        echo "<td'>
-                        <a href='availableProduct.php?id={$row['id']}' class='btn btn-primary'>Avilable</a>
-                        <a href='updateProduct.php?id={$row['id']}' class='btn btn-warning'>Edit</a>
+                        echo "<td>
+                        <a href='availableProduct.php?id={$row['id']}' class='btn btn-primary'>Available</a>
+                        <a href='editProduct.php?id={$row['id']}' class='btn btn-warning'>Edit</a>
                         <a href='deleteProduct.php?id={$row['id']}&page=$page' class='btn btn-danger'>Delete</a>
                         </td>";
                         echo "</tr>";

@@ -48,20 +48,35 @@ require './checkall.php';
                 </tbody>
             </table>
             <div class="order-details" style="display:none;"></div>
-
-
+            <div class="order-full-details"></div>
         </div>
     </div>
 </div>
+
+<style>
+    .order-details{
+        border: 1px solid black;
+    }
+    .order-full-details{
+        margin-top: 5px;
+        border: 1px solid black;
+        justify-content: space-around;
+        align-items: center;
+        display: none;
+    }
+</style>
 
 <script>
 // Retrieve user orders from PHP variable
 const userOrders = <?php echo $userOrdersJson; ?>; //get data from json string
 const ordersDate = <?php echo $ordersDateJson; ?>; //get data from json string
 const orderDetails = <?php echo $detailsJson; ?>; //get data from json string
-console.log(orderDetails);
+const orderDetailsDiv = document.querySelector('.order-details');
+const orderFullDetails = document.querySelector('.order-full-details');
 
 function filterOrders() {
+    orderDetailsDiv.style.display = 'none';
+    orderFullDetails.style.display = 'none';
     const dateFrom = document.getElementById('date_from').value;
     const dateTo = document.getElementById('date_to').value;
     const selectedUserId = document.getElementById('user').value;
@@ -74,7 +89,7 @@ function filterOrders() {
     }
 
     // Filter user orders based on selected user and date range
-    let filteredOrders = ordersDate.filter(order => {
+    let filteredOrders = userOrders.filter(order => {
         const orderDate = new Date(order['date']);
         const fromDate = new Date(dateFrom);
         const toDate = new Date(dateTo);
@@ -106,59 +121,68 @@ function updateOrdersTable(orders, ordersDate, orderDetails) {
         const row = `
                 <tr>
                     <td>                                                 
-                        <button class="show-details-btn btn btn-info" data-date="${order['date']}" data-userid="${order['id']}">+</button> ${order['name']}      
+                        <button class="show-details-btn btn btn-info" data-userid="${order['id']}">+</button> ${order['name']}      
                     </td>
-                    <td>${order['total_price']}
-                    </td>
+                    <td>${order['total_price']}</td>
                 </tr>
             `;
         userOrdersTableBody.insertAdjacentHTML('beforeend', row);
     });
+
+
     const showDetailsButtons = document.querySelectorAll('.show-details-btn');
     showDetailsButtons.forEach(button => {
         button.addEventListener('click', function() {
+            orderFullDetails.style.display = 'none';
             const userId = this.getAttribute('data-userid');
-            const userdate = this.getAttribute('data-date');      //added here2 
-
-            const orderDetailsDiv = document.querySelector('.order-details');
-
+            if (this.innerText === '-') {
+                orderDetailsDiv.style.display = 'none';
+                this.innerText = '+';
+                return; 
+            }
+            // Reset all buttons to show '+'
+            showDetailsButtons.forEach(btn => {
+            btn.innerText = '+';
+            });
+            // Set the clicked button's text to '-'
+            this.innerText = '-';
             // Find orders associated with the user ID
-            const userOrders = ordersDate.filter(order => order['user_id'] === userId && order['date'] === userdate );   //change here*******3
-
+            const userOrders = ordersDate.filter(order => order['user_id'] ===userId);
             // Generate HTML to display order date and amount
             let orderDetailsHTML =
-                '<table class="table" border=2><tr><th>Order Date</th><th>Amount</th></tr>';
+                '<table class="table"><tr><th>Order Date</th><th>Amount</th></tr>';
             userOrders.forEach(order => {
                 orderDetailsHTML +=
-                    `<tr><td><button class="btn btn-secondary showOrder" data-userid="${order['user_id']}" data-orderDate="${order['date']}" >+</button> ${order['date']}</td><td>${order['total_price']}</td></tr>`;
+                    `<tr>
+                        <td><button class="btn btn-secondary showOrder" data-userid="${order['user_id']}" data-orderDate="${order['date']}" >+</button> ${order['date']}</td>
+                        <td>${order['total_price']}</td>
+                    </tr>`;
             });
-            orderDetailsHTML +=
-                '<tr><td colspan=2 class="text-center"><div class="contain d-flex justify-content-around align-items-center"></div></td></tr><tr><td colspan=2 class="text-center"> <button id="close" class="btn btn-danger">Close</button></td></tr></table>';
+            orderDetailsHTML += '</table>';
 
             // Update the order details div
             orderDetailsDiv.innerHTML = orderDetailsHTML;
             orderDetailsDiv.style.display = 'block';
-            const closeButton = document.getElementById('close');
-            closeButton.addEventListener('click', function() {
-                orderDetailsDiv.style.display = 'none';
-            });
-            const filterButton = document.getElementById('filter');     ///i added here **********1
-            filterButton.addEventListener('click', function() {
-                orderDetailsDiv.style.display = 'none';
-            });
+
 
             const showOrderButtons = document.querySelectorAll('.showOrder');
             showOrderButtons.forEach(showButton => {
                 showButton.addEventListener('click', function() {
                     const orderUserid = this.getAttribute('data-userid');
-                    const containerEle = document.querySelector('.contain');
+
                     const orderDate = this.getAttribute('data-orderDate');
-                    const order = orderDetails.filter(order => order['user_id'] ===
-                        orderUserid && order['date'] === orderDate);
+                    const order = orderDetails.filter(order => order['user_id'] === orderUserid && order['date'] === orderDate);
+                    if (this.innerText === '-') {
+                        orderFullDetails.style.display = 'none';
+                        this.innerText = '+';
+                        return; 
+                    }
+
+
                     let orderDetailsContent = '';
                     order.forEach(order => {
                         orderDetailsContent += `
-                                <div>
+                                <div class="pt-2">
                                 <img src="../imgs/products/${order['product_image']}" style="max-width: 100px;">
                                     <p>${order['product_name']}</p>
                                     <p>Quantity: ${order['quantity']}</p>
@@ -166,8 +190,16 @@ function updateOrdersTable(orders, ordersDate, orderDetails) {
                                 </div>
                             `;
                         // Append the order details to the existing content
-                        containerEle.innerHTML = orderDetailsContent;
+                        orderFullDetails.innerHTML = orderDetailsContent;
                     });
+                    orderFullDetails.style.display = 'flex';
+                    // Reset all buttons to show '+'
+                    showOrderButtons.forEach(btn => {
+                    btn.innerText = '+';
+                    });
+                    // Set the clicked button's text to '-'
+                    this.innerText = '-';
+
                 });
             });
         });
