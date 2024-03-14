@@ -60,7 +60,8 @@ $result = $db->getDataPagination("user u INNER JOIN rooms r ON u.room_no = r.roo
     <?PHP include "../components/nav.php" ?>
 
     <div class="d-flex justify-content-between mx-5 mt-1 align-items-center ">
-        <p class="fs-3 fw-bold ">All Users</p><button type="button" class="btn btn-primary">Add User</button>
+        <p class="fs-3 fw-bold ">All Users</p>
+        <a class="btn btn-primary" href="addUser.php">Add User</a>
     </div>
 
     <div class="mx-5 my-1 text-center ">
