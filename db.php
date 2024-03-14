@@ -15,14 +15,22 @@ class DB
         }
     }
     function getData($tableName, $condition = "1", $column = "*")
-    {
-        //echo "SELECT $column FROM $tableName WHERE $condition";
-        $result = $this->connection->query("SELECT $column FROM $tableName WHERE $condition");
-        if (!$result) {
-            die("Error fetching data: " . $this->connection->error);
-        }
-        return $result;
+{
+    $result = $this->connection->query("SELECT $column FROM $tableName WHERE $condition");
+    if (!$result) {
+        die("Error fetching data: " . $this->connection->error);
     }
+
+    // Check if any rows are returned
+    if ($result->num_rows > 0) {
+        // Fetch and return the result
+        return $result;
+    } else {
+        // No rows found, return null
+        return null;
+    }
+}
+
 
     function getDataSpec($column, $tableName, $condition = "1")
     {
