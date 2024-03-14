@@ -71,6 +71,11 @@ try {
         // There was an error uploading the file
         $errors['image'] = "Image upload failed. ";
     }
+    $checkEmail = $db->getData("user" , "email = '$email'");
+    if ($checkEmail !== null){
+        $errors['email'] = "This User already exists";
+        header("location: userForm.php?errors=" . $errors);
+    }
 
 
 
@@ -84,7 +89,7 @@ try {
     } else {
 
         if (isset($_POST['add'])) {
-             $db->insert_data("rooms" , "room_no , ext" , "'$Room_No' , '$Ext'");
+            $db->insert_data("rooms" , "room_no , ext" , "'$Room_No' , '$Ext'");
             $db->insert_data("user", "name , email , password , room_no, image , role", "'$name' , '$email' , '$password'  , '$Room_No', '$imageName' , 'user'");
         } elseif (isset($_POST['update'])) {
             $db->update_data("rooms" , "room_no = '$Room_No' , ext = '$Ext'" , "room_no = '$oldRoom'");
