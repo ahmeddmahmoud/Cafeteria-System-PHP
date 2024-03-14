@@ -23,19 +23,17 @@ $userOrdersResult = $db->getConnection()->query($query);
 
 // Fetch user orders based on date
 $query2= " SELECT
+u.id,
+u.name,
 o.user_id,
 o.date,
 SUM(p.price * op.quantity) AS total_price
-FROM
-orders o
-JOIN
-orders_product op ON o.id = op.order_id
-JOIN
-product p ON op.product_id = p.id
-GROUP BY
-o.user_id, o.date
-ORDER BY
-o.user_id, o.date;";
+FROM `user` u 
+JOIN `orders` o ON u.id = o.user_id 
+JOIN orders_product op ON o.id = op.order_id 
+JOIN product p ON op.product_id = p.id 
+GROUP BY o.user_id, o.date 
+ORDER BY o.user_id, o.date;";
 $userOrdersDate = $db->getConnection()->query($query2);
 
 // Fetch order details based on date

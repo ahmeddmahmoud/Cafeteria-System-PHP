@@ -28,7 +28,7 @@ require './checkall.php';
                     </select>
                 </div>
 
-                <div><button type="button" onclick="filterOrders()" class="btn btn-primary"
+                <div><button type="button" id="filter" onclick="filterOrders()" class="btn btn-primary"
                         style="height: fit-content;">Filter</button></div>
 
             </form>
@@ -74,7 +74,7 @@ function filterOrders() {
     }
 
     // Filter user orders based on selected user and date range
-    let filteredOrders = userOrders.filter(order => {
+    let filteredOrders = ordersDate.filter(order => {
         const orderDate = new Date(order['date']);
         const fromDate = new Date(dateFrom);
         const toDate = new Date(dateTo);
@@ -105,8 +105,8 @@ function updateOrdersTable(orders, ordersDate, orderDetails) {
     orders.forEach(order => {
         const row = `
                 <tr>
-                    <td>
-                        <button class="show-details-btn btn btn-info" data-userid="${order['id']}">+</button> ${order['name']}
+                    <td>                                                 
+                        <button class="show-details-btn btn btn-info" data-date="${order['date']}" data-userid="${order['id']}">+</button> ${order['name']}      
                     </td>
                     <td>${order['total_price']}
                     </td>
@@ -118,10 +118,12 @@ function updateOrdersTable(orders, ordersDate, orderDetails) {
     showDetailsButtons.forEach(button => {
         button.addEventListener('click', function() {
             const userId = this.getAttribute('data-userid');
+            const userdate = this.getAttribute('data-date');      //added here2 
+
             const orderDetailsDiv = document.querySelector('.order-details');
 
             // Find orders associated with the user ID
-            const userOrders = ordersDate.filter(order => order['user_id'] === userId);
+            const userOrders = ordersDate.filter(order => order['user_id'] === userId && order['date'] === userdate );   //change here*******3
 
             // Generate HTML to display order date and amount
             let orderDetailsHTML =
@@ -138,6 +140,10 @@ function updateOrdersTable(orders, ordersDate, orderDetails) {
             orderDetailsDiv.style.display = 'block';
             const closeButton = document.getElementById('close');
             closeButton.addEventListener('click', function() {
+                orderDetailsDiv.style.display = 'none';
+            });
+            const filterButton = document.getElementById('filter');     ///i added here **********1
+            filterButton.addEventListener('click', function() {
                 orderDetailsDiv.style.display = 'none';
             });
 
