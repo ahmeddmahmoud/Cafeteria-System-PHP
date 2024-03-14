@@ -72,7 +72,7 @@ if (isset($_GET['errors'])) {
             <p class="text-danger"><?php if (isset($errors['image'])) echo $errors['image']; ?></p>
         </div>
         <button type="submit" class="btn btn-primary my-3" name="update" value="update">Save</button>
-        <button type="button" class="btn btn-danger ms-5">Cancel</button>
+        <a href="./usersTable.php" class="btn btn-danger">Cancel</a>
     </form>
 
 </div>

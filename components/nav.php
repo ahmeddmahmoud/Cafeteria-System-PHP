@@ -24,7 +24,7 @@ echo <<<HTML
     <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
       <ul class="nav mt-2 ">
         <li class="">
-          <a class="btn btn-outline-dark border-0" aria-current="page" href="../orders/makeOrderUser.php">Home</a>
+          <a class="btn btn-outline-dark border-0" aria-current="page" href="#">Home</a>
         </li>
         
 HTML;
@@ -49,7 +49,7 @@ if ($_SESSION['role'] === 'admin') {
           <a class="btn btn-outline-dark mx-1 border-0" href="../users/usersTable.php">Users</a>
         </li>
         <li class="">
-          <a class="btn btn-outline-dark mx-1 border-0" href="../orders/allOrders.php">Checks</a>
+          <a class="btn btn-outline-dark mx-1 border-0" href="../checks/checks.php">Checks</a>
         </li>
 HTML;
 }

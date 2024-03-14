@@ -1,8 +1,23 @@
 <?php
 require '../db.php';
 require './checkall.php';
+session_start();
 ?>
+<style>
+    .userimg {
+        width: 50px;
+        border-radius: 50%;
+        height: 50px;
+    }
+
+    .allproduct img {
+        cursor: pointer;
+        margin: auto;
+        display: inline-block;
+    }
+</style>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<?PHP include "../components/nav.php" ?>
 <div class="container">
     <div class="row">
         <div class="col-md-6 offset-md-3">
