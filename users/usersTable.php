@@ -32,17 +32,20 @@ $result = $db->getDataPagination("user u INNER JOIN rooms r ON u.room_no = r.roo
 
 ?>
 <style>
-.userimg {
-    width: 50px;
-    border-radius: 50%;
-    height: 50px;
-}
+    .userimg {
+        width: 50px;
+        border-radius: 50%;
+        height: 50px;
+    }
 
-.allproduct img {
-    cursor: pointer;
-    margin: auto;
-    display: inline-block;
-}
+    .allproduct img {
+        cursor: pointer;
+        margin: auto;
+        display: inline-block;
+    }
+    body > div.mx-5.my-1.text-center > table > tbody > tr > td > img{
+        width:10% !important;
+    }
 </style>
 <!doctype html>
 <html lang="en">
@@ -56,14 +59,13 @@ $result = $db->getDataPagination("user u INNER JOIN rooms r ON u.room_no = r.roo
 <body>
     <?PHP include "../components/nav.php" ?>
 
-    <div class="d-flex justify-content-around m-2 align-items-center ">
+    <div class="d-flex justify-content-between mx-5 mt-1 align-items-center ">
         <p class="fs-3 fw-bold ">All Users</p><button type="button" class="btn btn-primary">Add User</button>
-
     </div>
 
-    <div class="mx-5 my-2 text-center ">
-        <table class="table table-striped">
-            <thead>
+    <div class="mx-5 my-1 text-center ">
+        <table class="table  table-striped">
+            <thead class="text-center">
                 <tr>
                     <th>Name</th>
                     <th>Image</th>
@@ -72,15 +74,15 @@ $result = $db->getDataPagination("user u INNER JOIN rooms r ON u.room_no = r.roo
                     <th>Action</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="text-center">
                 <?php 
                     while ($row = $result->fetch_assoc()) {
                         echo "<tr>";
                         echo "<td>".$row['name']."</td>";
-                        echo "<td>".$row['image']."</td>";
+                        echo "<td><img src='../imgs/users/{$row['image']}' class='rounded-circle'/></td>";
                         echo "<td>".$row['room_no']."</td>";
                         echo "<td>".$row['ext']."</td>";
-                        echo "<td>
+                        echo "<td >
                         <a href='updateUser.php?id={$row['id']}' class='btn btn-warning'>Edit</a>
                         <a href='deleteUser.php?id={$row['id']}&page=$page' class='btn btn-danger'>Delete</a>
                         </td>";

@@ -61,7 +61,7 @@ $userNames = $obj->getData("user", "role!='admin'", "name")->fetch_all(MYSQLI_AS
   <section class="row g-0 mt-4 justify-content-evenly">
     <div class=" col-7 h-50 row ">
       <hr>
-      <div class="allproduct row">
+      <div class="allproduct row g-0">
       <h4 class='text-center bg-dark rounded text-light p-1'>Available product </h4>
         <?php
         foreach ($productData as $row) {
@@ -89,8 +89,8 @@ $userNames = $obj->getData("user", "role!='admin'", "name")->fetch_all(MYSQLI_AS
         </div>
         <div class="card-body">
           <form action="orderControl.php" method="post">
-            <label for="select" class="text-center">Add Order To</label>
-            <select name="userNameByAdmin" class="form-select" id="select">
+            <div class="text-center fw-bold fs-5"><p>Add Order To</p></div>
+            <select name="userNameByAdmin" class="form-select mb-2" id="select">
               <?php
               for ($i = 0; $i < count($userNames); $i++) {
                 echo "<option value='{$userNames[$i]['name']}'>{$userNames[$i]['name']}</option>";
