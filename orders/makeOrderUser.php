@@ -14,10 +14,8 @@ if (isset($_SESSION['id'])) {
   exit(); // Stop further execution
 }
 
-$productData = $obj->getData("product")->fetch_all(MYSQLI_ASSOC);
+$productData = $obj->getData("product","available=1")->fetch_all(MYSQLI_ASSOC);
 $roomsNums = $obj->getData("rooms", "1", "room_no")->fetch_all(MYSQLI_ASSOC);
-$userImage = "../imgs/users/" . $_SESSION['image'];
-$userName = $_SESSION['name'];
 $userID = $_SESSION['id'];
 $lastOrderID = $obj->getData("orders", "user_id={$userID} order by id desc limit 1", "id");
 $lastOrderID=$lastOrderID->fetch_assoc();
@@ -39,6 +37,16 @@ if($lastOrderID!=null){
     margin: auto;
     display: inline-block;
   }
+  .quantityTd{
+    text-align: center;
+    width: 0% !important;
+  }
+  .priceTd{
+    width: 20%;
+  }
+  table input{
+    cursor: default;
+  }
 </style>
 <link rel="stylesheet" href="main.css">
 <!doctype html>
@@ -57,10 +65,10 @@ if($lastOrderID!=null){
     <?PHP include "../components/nav.php" ?>
   <section class="row g-0 mt-4 justify-content-evenly">
     <div class=" col-7 h-50 row ">
-      <div class="last row h-50 mb-2">
+      <div class="last row h-50 mb-2 g-0">
         <?php
         if(isset($lastOrder)){
-          echo "<h4 class='text-center'>Your last order was: </h4>";
+          echo "<h4 class='text-center bg-dark rounded text-light py-1'>My last order was </h4>";
           for ($i = 0; $i <  count($lastOrder); $i++) {
             echo "<div class=' card col-3 mb-2  text-center'>";
             foreach ($lastOrder[$i] as $key => $value) {
@@ -77,7 +85,8 @@ if($lastOrderID!=null){
         ?>
       </div>
       <hr>
-      <div class="allproduct row">
+      <div class="allproduct row g-0">
+      <h4 class='text-center bg-dark rounded text-light p-1'>Available product </h4>
         <?php
         foreach ($productData as $row) {
           echo "<div class='productcard card col-3 mb-2  text-center'>";
@@ -98,14 +107,14 @@ if($lastOrderID!=null){
     </div>
     <div class="reset col-4">
       <div class="card">
-        <div class="card-header">
-          <p>order list</p>
+        <div class="card-header text-center ">
+          <h4 class="fw-bold">Order Details</h4>
         </div>
         <div class="card-body">
           <form action="orderControl.php" method="post">
             <div class="table-responsive">
-              <table class="table table-striped ">
-                <thead>
+              <table class="table  table-hover ">
+                <thead class="text-center">
                   <th>product</th>
                   <th>price</th>
                   <th>+</th>
@@ -145,7 +154,7 @@ if($lastOrderID!=null){
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.min.js" integrity="sha512-ykZ1QQr0Jy/4ZkvKuqWn4iF3lqPZyij9iRv6sGqLRdTPkY69YX6+7wvVGmsdBbiIfN/8OdsI7HABjvEok6ZopQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
   let cards = document.querySelectorAll(".productcard img");
-  let table = document.querySelector(".table-striped tbody");
+  let table = document.querySelector(".table tbody");
   let totalPrice = document.querySelector(".card-footer h3");
   cards.forEach(card => {
     card.addEventListener("click", addRow, {
@@ -179,9 +188,11 @@ if($lastOrderID!=null){
     input.name = type
     if (type === "price[]") {
       input.classList.add("price");
+      td.classList.add("priceTd");
     }
     if (type === "quantity[]") {
       input.classList.add("quantity");
+      td.classList.add("quantityTd");
     }
     input.classList.add("form-control");
     input.value = value;

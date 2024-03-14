@@ -13,13 +13,11 @@ if (isset($_SESSION['id'])) {
   exit(); // Stop further execution
 }
 
-$data = $obj->getData("product")->fetch_all(MYSQLI_ASSOC);
-$rooms = $obj->getData("rooms", "1", "room_no")->fetch_all(MYSQLI_ASSOC);
+$productData = $obj->getData("product","available=1")->fetch_all(MYSQLI_ASSOC);
+$roomsNums = $obj->getData("rooms", "1", "room_no")->fetch_all(MYSQLI_ASSOC);
 $userNames = $obj->getData("user", "role!='admin'", "name")->fetch_all(MYSQLI_ASSOC);
 
-$image = "../imgs/users/" . $_SESSION['image'];
-$userName = $_SESSION['name'];
-$userID = $_SESSION['id'];
+
 
 ?>
 <style>
@@ -33,6 +31,16 @@ $userID = $_SESSION['id'];
     cursor: pointer;
     margin: auto;
     display: inline-block;
+  }
+  .quantityTd{
+    text-align: center;
+    width: 0% !important;
+  }
+  .priceTd{
+    width: 20%;
+  }
+  table input{
+    cursor: default;
   }
 </style>
 <link rel="stylesheet" href="main.css">
@@ -54,8 +62,9 @@ $userID = $_SESSION['id'];
     <div class=" col-7 h-50 row ">
       <hr>
       <div class="allproduct row">
+      <h4 class='text-center bg-dark rounded text-light p-1'>Available product </h4>
         <?php
-        foreach ($data as $row) {
+        foreach ($productData as $row) {
           echo "<div class='productcard card col-3 mb-2  text-center'>";
           foreach ($row as $key => $value) {
             if ($key == 'image') echo "<img class='h-75 w-75' src='../imgs/products/$value'>";
@@ -75,8 +84,8 @@ $userID = $_SESSION['id'];
     </div>
     <div class="reset col-4">
       <div class="card">
-        <div class="card-header">
-          <p>order list</p>
+        <div class="card-header text-center">
+        <h4 class="fw-bold">Order Details</h4>
         </div>
         <div class="card-body">
           <form action="orderControl.php" method="post">
@@ -89,8 +98,8 @@ $userID = $_SESSION['id'];
               ?>
             </select>
             <div class="table-responsive">
-              <table class="table table-striped ">
-                <thead>
+              <table class="table  table-hover ">
+                <thead class="text-center">
                   <th>product</th>
                   <th>price</th>
                   <th>+</th>
@@ -108,8 +117,8 @@ $userID = $_SESSION['id'];
             <select name="roomNum" id="" class="form-select my-1">
               <option value="" disabled selected>Select room</option>
               <?php
-              for ($i = 0; $i < count($rooms); $i++) {
-                echo "<option value='{$rooms[$i]['room_no']}'>{$rooms[$i]['room_no']}</option>";
+              for ($i = 0; $i < count($roomsNums); $i++) {
+                echo "<option value='{$roomsNums[$i]['room_no']}'>{$roomsNums[$i]['room_no']}</option>";
               }
               ?>
             </select>
@@ -130,7 +139,7 @@ $userID = $_SESSION['id'];
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.min.js" integrity="sha512-ykZ1QQr0Jy/4ZkvKuqWn4iF3lqPZyij9iRv6sGqLRdTPkY69YX6+7wvVGmsdBbiIfN/8OdsI7HABjvEok6ZopQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
   let cards = document.querySelectorAll(".productcard img");
-  let table = document.querySelector(".table-striped tbody");
+  let table = document.querySelector(".table tbody");
   let totalPrice = document.querySelector(".card-footer h3");
   cards.forEach(card => {
     card.addEventListener("click", addRow, {
@@ -164,9 +173,11 @@ $userID = $_SESSION['id'];
     input.name = type
     if (type === "price[]") {
       input.classList.add("price");
+      td.classList.add("priceTd");
     }
     if (type === "quantity[]") {
       input.classList.add("quantity");
+      td.classList.add("quantityTd");
     }
     input.classList.add("form-control");
     input.value = value;
