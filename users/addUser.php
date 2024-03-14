@@ -1,4 +1,7 @@
 <?php
+
+
+
 require "../db.php";
 function validateData($data)
 {
@@ -7,6 +10,13 @@ function validateData($data)
     $data = htmlspecialchars($data);
     return $data;
 }
+// Check if the referer is not set or if it doesn't contain 'userForm.php'
+if (!isset($_SERVER['HTTP_REFERER']) || strpos($_SERVER['HTTP_REFERER'], 'userForm.php') === false) {
+    // Redirect to userForm.php
+    header('Location: ./userForm.php');
+    exit; // It's a good practice to exit after sending a Location header
+}
+
 
 $db  = new DB();
 $db->__construct();
@@ -75,6 +85,7 @@ try {
     if ($checkEmail !== null){
         $errors['email'] = "This User already exists";
         header("location: userForm.php?errors=" . $errors);
+        exit;
     }
 
 
@@ -83,8 +94,10 @@ try {
         $errors = json_encode($errors);
         if (isset($_POST['add'])) {
             header("location: userForm.php?errors=" . $errors);
+            exit;
         } else if(isset($_POST['update'])) {
             header("location: updateUser.php?errors=" . $errors."&id=" . $id);
+            exit;
         }
     } else {
 
