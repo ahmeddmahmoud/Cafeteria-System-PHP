@@ -56,9 +56,14 @@ if($lastOrderID!=null){
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" 
+  integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
-  <title>Order</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <title>User Order</title>
 </head>
 
 <body>
@@ -86,7 +91,13 @@ if($lastOrderID!=null){
       </div>
       <hr>
       <div class="allproduct row g-0">
-      <h4 class='text-center bg-dark rounded text-light p-1'>Available product </h4>
+        <div class="input-group mb-3 w-50">
+        <input type="text" class="form-control" placeholder="Search For Product">
+        <button class="btn btn-outline-secondary searchBtn" >
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+        </div>
+        <h4 class='text-center bg-dark rounded text-light p-1'>Available product </h4>
         <?php
         foreach ($productData as $row) {
           echo "<div class='productcard card col-3 mb-2  text-center'>";
@@ -142,7 +153,7 @@ if($lastOrderID!=null){
           </form>
         </div>
         <div class="card-footer text-center">
-          <h3>Total price is --</h3>
+          <h3>Total price is 00.00</h3>
         </div>
       </div>
     </div>
@@ -153,10 +164,13 @@ if($lastOrderID!=null){
 </html>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.min.js" integrity="sha512-ykZ1QQr0Jy/4ZkvKuqWn4iF3lqPZyij9iRv6sGqLRdTPkY69YX6+7wvVGmsdBbiIfN/8OdsI7HABjvEok6ZopQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
-  let cards = document.querySelectorAll(".productcard img");
+  let cardsImg = document.querySelectorAll(".productcard img");
+  let cardsName = document.querySelectorAll(".productcard h4");
   let table = document.querySelector(".table tbody");
   let totalPrice = document.querySelector(".card-footer h3");
-  cards.forEach(card => {
+  let searchBtn=document.querySelector(".searchBtn");
+  searchBtn.addEventListener("click",fitlerProduct);
+  cardsImg.forEach(card => {
     card.addEventListener("click", addRow, {
       once: true
     });
@@ -229,8 +243,7 @@ if($lastOrderID!=null){
       parseInt(event.target.parentNode.previousElementSibling.firstChild.value) - 1;
     if (parseInt(event.target.parentNode.previousElementSibling.firstChild.value) == 0) {
       event.target.parentNode.parentNode.remove();
-      let cards = document.querySelectorAll(".productcard img");
-      cards.forEach(card => {
+      cardsImg.forEach(card => {
         if (card.nextElementSibling.innerText === event.target.parentNode.parentNode.firstChild.firstChild.value)
           card.addEventListener("click", addRow, {
             once: true
@@ -246,7 +259,6 @@ if($lastOrderID!=null){
     let quantityInputs = document.querySelectorAll(".quantity");
     let sum = 0,
       rowSum = 0;
-    // console.log(quantityInputs);
     for (let i = 0; i < priceInputs.length; i++) {
       for (let j = 0; j < quantityInputs.length; j++) {
         rowSum = parseFloat(priceInputs[i].value) * +quantityInputs[i].value;
@@ -254,5 +266,19 @@ if($lastOrderID!=null){
       sum += rowSum;
     }
     return +sum.toFixed(3);
+  }
+  function fitlerProduct() {
+    let searchValue=this.previousElementSibling.value;
+    let regex= new RegExp(searchValue,"i");
+    for(let i=0;i<cardsName.length;i++){
+      if(cardsName[i].parentElement.classList.contains("d-none")){
+        cardsName[i].parentElement.classList.remove("d-none");
+      }
+      if(searchValue === ""){
+
+      }
+      else if(!(regex.test(cardsName[i].innerText)))
+        cardsName[i].parentElement.classList.add("d-none");
+    }
   }
 </script>

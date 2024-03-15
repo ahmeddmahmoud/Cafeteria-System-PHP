@@ -13,11 +13,17 @@ $errors = [];
 // }
 if(isset($_GET['errors'])){
     $errors = json_decode($_GET['errors'],true);
-    var_dump($errors);
+    // var_dump($errors);
  }
 
 ?>
-<div class="card col-4 mx-auto my-5 text-center">
+<style>
+    body{
+        background-color: #F4DFC8;
+        
+    }
+</style>
+<div class="card col-4 mx-auto my-5 text-center shadow">
     <div class="card-header"><h3>Log In</h3></div>
     <form action="validation.php" method="POST" class="my-5 row g-3 needs-validation w-75 mx-auto">
         <div class="row">
@@ -28,7 +34,11 @@ if(isset($_GET['errors'])){
             // Check if $errors['connection'] is set and is an array
             if (isset($errors['connection']) ) {
                 echo "Please connect to another Database";
-            } else {
+            }else if(isset($errors['Connectio_Failed']) ) {
+                echo "Connectio_Failed";
+            }else if(isset($errors['invalid']) ) {
+                echo "Invalid email or password";
+            }else {
                 // Check for invalid email or password
                 echo "Invalid email or password";
             }
@@ -63,7 +73,7 @@ if(isset($_GET['errors'])){
         </div>
 
         <div class="row-cols-2 justify-content-center text-center">
-            <button class="btn btn-outline-secondary w-25" name="login" type="submit">Login</button>
+            <button class="btn btn-outline-secondary w-50 rounded-pill" name="login" type="submit">Log In</button>
         </div>
         
     </form>

@@ -1,6 +1,8 @@
 
 <?php
 require_once '../db.php';
+require_once '../functions/validateSourcePage.php';
+validateSourcePage('allOrders.php', '../errors/err.php', 403);
 if (isset($_GET['id']) && isset($_GET['status'])) {
 
     $id = $_GET['id'];

@@ -1,10 +1,9 @@
 <?php
 require_once '../db.php';
+require_once '../functions/validateSourcePage.php';
+validateSourcePage('myOrders.php', '../errors/err.php', 403);
 $id;
 $table = 'orders';
-//check if id is set and is number
-//TODO: add checkLogin() 
-//checkLogin(); 
 if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     $id = $_GET['id'];
     $db = new DB();
