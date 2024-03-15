@@ -22,15 +22,13 @@ require './checkall.php';
                     <label for="user">Select User:</label>
                     <select class="form-control" id="user">
                         <option value="all" selected>Show All</option> <!-- Add the selected attribute -->
-                        <?php foreach ($userOrders as $order): ?>
+                        <?php foreach ($userOrders as $order): ?>    <!-- first query-->
                         <option value="<?php echo $order['id']; ?>"><?php echo $order['name']; ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
-
                 <div><button type="button" id="filter" onclick="filterOrders()" class="btn btn-primary"
                         style="height: fit-content;">Filter</button></div>
-
             </form>
         </div>
     </div>
@@ -89,7 +87,7 @@ function filterOrders() {
     }
 
     // Filter user orders based on selected user and date range
-    let filteredOrders = userOrders.filter(order => {
+    let filteredOrders = ordersDate.filter(order => {                     //second query
         const orderDate = new Date(order['date']);
         const fromDate = new Date(dateFrom);
         const toDate = new Date(dateTo);
@@ -109,61 +107,107 @@ function filterOrders() {
 
 // Function to display all orders
 function displayAllOrders() {
-    updateOrdersTable(userOrders, ordersDate, orderDetails);
+    updateOrdersTable(ordersDate, ordersDate, orderDetails);                      //second query
 }
-
+//**************************************************************** */
 // Function to update the orders table
 function updateOrdersTable(orders, ordersDate, orderDetails) {
 
     const userOrdersTableBody = document.getElementById('userOrdersTableBody');
     userOrdersTableBody.innerHTML = ''; // Clear the existing content in the table body
+    
+    // Create an object to store total prices for each user
+    const userTotalPrices = {};
+    
+    // Iterate over the orders to group them by user ID and sum the total prices
     orders.forEach(order => {
-        const row = `
-                <tr>
-                    <td>                                                 
-                        <button class="show-details-btn btn btn-info" data-userid="${order['id']}">+</button> ${order['name']}      
-                    </td>
-                    <td>${order['total_price']}</td>
-                </tr>
-            `;
-        userOrdersTableBody.insertAdjacentHTML('beforeend', row);
+        const userId = order['id'];
+        const totalPrice = parseFloat(order['total_price']);
+        
+        if (userId in userTotalPrices) {
+            // If the user ID already exists in the object, add the total price to it
+            userTotalPrices[userId] += totalPrice;
+        } else {
+            // If the user ID doesn't exist, initialize it with the total price
+            userTotalPrices[userId] = totalPrice;
+        }
     });
+    
+    // Iterate over the userTotalPrices object to create rows for each user
+    for (const userId in userTotalPrices) {
+        const userName = orders.find(order => order['id'] === userId)['name'];
+        const totalPrice = userTotalPrices[userId].toFixed(2);
+        const userOrder = orders.find(order => order['id'] === userId); // Find the user's order
+        const date = userOrder['date'];    
+        // console.log(date);
+        const row = `
+            <tr>
+                <td>                                                 
+                    <button class="show-details-btn btn btn-info" data-date=${date} data-userid="${userId}">+</button> ${userName}      
+                </td>
+                <td>${totalPrice}</td>
+            </tr>
+        `;
+        userOrdersTableBody.insertAdjacentHTML('beforeend', row);
+    }
 
+//**************************************************/ */
 
-    const showDetailsButtons = document.querySelectorAll('.show-details-btn');
-    showDetailsButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            orderFullDetails.style.display = 'none';
-            const userId = this.getAttribute('data-userid');
-            if (this.innerText === '-') {
-                orderDetailsDiv.style.display = 'none';
-                this.innerText = '+';
-                return; 
-            }
-            // Reset all buttons to show '+'
-            showDetailsButtons.forEach(btn => {
+const showDetailsButtons = document.querySelectorAll('.show-details-btn');
+showDetailsButtons.forEach(button => {
+    button.addEventListener('click', function() {
+        orderFullDetails.style.display = 'none';
+        const userId = this.getAttribute('data-userid');
+        const userdate = this.getAttribute('data-date');
+
+        if (this.innerText === '-') {
+            orderDetailsDiv.style.display = 'none';
+            this.innerText = '+';
+            return; 
+        }
+        // Reset all buttons to show '+'
+        showDetailsButtons.forEach(btn => {
             btn.innerText = '+';
-            });
-            // Set the clicked button's text to '-'
-            this.innerText = '-';
-            // Find orders associated with the user ID
-            const userOrders = ordersDate.filter(order => order['user_id'] ===userId);
-            // Generate HTML to display order date and amount
-            let orderDetailsHTML =
-                '<table class="table"><tr><th>Order Date</th><th>Amount</th></tr>';
-            userOrders.forEach(order => {
-                orderDetailsHTML +=
-                    `<tr>
-                        <td><button class="btn btn-secondary showOrder" data-userid="${order['user_id']}" data-orderDate="${order['date']}" >+</button> ${order['date']}</td>
-                        <td>${order['total_price']}</td>
-                    </tr>`;
-            });
-            orderDetailsHTML += '</table>';
+        });
+        // Set the clicked button's text to '-'
+        this.innerText = '-';
+        // Retrieve the selected date range
+        const dateFrom = document.getElementById('date_from').value;
+        const dateTo = document.getElementById('date_to').value;
+        // Convert date strings to Date objects
+        const fromDate = new Date(dateFrom);
+        const toDate = new Date(dateTo);
+        // console.log(fromDate);
+        // console.log(toDate);
 
-            // Update the order details div
-            orderDetailsDiv.innerHTML = orderDetailsHTML;
-            orderDetailsDiv.style.display = 'block';
+        // Find orders associated with the user ID and within the date range
+        const userOrders = ordersDate.filter(order => {                               //check if date range selected
+        // Check if isDateInRange function exists and is a function
+        if (dateFrom && dateTo ) {
+            return order['user_id'] === userId && isDateInRange(order['date'], fromDate, toDate);
+        } else {
+            return order['user_id'] === userId ;
+        }
+});
+        // Generate HTML to display order date and amount
+        let orderDetailsHTML = '<table class="table"><tr><th>Order Date</th><th>Amount</th></tr>';
+        userOrders.forEach(order => {
+            orderDetailsHTML += `<tr>
+                                    <td><button class="btn btn-secondary showOrder" data-userid="${order['user_id']}" data-orderDate="${order['date']}" >+</button> ${order['date']}</td>
+                                    <td>${order['total_price']}</td>
+                                </tr>`;
+        });
+        orderDetailsHTML += '</table>';
 
+        // Update the order details div
+        orderDetailsDiv.innerHTML = orderDetailsHTML;
+        orderDetailsDiv.style.display = 'block';
+
+        // Function to check if a date falls within a specified range
+        function isDateInRange(date, fromDate, toDate) {
+            const orderDate = new Date(date);
+            return orderDate >= fromDate && orderDate <= toDate;
+        }
 
             const showOrderButtons = document.querySelectorAll('.showOrder');
             showOrderButtons.forEach(showButton => {
