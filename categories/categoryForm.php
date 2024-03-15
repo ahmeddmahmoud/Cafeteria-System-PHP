@@ -57,18 +57,6 @@ $result = $db->getData("category");
     <?php
         include_once '../components/nav.php'; 
     ?>
-    <!-- <nav class="navbar d-flex justify-content-between " style="background-color: #e3f2fd;">
-        <div class="d-flex justify-align-content-between gap-3 px-5 ">
-            <a href="#">Home</a>
-            <a href="#">Products</a>
-            <a href="#">Users</a>
-            <a href="#">Manual Orders</a>
-            <a href="#">Checks</a>
-        </div>
-        <div>
-            <a href="#" class="px-5">Admin</a>
-        </div>
-    </nav> -->
 
     <section>
         <div class="text-center text-danger ">
