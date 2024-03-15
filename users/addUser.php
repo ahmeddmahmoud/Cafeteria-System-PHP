@@ -19,17 +19,8 @@ if (!isset($_POST['add']) || !isset($_POST['update'])) {
     validateSourcePage('userForm.php', '../errors/err.php', 403);
 }
 
-
-
-
-
-
 $db  = new DB();
 $db->__construct();
-
-
-
-
 
 $name = validateData($_POST['name']);
 //echo $name;
