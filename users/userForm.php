@@ -2,6 +2,8 @@
 
 <?php
 
+//include "../components/nav.php";
+
 if (isset($_GET['errors'])) {
     $errors = json_decode($_GET['errors'], true); // Decode the JSON string into an associative array
 }

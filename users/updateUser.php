@@ -40,35 +40,37 @@ if (isset($_GET['errors'])) {
         </div>
         <div class="mb-3">
             <label>Name</label>
-            <input type="text" name="name" class="form-control" value="<?= $result['name'] ?>">
+            <input type="text" name="name" class="form-control" value="<?= $result['name'] ?>" required>
             <p class="text-danger"><?php if (isset($errors['name'])) echo $errors['name']; ?></p>
         </div>
         <div class="mb-3">
             <label for="email">Email</label>
-            <input type="email" name="email" class="form-control" value="<?= $result['email'] ?>">
+            <input type="email" name="email" class="form-control" required value="<?= $result['email'] ?>">
             <p class="text-danger"><?php if (isset($errors['email'])) echo $errors['email']; ?></p>
         </div>
         <div class="mb-3">
             <label for="password">Password</label>
-            <input type="password" name="password" class="form-control" value="<?= $result['password'] ?>">
+            <input type="password" name="password" class="form-control" required value="<?= $result['password'] ?>">
+            <p><p class="text-danger"><?php if (isset($errors['password'])) echo $errors['password']; ?></p>
         </div>
         <div class="mb-3">
             <label for="password">Confirm Password</label>
             <input type="password" name="confirm_password" class="form-control">
+            <p class="text-danger"><?php if (isset($errors['confirm_password'])) echo $errors['confirm_password']; ?></p>
         </div>
         <div class="mb-3">
             <label for="Room No">Room No.</label>
-            <input type="text" name="room_no" class="form-control" value="<?= $result['room_no'] ?>">
+            <input type="text" name="room_no" class="form-control" required value="<?= $result['room_no'] ?>">
             <p class="text-danger"><?php if (isset($errors['room_no'])) echo $errors['room_no']; ?></p>
         </div>
         <div class="mb-3">
             <label for="Ext">Ext.</label>
-            <input type="text" name="ext" class="form-control" value="<?= $roomResult['ext'] ?>">
+            <input type="text" name="ext" class="form-control" required value="<?= $roomResult['ext'] ?>">
             <p class="text-danger"><?php if (isset($errors['ext'])) echo $errors['ext']; ?></p>
         </div>
         <div class="mb-3">
             <label for="image">Profile Picture</label >
-            <input type="file" class="form-control" name="image" value="<?= $result['image'] ?>">
+            <input type="file" class="form-control" name="image" required value="<?= $result['image'] ?>">
             <p class="text-danger"><?php if (isset($errors['image'])) echo $errors['image']; ?></p>
         </div>
         <button type="submit" class="btn btn-primary my-3" name="update" value="update">Save</button>
