@@ -21,14 +21,14 @@ $page = isset($_GET['page']) ? $_GET['page'] : 1; // Current page number
 $offset = ($page - 1) * $limit; // Offset for database query
 
 // Query to fetch total number of records
-$total_records_query = $db->getCount("user");
+$total_records_query = $db->getCountCondition("user","role='user'");
 $total_records = $total_records_query->fetch_assoc()['total'];
 
 // Calculate total pages
 $total_pages = ceil($total_records / $limit);
 
 // Query to fetch records for current page
-$result = $db->getDataPagination("user u INNER JOIN rooms r ON u.room_no = r.room_no", "1", $limit, $offset);
+$result = $db->getDataPagination("user u INNER JOIN rooms r ON u.room_no = r.room_no", "role='user'", $limit, $offset);
 
 ?>
 <style>
