@@ -4,7 +4,7 @@
 <?php
 
 require_once '../functions/validateSourcePage.php';
-validateSourcePage('usersTable.php', '../errors/err.php', 403);
+// validateSourcePage('usersTable.php', '../errors/err.php', 403);
 
 
 $id  = $_GET['id'];
@@ -13,7 +13,7 @@ require "../db.php";
 $db = new DB();
 $db->__construct();
 // $data = $db->select_data("user", "id = '$id'");
-$data = $db->getData("user" , "id = '$id' ");
+$data = $db->getData("user", "id = '$id' ");
 $result = $data->fetch_array(MYSQLI_ASSOC);
 
 // die();
@@ -28,18 +28,20 @@ $_SESSION['roomNo'] = $roomNo;
 
 if (isset($_GET['errors'])) {
     $errors = json_decode($_GET['errors'], true); // Decode the JSON string into an associative array
-    
+
 }
 ?>
 <style>
-body{
-    background-color: #F4EAE0 !important;
-}
+    body {
+        background-color: #F4EAE0 !important;
+    }
 </style>
 
 
 <div class="card w-50 my-2 mx-auto">
-    <div class="card-header text-center"><h3>Edit User</h3></div>
+    <div class="card-header text-center">
+        <h3>Edit User</h3>
+    </div>
     <form action="addUser.php" method="post" enctype="multipart/form-data">
         <div class="my-2 form-floating w-75 mx-auto">
             <input type="text" name="id" placeholder="ID" class="form-control" value="<?= $result['id'] ?>" readonly>
@@ -74,7 +76,7 @@ body{
             <p class="text-danger"><?php if (isset($errors['ext'])) echo $errors['ext']; ?></p>
         </div>
         <div class="my-2  w-75 mx-auto">
-            <label for="image">Profile Picture</label >
+            <label for="image">Profile Picture</label>
             <input type="file" class="form-control" name="image" required value="<?= $result['image'] ?>">
             <p class="text-danger"><?php if (isset($errors['image'])) echo $errors['image']; ?></p>
         </div>

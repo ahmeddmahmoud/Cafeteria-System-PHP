@@ -1,7 +1,7 @@
-<?php 
+<?php
 include_once '../db.php'; // Include the DB class file
 
-$db = new DB(); 
+$db = new DB();
 
 session_start();
 // Check if user is logged in
@@ -21,7 +21,7 @@ $page = isset($_GET['page']) ? $_GET['page'] : 1; // Current page number
 $offset = ($page - 1) * $limit; // Offset for database query
 
 // Query to fetch total number of records
-$total_records_query = $db->getCountCondition("user","role='user'");
+$total_records_query = $db->getCountCondition("user", "role='user'");
 $total_records = $total_records_query->fetch_assoc()['total'];
 
 // Calculate total pages
@@ -32,9 +32,10 @@ $result = $db->getDataPagination("user u INNER JOIN rooms r ON u.room_no = r.roo
 
 ?>
 <style>
-    body{
-background-color: #F4EAE0 !important;
-}
+    body {
+        background-color: #F4EAE0 !important;
+    }
+
     .userimg {
         width: 50px;
         border-radius: 50%;
@@ -46,8 +47,9 @@ background-color: #F4EAE0 !important;
         margin: auto;
         display: inline-block;
     }
-    table > tbody > tr > td > img{
-        width:10% !important;
+
+    table>tbody>tr>td>img {
+        width: 10% !important;
     }
 </style>
 <!doctype html>
@@ -55,8 +57,13 @@ background-color: #F4EAE0 !important;
 
 <head>
     <title>All Users</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        .rounded-circle {
+            width: 50px !important;
+            height: 50px;
+        }
+    </style>
 </head>
 
 <body>
@@ -79,19 +86,19 @@ background-color: #F4EAE0 !important;
                 </tr>
             </thead>
             <tbody class="text-center">
-                <?php 
-                    while ($row = $result->fetch_assoc()) {
-                        echo "<tr>";
-                        echo "<td>".$row['name']."</td>";
-                        echo "<td><img src='../imgs/users/{$row['image']}' class='rounded-circle'/></td>";
-                        echo "<td>".$row['room_no']."</td>";
-                        echo "<td>".$row['ext']."</td>";
-                        echo "<td >
+                <?php
+                while ($row = $result->fetch_assoc()) {
+                    echo "<tr>";
+                    echo "<td>" . $row['name'] . "</td>";
+                    echo "<td><img  src='../imgs/users/{$row['image']}' class='rounded-circle' /></td>";
+                    echo "<td>" . $row['room_no'] . "</td>";
+                    echo "<td>" . $row['ext'] . "</td>";
+                    echo "<td >
                         <a href='updateUser.php?id={$row['id']}' class='btn btn-warning'>Edit</a>
                         <a href='deleteUser.php?id={$row['id']}&page=$page' class='btn btn-danger'>Delete</a>
                         </td>";
-                        echo "</tr>";
-                    }
+                    echo "</tr>";
+                }
                 ?>
             </tbody>
         </table>
@@ -102,26 +109,25 @@ background-color: #F4EAE0 !important;
                 <ul class="pagination text-center">
                     <?php
                     // Previous Page link
-                    if($page > 1) {
-                        echo '<li class="page-item"><a class="page-link" href="?page='.($page - 1).'">Previous</a></li>';
+                    if ($page > 1) {
+                        echo '<li class="page-item"><a class="page-link" href="?page=' . ($page - 1) . '">Previous</a></li>';
                     }
 
                     // Page links
                     for ($i = 1; $i <= $total_pages; $i++) {
-                        echo '<li class="page-item '.($page == $i ? 'active' : '').'"><a class="page-link" href="?page='.$i.'">'.$i.'</a></li>';
+                        echo '<li class="page-item ' . ($page == $i ? 'active' : '') . '"><a class="page-link" href="?page=' . $i . '">' . $i . '</a></li>';
                     }
 
                     // Next Page link
-                    if($page < $total_pages) {
-                        echo '<li class="page-item"><a class="page-link" href="?page='.($page + 1).'">Next</a></li>';
+                    if ($page < $total_pages) {
+                        echo '<li class="page-item"><a class="page-link" href="?page=' . ($page + 1) . '">Next</a></li>';
                     }
-                ?>
+                    ?>
                 </ul>
             </nav>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
     </script>
 </body>
 

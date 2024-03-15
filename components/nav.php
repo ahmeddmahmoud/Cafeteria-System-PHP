@@ -7,10 +7,10 @@ echo <<<HTML
 HTML;
 
 if (isset($_SESSION["image"])) {
-    echo "<img src='../imgs/users/{$_SESSION['image']}' class='userimg' >";
+  echo "<img src='../imgs/users/{$_SESSION['image']}' class='userimg' >";
 }
 if (isset($_SESSION["name"])) {
-    echo "<span class='ms-3'>{$_SESSION['name']}</span>";
+  echo "<span class='ms-3'>{$_SESSION['name']}</span>";
 }
 
 $activeClass = $_SESSION['role'] === 'user' ? 'active' : '';
@@ -23,27 +23,29 @@ echo <<<HTML
     </button>
     <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
       <ul class="nav mt-2 ">
-        <li class="">
-          <a class="btn btn-outline-dark border-0" aria-current="page" href="#">Home</a>
-        </li>
-        
 HTML;
 
 if ($_SESSION['role'] === 'user') {
-    echo <<<HTML
+  echo <<<HTML
         <li class="">
           <a class="btn btn-outline-dark mx-2  border-0" href="../orders/myorders.php">My Orders</a>
+        </li>
+HTML;
+} else if ($_SESSION['role'] === 'admin') {
+  echo <<<HTML
+        <li class="">
+          <a class="btn btn-outline-dark mx-2  border-0" href="../orders/allOrders.php">All Orders</a>
         </li>
 HTML;
 }
 
 if ($_SESSION['role'] === 'admin') {
-    echo <<<HTML
+  echo <<<HTML
         <li class="">
-          <a class="btn btn-outline-dark mx-1 border-0 " href="../orders/allOrders.php">Manual Order</a>
+          <a class="btn btn-outline-dark mx-1 border-0 " href="../orders/makeOrderAdmin.php">Manual Order</a>
         </li>
         <li class="">
-          <a class="btn btn-outline-dark mx-1 border-0" href="../orders/makeOrderAdmin.php">Products</a>
+          <a class="btn btn-outline-dark mx-1 border-0" href="../products/productTable.php">Products</a>
         </li>
         <li class="">
           <a class="btn btn-outline-dark mx-1 border-0" href="../users/usersTable.php">Users</a>

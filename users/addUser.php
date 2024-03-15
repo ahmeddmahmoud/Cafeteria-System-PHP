@@ -14,9 +14,9 @@ $errors = [];
 
 
 
-require_once '../functions/validateSourcePage.php';
+// require_once '../functions/validateSourcePage.php';
 if (!isset($_POST['add']) || !isset($_POST['update'])) {
-    validateSourcePage('userForm.php', '../errors/err.php', 403);
+    // validateSourcePage('userForm.php', '../errors/err.php', 403);
 }
 
 $db  = new DB();
@@ -45,18 +45,18 @@ move_uploaded_file($source, "../imgs/users/" . $imageName);
 
 echo "</br>";
 // for update
-if (isset($_POST['update'])){
+if (isset($_POST['update'])) {
     $id = $_POST['id'];
-session_start();
-$oldRoom = $_SESSION['roomNo'];
+    session_start();
+    $oldRoom = $_SESSION['roomNo'];
 }
 
 
 //echo $name;
 try {
     if (strlen($name) < 3 || !preg_match("/^[a-zA-Z\s]+$/", $name)) {
-    $errors['name'] = "Name must be at least 3 characters and contain only alphabetic characters";
-}
+        $errors['name'] = "Name must be at least 3 characters and contain only alphabetic characters";
+    }
 
     // check email validation
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -66,7 +66,7 @@ try {
     if (strlen($password) < 6) {
         $errors['password'] = "Password must be at least 6 characters";
     }
-    if ($password !== $confirmPassword){
+    if ($password !== $confirmPassword) {
         $errors['confirm_password'] = "Password does not match";
     }
     if (!is_numeric($Room_No)) {
@@ -79,13 +79,13 @@ try {
         // There was an error uploading the file
         $errors['image'] = "Image upload failed. ";
     }
-    $checkEmail = $db->getData("user" , "email = '$email'");
-    if ($checkEmail !== null && (isset($_POST['add']))){
+    $checkEmail = $db->getData("user", "email = '$email'");
+    if ($checkEmail !== null && (isset($_POST['add']))) {
         $errors['email'] = "This User already exists";
-        header("location: userForm.php?errors=" . $errors); 
+        header("location: userForm.php?errors=" . $errors);
     }
-    $checkRoom = $db->getData("rooms" , "room_no = '$Room_No'");
-    if ($checkRoom !== null && (isset($_POST['add']))){
+    $checkRoom = $db->getData("rooms", "room_no = '$Room_No'");
+    if ($checkRoom !== null && (isset($_POST['add']))) {
         $errors['room_no'] = "This room already exist for another user";
         header("location: userForm.php?errors=" . $errors);
     }
@@ -96,18 +96,17 @@ try {
         $errors = json_encode($errors);
         if (isset($_POST['add'])) {
             header("location: userForm.php?errors=" . $errors);
-            
-        } else if(isset($_POST['update'])) {
-            header("location: updateUser.php?errors=" . $errors."&id=" . $id);
+        } else if (isset($_POST['update'])) {
+            header("location: updateUser.php?errors=" . $errors . "&id=" . $id);
         }
     } else {
 
         if (isset($_POST['add'])) {
-            $db->insert_data("rooms" , "room_no , ext" , "'$Room_No' , '$Ext'");
+            $db->insert_data("rooms", "room_no , ext", "'$Room_No' , '$Ext'");
             $db->insert_data("user", "name , email , password , room_no, image , role", "'$name' , '$email' , '$password'  , '$Room_No', '$imageName' , 'user'");
         } elseif (isset($_POST['update'])) {
-            $db->update_data("rooms" , "room_no = '$Room_No' , ext = '$Ext'" , "room_no = '$oldRoom'");
-            $db->update_data("user" , "name = '$name' , email = '$email' , password = '$password' , room_no = '$Room_No' , image = '$imageName'", "id = '$id'");
+            $db->update_data("rooms", "room_no = '$Room_No' , ext = '$Ext'", "room_no = '$oldRoom'");
+            $db->update_data("user", "name = '$name' , email = '$email' , password = '$password' , room_no = '$Room_No' , image = '$imageName'", "id = '$id'");
         }
     }
 } catch (Exception $e) {
