@@ -28,9 +28,5 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
         $db->insert_data("category","name", "'$category'");
         header('Location: categoryForm.php');
     }
-} else {
-    setcookie("errMsg", "Category cannot be empty!");
-    header('Location: categoryForm.php');
-    exit();
 }
 ?>
