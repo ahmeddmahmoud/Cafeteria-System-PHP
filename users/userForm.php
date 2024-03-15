@@ -6,7 +6,9 @@
 
 
 require_once '../functions/validateSourcePage.php';
-validateSourcePage('usersTable.php', '../errors/err.php', 403);
+
+//validateSourcePage('usersTable.php', '../errors/err.php', 403);
+
 
 if (isset($_GET['errors'])) {
     $errors = json_decode($_GET['errors'], true); // Decode the JSON string into an associative array
