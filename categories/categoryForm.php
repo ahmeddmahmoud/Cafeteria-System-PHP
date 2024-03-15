@@ -85,16 +85,17 @@ $result = $db->getData("category");
             <form action="addCategory.php" method="post" class="needs-validation" novalidate>
                 <div>
                     <label class="col-12 form-label text-center ">Category</label>
+                    <div class="col-6 offset-3 ">
                     <input type="text" name="category" class="form-control" required >
+                    <div></div>
                     <?php
                         if(isset($_COOKIE['errMsg'])){
                         $errorMessage = $_COOKIE['errMsg'];
-                        echo "<p class='text-danger my-0 '>$errorMessage</p>";
-                        setcookie('errMsg', '', time() -1);
+                        echo "<p class='text-danger my-0 text-center'>$errorMessage</p>";
                         }
                     ?>
 
-                    <p class="invalid-feedback text-danger my-0 " style="font-size:16px">
+                    <p class="invalid-feedback text-danger my-0 text-center" style="font-size:16px">
                         Please add a category!
                     </p>
                 </div>
