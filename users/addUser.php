@@ -12,12 +12,7 @@ function validateData($data)
 }
 $errors = [];
 
-// Check if the referer is not set or if it doesn't contain 'userForm.php'
-// if (!isset($_SERVER['HTTP_REFERER']) || strpos($_SERVER['HTTP_REFERER'], 'userForm.php') === false) {
-//     // Redirect to userForm.php
-//     header('Location: ./userForm.php');
-//     exit; // It's a good practice to exit after sending a Location header
-// }
+
 
 require_once '../functions/validateSourcePage.php';
 if (!isset($_POST['add']) || !isset($_POST['update'])) {
@@ -25,10 +20,6 @@ if (!isset($_POST['add']) || !isset($_POST['update'])) {
 }
 
 
-    // if (isset($_POST['update'])) {
-    //     validateSourcePage('updateUser.php', '../errors/err.php', 403);
-    // }
-    
 
 
 
