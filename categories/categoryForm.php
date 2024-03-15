@@ -1,6 +1,16 @@
 <?php
 // Include the DB class file
 include_once '../db.php'; 
+session_start();
+if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin') {
+    $name = $_SESSION['name'];
+    $user_id = $_SESSION['id'];
+} else {
+    // Redirect to login page if user is not logged in
+    setcookie("msg", "You are not logged in, please login first");
+    header("Location: ../login/login.php");
+    exit(); // Stop further execution
+}
 // Create an instance of the DB class
 $db = new DB(); 
 // Query to fetch total number of records
@@ -13,6 +23,7 @@ $result = $db->getData("category");
     <title>Categories</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="../style/nav.css">
     <style>
         .category-container {
             display: flex;
@@ -43,7 +54,10 @@ $result = $db->getData("category");
     </style>
 </head>
 <body>
-    <nav class="navbar d-flex justify-content-between " style="background-color: #e3f2fd;">
+    <?php
+        include_once '../components/nav.php'; 
+    ?>
+    <!-- <nav class="navbar d-flex justify-content-between " style="background-color: #e3f2fd;">
         <div class="d-flex justify-align-content-between gap-3 px-5 ">
             <a href="#">Home</a>
             <a href="#">Products</a>
@@ -54,7 +68,7 @@ $result = $db->getData("category");
         <div>
             <a href="#" class="px-5">Admin</a>
         </div>
-    </nav>
+    </nav> -->
 
     <section>
         <div class="text-center text-danger ">

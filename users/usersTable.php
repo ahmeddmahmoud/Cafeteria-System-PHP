@@ -5,14 +5,14 @@ $db = new DB();
 
 session_start();
 // Check if user is logged in
-if (isset($_SESSION['id'])) {
+if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin') {
     $name = $_SESSION['name'];
     $user_id = $_SESSION['id'];
 } else {
     // Redirect to login page if user is not logged in
     setcookie("msg", "You are not logged in, please login first");
     header("Location: ../login/login.php");
-    exit(); // Stop further execution
+    exit(); // Stop further execution
 }
 
 // Pagination Variables
