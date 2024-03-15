@@ -1,7 +1,7 @@
 <?php 
 include_once '../db.php'; // Include the DB class file
 
-$db = new DB(); // Create an instance of the DB class
+$db = new DB(); 
 
 session_start();
 // Check if user is logged in

@@ -20,11 +20,25 @@ $result = $db->getData("category");
             justify-content: center;
         }
         .category-item {
-            padding: 10px;
+            position: relative;
+            padding: 15px;
             margin: 5px;
             border: 1px solid #ccc;
             border-radius: 5px;
             background-color: #f2f2f2;
+        }
+        .delete-category {
+            position: absolute;
+            top: -5px;
+            right: 2px;
+            color: red;
+            text-decoration: none;
+            font-size: 20px;
+        }
+
+        .delete-category:hover {
+            color: darkred; /* Change color on hover */
+            text-decoration: none; /* Remove underline on hover */
         }
     </style>
 </head>
@@ -53,7 +67,8 @@ $result = $db->getData("category");
                 echo "<p>There are no categories available.</p>";
             } else {
                 while ($row = $result->fetch_assoc()) {
-                    echo "<div class='category-item'>" . ucwords($row['name']) . "</div>";
+                    // echo "<div class='category-item'>" . ucwords($row['name']) . "</div>";
+                    echo "<div class='category-item'>" . ucwords($row['name']) . " <a href='deleteCategory.php?id={$row['id']}' class='delete-category'>&times;</a></div>";
                 }
             }
             ?>
