@@ -38,7 +38,10 @@ try {
         // $result = $connection->query($query);
 
         if (!$result) {
-            header("Location: login.php?errors=db_error");
+            // header("Location: login.php?errors=db1_error");
+            $errors["invalid"] = 1;
+            $errors = json_encode($errors);
+            header("location:login.php?errors=" . $errors);
         }
 
         $data = $result->fetch_array(MYSQLI_ASSOC);
@@ -71,7 +74,11 @@ try {
         $connection->close();
     }
 } catch (Exception $e) {
-    header("Location: login.php?errors=db_error");
+    // header("Location: login.php?errors=db_error");
+    $errors["Connectio_Failed"] = 1;
+    $errors = json_encode($errors);
+    header("location:login.php?errors=" . $errors);
+    exit();
 }
 
 function validate_data($data)

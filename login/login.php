@@ -13,7 +13,7 @@ $errors = [];
 // }
 if(isset($_GET['errors'])){
     $errors = json_decode($_GET['errors'],true);
-    var_dump($errors);
+    // var_dump($errors);
  }
 
 ?>
@@ -34,7 +34,11 @@ if(isset($_GET['errors'])){
             // Check if $errors['connection'] is set and is an array
             if (isset($errors['connection']) ) {
                 echo "Please connect to another Database";
-            } else {
+            }else if(isset($errors['Connectio_Failed']) ) {
+                echo "Connectio_Failed";
+            }else if(isset($errors['invalid']) ) {
+                echo "Invalid email or password";
+            }else {
                 // Check for invalid email or password
                 echo "Invalid email or password";
             }

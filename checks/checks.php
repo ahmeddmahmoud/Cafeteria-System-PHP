@@ -1,7 +1,21 @@
 <?php
 require '../db.php';
 require './checkall.php';
-session_start();
+// Check if session is started
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Check if user is logged in
+if (isset($_SESSION['id'])) {
+    $name = $_SESSION['name'];
+    $user_id = $_SESSION['id'];
+} else {
+    // Redirect to login page if user is not logged in
+    setcookie("msg", "You are not logged in, please login first");
+    header("Location: ../login/login.php");
+    exit(); // Stop further execution
+}
 ?>
 <style>
     .userimg {
@@ -77,6 +91,7 @@ session_start();
         align-items: center;
         display: none;
     }
+
 </style>
 
 <script>
