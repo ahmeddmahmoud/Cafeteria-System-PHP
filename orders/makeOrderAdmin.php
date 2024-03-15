@@ -21,6 +21,15 @@ $userNames = $obj->getData("user", "role!='admin'", "name")->fetch_all(MYSQLI_AS
 
 ?>
 <style>
+  body{
+    background-color: #F4EAE0 !important;
+  }
+  .productcard:hover{
+    background-color: #FAF6F0 !important;
+    transform: scale(1.2);
+    transition: transform 1.5s;
+    z-index: 1;
+  }
   .userimg {
     width: 50px;
     border-radius: 50%;

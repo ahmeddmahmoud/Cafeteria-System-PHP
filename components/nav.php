@@ -1,7 +1,7 @@
 <?php
 // 
 echo <<<HTML
-<nav class="navbar navbar-expand-lg navbar-light bg-light ">
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow mb-5">
   <div class="container">
     <span class="navbar-brand d-flex align-items-center" href="#">
 HTML;
@@ -40,7 +40,7 @@ HTML;
 if ($_SESSION['role'] === 'admin') {
     echo <<<HTML
         <li class="">
-          <a class="btn btn-outline-dark mx-1 border-0" href="../orders/allOrders.php">Manual Order</a>
+          <a class="btn btn-outline-dark mx-1 border-0 " href="../orders/allOrders.php">Manual Order</a>
         </li>
         <li class="">
           <a class="btn btn-outline-dark mx-1 border-0" href="../orders/makeOrderAdmin.php">Products</a>
