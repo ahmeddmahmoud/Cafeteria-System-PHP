@@ -1,7 +1,21 @@
 <?php
 require '../db.php';
 require './checkall.php';
-session_start();
+// Check if session is started
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Check if user is logged in
+if (isset($_SESSION['id'])) {
+    $name = $_SESSION['name'];
+    $user_id = $_SESSION['id'];
+} else {
+    // Redirect to login page if user is not logged in
+    setcookie("msg", "You are not logged in, please login first");
+    header("Location: ../login/login.php");
+    exit(); // Stop further execution
+}
 ?>
 <style>
     .userimg {
@@ -9,19 +23,42 @@ session_start();
         border-radius: 50%;
         height: 50px;
     }
-
+    body{
+    background-color: #F4EAE0 !important;
+    }
     .allproduct img {
         cursor: pointer;
         margin: auto;
         display: inline-block;
     }
+    .order-details > table > tbody > tr:hover{
+        background-color: #F4EAE0 !important;
+    }
+    .order-full-details > div{
+        text-align: center;
+    }
+    .order-full-details > div:hover{
+    background-color: #FAF6F0 !important;
+    transform: scale(1.2);
+    transition: transform 1.5s;
+    z-index: 1;
+    border:2px solid #000000;
+    border-radius: 10px;
+    }
+    .order-full-details{
+        margin-top: 5px;
+        /* border: 1px solid black; */
+        justify-content: space-around;
+        align-items: center;
+        display: none;
+    }
 </style>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <?PHP include "../components/nav.php" ?>
-<div class="container">
-    <div class="row">
-        <div class="col-md-6 offset-md-3">
-            <h2>Checks</h2>
+<div class="container row justify-content-between mx-auto">
+    <div class=" card h-50 shadow p-4 col-4">
+        <!-- <div class="col-md-6 offset-md-3"> -->
+            <h2 class="mx-auto">Checks</h2>
             <form>
                 <div class="form-row">
                     <div class="form-group col">
@@ -45,24 +82,27 @@ session_start();
                 <div><button type="button" id="filter" onclick="filterOrders()" class="btn btn-primary"
                         style="height: fit-content;">Filter</button></div>
             </form>
-        </div>
+        <!-- </div> -->
     </div>
-    <div class="row mt-2">
-        <div class="col-md-6 offset-md-3">
-            <h2>User Orders</h2>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Total Price</th>
-                    </tr>
-                </thead>
-                <tbody id="userOrdersTableBody">
-                </tbody>
-            </table>
-            <div class="order-details" style="display:none;"></div>
-            <div class="order-full-details"></div>
-        </div>
+    <div class=" bg-light shadow-lg col-7">
+        
+            <div class="text-center">
+                <h2 >User Orders</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Total Price</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userOrdersTableBody">
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <div class="order-details" style="display:none;"></div>
+                <div class="order-full-details"></div>
+            </div>
     </div>
 </div>
 
@@ -77,6 +117,7 @@ session_start();
         align-items: center;
         display: none;
     }
+
 </style>
 
 <script>

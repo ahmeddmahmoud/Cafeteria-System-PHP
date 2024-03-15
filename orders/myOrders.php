@@ -83,6 +83,10 @@ $crrentDate = date("Y-m-d");
         .actions {
             margin-top: 10px;
         }
+
+        .red-border {
+            border: 2px solid red;
+        }
     </style>
 </head>
 
@@ -139,7 +143,7 @@ HTML;
 
                 echo <<<HTML
             <div class='product'>
-                <img src='$image' alt='Product Image' style='width: 100px; height: auto;'>
+                <img src='../imgs/products/$image' alt='Product Image' style='width: 100px; height: auto;'>
                 <p>Quantity: $quantity</p>
                 <p>Price: $price</p>
             </div> <!-- Closing div for product -->
@@ -199,12 +203,34 @@ HTML;
                     console.log(orderDate, date);
                     if (orderDate >= startDate && orderDate <= endDate) {
                         date.closest('.order').style.display = 'block';
+                        // date.closest('.order').classList.toggle('red-border');
                         console.log("found");
                     } else {
                         date.closest('.order').style.display = 'none';
+                        if (date.closest('.order').classList.contains('red-border')) {
+                            // date.closest('.order').classList.toggle('red-border');
+                        }
                     }
                 });
         }
+        //give the neareset elemnt that have order class a red border on clicking button that have show details class 
+
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('show-details')) {
+                let order = e.target.closest('.order');
+                let allOrders = document.querySelectorAll('.order');
+                //close other orders
+                allOrders.forEach(function(order) {
+                    if (order.classList.contains('red-border')) {
+                        order.classList.toggle('red-border');
+                        order.closest('.product-details').display = 'none';
+
+                    }
+                });
+                order.classList.toggle('red-border');
+                order.closest('.product-details').display = 'block';
+            }
+        });
     </script>
 </body>
 

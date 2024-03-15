@@ -58,13 +58,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["update_password"])) {
     <link rel="stylesheet" href="style.css"> 
 </head>
 <body>
+<div class="card col-4 mx-auto my-5 text-center shadow">
+    <div class="card-header"><h3>Reset Password</h3></div>
     <div class="container">
-        <div class="row">
-            <div class="col-md-4 offset-md-4 form">
                 <form action="" method="POST" autocomplete="off">
-                    <h2 class="text-center">Reset Password</h2>
                     <p class="text-center">Enter the reset code and your new password</p>
-                    
+                         <!-- Error message display area -->
+                <?php if (!empty($errorMessage)): ?>
+                    <div class="alert alert-danger" role="alert">
+                        <?php echo $errorMessage; ?>
+                    </div>
+                <?php endif; ?>
                     <div class="form-group">
                         <input class="form-control" type="text" name="reset_code" placeholder="Enter reset code" required>
                     </div>
@@ -76,14 +80,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["update_password"])) {
                         <input class="form-control button" type="submit" name="update_password" value="Update Password">
                     </div>
                 </form>
-                <!-- Error message display area -->
-                <?php if (!empty($errorMessage)): ?>
-                    <div class="alert alert-danger" role="alert">
-                        <?php echo $errorMessage; ?>
-                    </div>
-                <?php endif; ?>
+               
             </div>
         </div>
     </div>
+    </div>
+    </div>
+
 </body>
 </html>
+<style>
+    body{
+        background-color: #F4DFC8;
+        
+    }
+</style>

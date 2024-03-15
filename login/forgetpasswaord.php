@@ -1,3 +1,19 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" 
+integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<!-- Font awesome CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+<?php
+$errors = [];
+if(isset($_GET['errors'])){
+    $errors = json_decode($_GET['errors'],true);
+ }
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,27 +50,36 @@
                     
                     // Unset the session variable to avoid showing the message again on subsequent page loads
                     unset($_SESSION['failed_sent']);
-                }
-            
+                }        
             ?>
-                <form action="" method="POST" autocomplete="off">
-                    <h2 class="text-center">Forgot Password</h2>
+            <div class="card col-12 mx-auto  my-5 text-center shadow">
+            <div class="card-header"><h3>Forget Your Password</h3></div>
+                <form action="validation_forgetpass.php" method="POST" autocomplete="off">
+                <div class="row">
+                    <!-- <h2 class="text-center">Forgot Password</h2> -->
                     <p class="text-center">Enter your email address</p>
                     
                     <div class="form-group">
-                        <input class="form-control" type="email" name="email" placeholder="Enter email address" required value="<?php echo isset($email) ? $email : '' ?>">
+                        <input class="form-control" type="text" name="email" id="email" placeholder="Enter email address"  value="<?php echo isset($email) ? $email : '' ?>">
+                        <?php
+                        if (isset($errors["email"])) {
+                            echo "<span style='color:red'>" . $errors['email'] . "</span>";
+                        }
+                        ?>
                     </div>
                     <div class="form-group">
                         <input class="form-control button" type="submit" name="check-email" value="Continue">
                     </div>
+                    <div >
                 </form>
+                </div>
+                    </div>
             </div>
         </div>
     </div>
 </body>
 </html>
 <?php
-// echo $_post['email'];
 ?>
 <?php
 require_once '../db.php';
@@ -68,49 +93,47 @@ try {
     header("location:login.php?errors=" . $errors);
     exit();
 }
-// Check if the form is submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["check-email"])) {
-    // Retrieve the email entered by the user
-    $email = $_POST["email"];
-
-    // Prepare and execute the query to check if the email exists in the database
-    
-    // $result=$db->getData("user","email ={$_POST['email']}}");
-    $sql = "SELECT * FROM user WHERE email = ?";
-    $stmt = $db->getConnection()->prepare($sql);
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    // Check if a row with the given email exists
-    if ($result->num_rows > 0) {
-     
-        $code = rand(100000, 999999);
-
-        // Save the code in a session variable
-        $_SESSION['reset_code'] = $code;
-        $_SESSION['email'] = $email;
-
-
-        // Send the code to the user's email
-        $subject = "Password Reset Code";
-        $message = "Your password reset code is $code";
-        $sender = "From: mohamed.awad.elgammal@gmail.com";
-        if (mail($email, $subject, $message, $sender)) {
-            echo "We've sent a password reset code to your email - $email";
-            header("Location: updatePassword.php?email=" . urlencode($email));
-        } else {
-            $_SESSION['failed_sent'] = true;
-            header("Location: forgetpasswaord.php");
-            // echo "Failed to send the code. Please try again later.";
-            
-        }
-    } else {
-        $_SESSION['wrong_email'] = true;
-        header("Location: forgetpasswaord.php");
-        // echo "Email does not exist in the database. Please enter a valid email.";
-    }
-    $stmt->close();
-
-}
 ?>
+<style>
+    body{
+        background-color: #F4DFC8;
+        
+    }
+</style>
+<!-- 
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Fetching form elements
+        const form = document.querySelector('form');
+        const emailInput = document.getElementById('email');
+
+
+        // Adding event listener to form submission
+        form.addEventListener('submit', function(event) {
+            let isValid = true;
+
+            // Email validation
+            if (!validateEmail(emailInput.value)) {
+                emailInput.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                emailInput.classList.remove('is-invalid');
+            }
+
+            // Preventing form submission if validation fails
+            if (!isValid) {
+                event.preventDefault();
+            }
+        });
+
+        // Email validation function
+        function validateEmail(email) {
+            const pass = /\S+@\S+\.\S+/;
+            return pass.test(email);
+        }
+    });
+</script>
+
+
+
+ -->
