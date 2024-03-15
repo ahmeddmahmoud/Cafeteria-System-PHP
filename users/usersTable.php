@@ -64,7 +64,7 @@ background-color: #F4EAE0 !important;
 
     <div class="d-flex justify-content-between mx-5 mt-1 align-items-center ">
         <p class="fs-3 fw-bold ">All Users</p>
-        <a class="btn btn-primary" href="addUser.php">Add User</a>
+        <a class="btn btn-primary" href="userForm.php">Add User</a>
     </div>
 
     <div class="mx-5 my-1 text-center rounded">
