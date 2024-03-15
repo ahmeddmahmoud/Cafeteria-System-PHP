@@ -79,16 +79,16 @@ try {
         // There was an error uploading the file
         $errors['image'] = "Image upload failed. ";
     }
-    $checkEmail = $db->getData("user" , "email = '$email'");
-    if ($checkEmail !== null && (isset($_POST['add']))){
-        $errors['email'] = "This User already exists";
-        header("location: userForm.php?errors=" . $errors); 
-    }
-    $checkRoom = $db->getData("rooms" , "room_no = '$Room_No'");
-    if ($checkRoom !== null && (isset($_POST['add']))){
-        $errors['room_no'] = "This room already exist for another user";
-        header("location: userForm.php?errors=" . $errors);
-    }
+    // $checkEmail = $db->getData("user" , "email = '$email'");
+    // if ($checkEmail !== null && (isset($_POST['add']))){
+    //     $errors['email'] = "This User already exists";
+    //     header("location: userForm.php?errors=" . $errors); 
+    // }
+    // $checkRoom = $db->getData("rooms" , "room_no = '$Room_No'");
+    // if ($checkRoom !== null && (isset($_POST['add']))){
+    //     $errors['room_no'] = "This room already exist for another user";
+    //     header("location: userForm.php?errors=" . $errors);
+    // }
 
 
 
@@ -111,5 +111,26 @@ try {
         }
     }
 } catch (Exception $e) {
-    echo $e->getMessage();
+    if ($e->getCode() === 1062) { // MySQL error code for duplicate entry
+        if (strpos($e->getMessage(), 'rooms') !== false) { // Check if the error message contains 'room_no'
+            $errors['room_no'] = "Room number already exists";
+        } elseif (strpos($e->getMessage(), 'email') !== false) { // Check if the error message contains 'email'
+            $errors['email'] = "Email already exists";
+        } else {
+            // For other duplicate entry errors or unknown errors, you can display a generic error message
+            echo "An error occurred: " . $e->getMessage();
+            exit; // Exit the script to prevent further execution
+        }
+        
+        $errors = json_encode($errors);
+        if (isset($_POST['add'])) {
+            header("location: userForm.php?errors=" . $errors);
+        } elseif (isset($_POST['update'])) {
+            header("location: updateUser.php?errors=" . $errors . "&id=" . $id);
+        }
+    } else {
+        // For other exceptions, you can display a generic error message
+        echo "An error occurred: " . $e->getMessage();
+    }
 }
+
