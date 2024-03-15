@@ -3,6 +3,10 @@
 
 <?php
 
+require_once '../functions/validateSourcePage.php';
+validateSourcePage('usersTable.php', '../errors/err.php', 403);
+
+
 $id  = $_GET['id'];
 
 require "../db.php";
