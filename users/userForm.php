@@ -8,8 +8,13 @@ if (isset($_GET['errors'])) {
 
 
 ?>
+<style>
+    body{
+background-color: #F4EAE0 !important;
+}
+</style>
 
-<div class="card w-50 mx-auto">
+<div class="card w-50 my-2 mx-auto">
     <div class="card-header text-center"><h3>Add New User</h3></div>
     <form action="addUser.php" method="post" enctype="multipart/form-data" id="registrationForm">
         <div class="my-2 form-floating w-75 mx-auto">
