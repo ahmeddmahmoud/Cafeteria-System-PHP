@@ -1,7 +1,11 @@
 <?php
 // Include the DB class file
 include_once '../db.php'; 
+// Create an instance of the DB class
+$db = new DB(); 
+
 session_start();
+
 if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin') {
     $name = $_SESSION['name'];
     $user_id = $_SESSION['id'];
@@ -11,8 +15,6 @@ if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin') {
     header("Location: ../login/login.php");
     exit(); // Stop further execution
 }
-// Create an instance of the DB class
-$db = new DB(); 
 // Query to fetch total number of records
 $result = $db->getData("category");
 ?>
@@ -54,9 +56,7 @@ $result = $db->getData("category");
     </style>
 </head>
 <body>
-    <?php
-        include_once '../components/nav.php'; 
-    ?>
+    <?php include_once '../components/nav.php';?>
 
     <section>
         <div class="text-center text-danger ">
