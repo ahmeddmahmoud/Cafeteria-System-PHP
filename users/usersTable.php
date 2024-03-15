@@ -32,6 +32,9 @@ $result = $db->getDataPagination("user u INNER JOIN rooms r ON u.room_no = r.roo
 
 ?>
 <style>
+    body{
+background-color: #F4EAE0 !important;
+}
     .userimg {
         width: 50px;
         border-radius: 50%;
@@ -43,7 +46,7 @@ $result = $db->getDataPagination("user u INNER JOIN rooms r ON u.room_no = r.roo
         margin: auto;
         display: inline-block;
     }
-    body > div.mx-5.my-1.text-center > table > tbody > tr > td > img{
+    table > tbody > tr > td > img{
         width:10% !important;
     }
 </style>
@@ -60,10 +63,11 @@ $result = $db->getDataPagination("user u INNER JOIN rooms r ON u.room_no = r.roo
     <?PHP include "../components/nav.php" ?>
 
     <div class="d-flex justify-content-between mx-5 mt-1 align-items-center ">
-        <p class="fs-3 fw-bold ">All Users</p><button type="button" class="btn btn-primary">Add User</button>
+        <p class="fs-3 fw-bold ">All Users</p>
+        <a class="btn btn-primary" href="addUser.php">Add User</a>
     </div>
 
-    <div class="mx-5 my-1 text-center ">
+    <div class="mx-5 my-1 text-center rounded">
         <table class="table  table-striped">
             <thead class="text-center">
                 <tr>

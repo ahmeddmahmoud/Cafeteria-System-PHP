@@ -1,7 +1,7 @@
 <?php
 // 
 echo <<<HTML
-<nav class="navbar navbar-expand-lg navbar-light bg-light ">
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow mb-5">
   <div class="container">
     <span class="navbar-brand d-flex align-items-center" href="#">
 HTML;
@@ -24,7 +24,7 @@ echo <<<HTML
     <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
       <ul class="nav mt-2 ">
         <li class="">
-          <a class="btn btn-outline-dark border-0" aria-current="page" href="../orders/makeOrderUser.php">Home</a>
+          <a class="btn btn-outline-dark border-0" aria-current="page" href="#">Home</a>
         </li>
         
 HTML;
@@ -40,7 +40,7 @@ HTML;
 if ($_SESSION['role'] === 'admin') {
     echo <<<HTML
         <li class="">
-          <a class="btn btn-outline-dark mx-1 border-0" href="../orders/allOrders.php">Manual Order</a>
+          <a class="btn btn-outline-dark mx-1 border-0 " href="../orders/allOrders.php">Manual Order</a>
         </li>
         <li class="">
           <a class="btn btn-outline-dark mx-1 border-0" href="../orders/makeOrderAdmin.php">Products</a>
@@ -49,7 +49,7 @@ if ($_SESSION['role'] === 'admin') {
           <a class="btn btn-outline-dark mx-1 border-0" href="../users/usersTable.php">Users</a>
         </li>
         <li class="">
-          <a class="btn btn-outline-dark mx-1 border-0" href="../orders/allOrders.php">Checks</a>
+          <a class="btn btn-outline-dark mx-1 border-0" href="../checks/checks.php">Checks</a>
         </li>
 HTML;
 }
