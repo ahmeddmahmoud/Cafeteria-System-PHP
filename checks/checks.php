@@ -268,3 +268,171 @@ document.addEventListener("DOMContentLoaded", function() {
     filterOrders();
 });
 </script>
+
+
+
+
+<script>
+/*
+function filterOrders() {
+    orderDetailsDiv.style.display = 'none';
+    orderFullDetails.style.display = 'none';
+    const dateFrom = document.getElementById('date_from').value;
+    const dateTo = document.getElementById('date_to').value;
+    const selectedUserId = document.getElementById('user').value;
+
+    // Check if the user selected any filtering criteria
+    if (!dateFrom && !dateTo && selectedUserId === 'all') {
+        // If 'Show All' option selected, display all orders
+        displayAllOrders();
+        return;
+    }
+
+    // Filter user orders based on selected user and date range
+    let filteredOrders = ordersDate.filter(order => {
+        const orderDate = new Date(order['date']);
+        const fromDate = new Date(dateFrom);
+        const toDate = new Date(dateTo);
+
+        // Check if the order matches the selected user
+        const userIdMatch = selectedUserId === '' || selectedUserId === 'all' || order['id'] === selectedUserId;
+
+        // Check if the order falls within the selected date range
+        const dateRangeMatch = (!dateFrom || !dateTo) || (orderDate >= fromDate && orderDate <= toDate);
+
+        return userIdMatch && dateRangeMatch;
+    });
+
+    // Update table with filtered user orders
+    updateOrdersTable(filteredOrders, ordersDate, orderDetails);
+}
+
+// Function to display all orders
+function displayAllOrders() {
+    updateOrdersTable(userOrders, ordersDate, orderDetails);
+}
+
+// Function to update the orders table
+function updateOrdersTable(orders, ordersDate, orderDetails) {
+
+    const userOrdersTableBody = document.getElementById('userOrdersTableBody');
+    userOrdersTableBody.innerHTML = ''; // Clear the existing content in the table body
+
+    // Create a map to store the total price for each user
+    const totalPriceMap = new Map();
+
+    // Calculate total price for each user
+    orders.forEach(order => {
+        const userId = order['id'];
+        const totalPrice = parseFloat(order['total_price']);
+
+        if (totalPriceMap.has(userId)) {
+            totalPriceMap.set(userId, totalPriceMap.get(userId) + totalPrice);
+        } else {
+            totalPriceMap.set(userId, totalPrice);
+        }
+    });
+
+    // Iterate through the totalPriceMap to create table rows
+    totalPriceMap.forEach((totalPrice, userId) => {
+        // Find the order details for the current user
+        const userOrderDetails = orders.find(order => order['id'] === userId);
+        // Create the row HTML
+        const row = `
+            <tr>
+                <td>                                                 
+                    <button class="show-details-btn btn btn-info" data-userid="${userId}">+</button> ${userOrderDetails['name']}      
+                </td>
+                <td>${totalPrice.toFixed(2)}</td>
+            </tr>
+        `;
+        // Append the row to the table body
+        userOrdersTableBody.insertAdjacentHTML('beforeend', row);
+    });
+
+    const showDetailsButtons = document.querySelectorAll('.show-details-btn');
+    showDetailsButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            orderFullDetails.style.display = 'none';
+            const userId = this.getAttribute('data-userid');
+            if (this.innerText === '-') {
+                orderDetailsDiv.style.display = 'none';
+                this.innerText = '+';
+                return; 
+            }
+            // Reset all buttons to show '+'
+            showDetailsButtons.forEach(btn => {
+            btn.innerText = '+';
+            });
+            // Set the clicked button's text to '-'
+            this.innerText = '-';
+            // Find orders associated with the user ID
+            let userOrders= ordersDate.filter(order => order['user_id'] ===userId);
+            console.log(userOrders);
+            console.log(totalPriceMap.get(userId).toFixed(2));
+            let orderDetailsHTML =
+                '<table class="table"><tr><th>Order Date</th><th>Amount</th></tr>';
+            if(userOrders.length==1){}
+            else{
+                userOrders = ordersDate.filter(order => order['user_id'] ===userId && +order['total_price'] == +totalPriceMap.get(userId).toFixed(2));
+                if(userOrders.length>0){}
+                else{
+                    userOrders = ordersDate.filter(order => order['user_id'] ===userId && +order['total_price'] < +totalPriceMap.get(userId).toFixed(2));
+                }
+            }
+            userOrders.forEach(order => {
+                orderDetailsHTML +=
+                    `<tr>
+                        <td><button class="btn btn-secondary showOrder" data-userid="${order['user_id']}" data-orderDate="${order['date']}" >+</button> ${order['date']}</td>
+                        <td>${order['total_price']}</td>
+                    </tr>`;
+                });
+            orderDetailsHTML += '</table>';
+
+            // Update the order details div
+            orderDetailsDiv.innerHTML = orderDetailsHTML;
+            orderDetailsDiv.style.display = 'block';
+            const showOrderButtons = document.querySelectorAll('.showOrder');
+            showOrderButtons.forEach(showButton => {
+                showButton.addEventListener('click', function() {
+                    const orderUserid = this.getAttribute('data-userid');
+
+                    const orderDate = this.getAttribute('data-orderDate');
+                    const order = orderDetails.filter(order => order['user_id'] === orderUserid && order['date'] === orderDate);
+                    if (this.innerText === '-') {
+                        orderFullDetails.style.display = 'none';
+                        this.innerText = '+';
+                        return; 
+                    }
+
+                    let orderDetailsContent = '';
+                    order.forEach(order => {
+                        orderDetailsContent += `
+                                <div class="pt-2">
+                                <img src="../imgs/products/${order['product_image']}" style="max-width: 100px;">
+                                    <p>${order['product_name']}</p>
+                                    <p>Quantity: ${order['quantity']}</p>
+                                    <p>Price: ${order['product_price']}</p>
+                                </div>
+                            `;
+                        // Append the order details to the existing content
+                        orderFullDetails.innerHTML = orderDetailsContent;
+                    });
+                    orderFullDetails.style.display = 'flex';
+                    // Reset all buttons to show '+'
+                    showOrderButtons.forEach(btn => {
+                    btn.innerText = '+';
+                    });
+                    // Set the clicked button's text to '-'
+                    this.innerText = '-';
+
+                });
+            });
+        });
+    });
+}
+document.addEventListener("DOMContentLoaded", function() {
+    filterOrders();
+});
+*/
+</script>
