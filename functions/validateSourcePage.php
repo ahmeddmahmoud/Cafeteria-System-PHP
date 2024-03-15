@@ -16,7 +16,8 @@ function validateSourcePage($incomingPage, $redirectedPage, $errCode)
 
     // Check if referer information is available
     if ($referer === '') {
-        echo "No referer information available.";
+        //echo "No referer information available.";
+        header('Location: ' . $redirectedPage . '?err=' . $errCode);
         exit;
     }
 

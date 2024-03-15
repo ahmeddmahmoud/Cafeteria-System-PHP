@@ -2,7 +2,7 @@
 
 <?php
 
-//include "../components/nav.php";
+
 
 
 require_once '../functions/validateSourcePage.php';

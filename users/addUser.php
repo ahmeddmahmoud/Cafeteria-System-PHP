@@ -21,10 +21,8 @@ if (!isset($_POST['add']) || !isset($_POST['update'])) {
 
 $db  = new DB();
 $db->__construct();
-
 $name = validateData($_POST['name']);
-//echo $name;
-echo "</br>";
+
 $email = validateData($_POST['email']);
 
 $password = validateData($_POST['password']);
@@ -32,13 +30,9 @@ $confirmPassword = validateData($_POST['confirm_password']);
 
 $Room_No = validateData($_POST['room_no']);
 
-echo "</br>";
-
 $Ext = validateData($_POST['ext']);
 
-echo "</br>";
 
-//var_dump($_FILES);/
 $source = $_FILES['image']['tmp_name'];
 $imageName = $_FILES['image']['name'];
 move_uploaded_file($source, "../imgs/users/" . $imageName);
@@ -79,17 +73,6 @@ try {
         // There was an error uploading the file
         $errors['image'] = "Image upload failed. ";
     }
-    // $checkEmail = $db->getData("user" , "email = '$email'");
-    // if ($checkEmail !== null && (isset($_POST['add']))){
-    //     $errors['email'] = "This User already exists";
-    //     header("location: userForm.php?errors=" . $errors); 
-    // }
-    // $checkRoom = $db->getData("rooms" , "room_no = '$Room_No'");
-    // if ($checkRoom !== null && (isset($_POST['add']))){
-    //     $errors['room_no'] = "This room already exist for another user";
-    //     header("location: userForm.php?errors=" . $errors);
-    // }
-
 
 
     if (count($errors) > 0) {
