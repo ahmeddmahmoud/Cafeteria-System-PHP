@@ -89,7 +89,7 @@ function filterOrders() {
     }
 
     // Filter user orders based on selected user and date range
-    let filteredOrders = userOrders.filter(order => {
+    let filteredOrders = ordersDate.filter(order => {
         const orderDate = new Date(order['date']);
         const fromDate = new Date(dateFrom);
         const toDate = new Date(dateTo);
@@ -102,6 +102,7 @@ function filterOrders() {
 
         return userIdMatch && dateRangeMatch;
     });
+ ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // Update table with filtered user orders
     updateOrdersTable(filteredOrders, ordersDate, orderDetails);
@@ -117,18 +118,38 @@ function updateOrdersTable(orders, ordersDate, orderDetails) {
 
     const userOrdersTableBody = document.getElementById('userOrdersTableBody');
     userOrdersTableBody.innerHTML = ''; // Clear the existing content in the table body
+
+    // Create a map to store the total price for each user
+    const totalPriceMap = new Map();
+
+    // Calculate total price for each user
     orders.forEach(order => {
-        const row = `
-                <tr>
-                    <td>                                                 
-                        <button class="show-details-btn btn btn-info" data-userid="${order['id']}">+</button> ${order['name']}      
-                    </td>
-                    <td>${order['total_price']}</td>
-                </tr>
-            `;
-        userOrdersTableBody.insertAdjacentHTML('beforeend', row);
+        const userId = order['id'];
+        const totalPrice = parseFloat(order['total_price']);
+
+        if (totalPriceMap.has(userId)) {
+            totalPriceMap.set(userId, totalPriceMap.get(userId) + totalPrice);
+        } else {
+            totalPriceMap.set(userId, totalPrice);
+        }
     });
 
+    // Iterate through the totalPriceMap to create table rows
+    totalPriceMap.forEach((totalPrice, userId) => {
+        // Find the order details for the current user
+        const userOrderDetails = orders.find(order => order['id'] === userId);
+        // Create the row HTML
+        const row = `
+            <tr>
+                <td>                                                 
+                    <button class="show-details-btn btn btn-info" data-userid="${userId}">+</button> ${userOrderDetails['name']}      
+                </td>
+                <td>${totalPrice.toFixed(2)}</td>
+            </tr>
+        `;
+        // Append the row to the table body
+        userOrdersTableBody.insertAdjacentHTML('beforeend', row);
+    });
 
     const showDetailsButtons = document.querySelectorAll('.show-details-btn');
     showDetailsButtons.forEach(button => {
@@ -147,18 +168,63 @@ function updateOrdersTable(orders, ordersDate, orderDetails) {
             // Set the clicked button's text to '-'
             this.innerText = '-';
             // Find orders associated with the user ID
-            const userOrders = ordersDate.filter(order => order['user_id'] ===userId);
-            // Generate HTML to display order date and amount
+            let userOrders= ordersDate.filter(order => order['user_id'] ===userId);
+            console.log(userOrders);
+            console.log(totalPriceMap.get(userId).toFixed(2));
             let orderDetailsHTML =
                 '<table class="table"><tr><th>Order Date</th><th>Amount</th></tr>';
-            userOrders.forEach(order => {
-                orderDetailsHTML +=
-                    `<tr>
-                        <td><button class="btn btn-secondary showOrder" data-userid="${order['user_id']}" data-orderDate="${order['date']}" >+</button> ${order['date']}</td>
-                        <td>${order['total_price']}</td>
-                    </tr>`;
-            });
+            if(userOrders.length==1){
+                userOrders.forEach(order => {
+                    orderDetailsHTML +=
+                        `<tr>
+                            <td><button class="btn btn-secondary showOrder" data-userid="${order['user_id']}" data-orderDate="${order['date']}" >+</button> ${order['date']}</td>
+                            <td>${order['total_price']}</td>
+                        </tr>`;
+                });
+            }else{
+                userOrders = ordersDate.filter(order => order['user_id'] ===userId && +order['total_price'] == +totalPriceMap.get(userId).toFixed(2));
+                if(userOrders){
+                    userOrders.forEach(order => {
+                    orderDetailsHTML +=
+                        `<tr>
+                            <td><button class="btn btn-secondary showOrder" data-userid="${order['user_id']}" data-orderDate="${order['date']}" >+</button> ${order['date']}</td>
+                            <td>${order['total_price']}</td>
+                        </tr>`;
+                });
+                }else{
+                    userOrders = ordersDate.filter(order => order['user_id'] ===userId && +order['total_price'] < +totalPriceMap.get(userId).toFixed(2));
+                    userOrders.forEach(order => {
+                    orderDetailsHTML +=
+                        `<tr>
+                            <td><button class="btn btn-secondary showOrder" data-userid="${order['user_id']}" data-orderDate="${order['date']}" >+</button> ${order['date']}</td>
+                            <td>${order['total_price']}</td>
+                        </tr>`;
+                })
+                }
+                console.log(totalPriceMap.get(userId).toFixed(2));
+            }
             orderDetailsHTML += '</table>';
+            //&& order['total_price']==totalPriceMap.get(userId).toFixed(2)
+
+
+
+            // Generate HTML to display order date and amount
+
+
+            // totalPriceMap.forEach((totalPrice, userId) => {
+            // // Retrieve orders associated with the current user ID from the map
+            // const userOrders = ordersDate.filter(order => order['user_id'] === userId);
+
+            // // Iterate over userOrders and add rows to orderDetailsHTML
+            // userOrders.forEach(order => {
+            //     orderDetailsHTML += `
+            //         <tr>
+            //             <td><button class="btn btn-secondary showOrder" data-userid="${userId}" data-orderDate="${order['date']}" >+</button> ${order['date']}</td>
+            //             <td>${order['total_price']}</td>
+            //         </tr>`;
+            // });
+            // });
+            
 
             // Update the order details div
             orderDetailsDiv.innerHTML = orderDetailsHTML;
