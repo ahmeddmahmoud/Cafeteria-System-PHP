@@ -58,7 +58,7 @@ if (isset($_GET['errors'])) {
                 <div class="input-group ">
                     <label for="email" class="input-group-text p-2"><i class="fa-solid fa-user"></i></label>
                     <input type="text" class="form-control rounded" id="email" placeholder="Email" name="email">
-                    <div class="invalid-feedback">Please enter a valid email address.</div>
+                    <div class="invalid-feedback  ">Please enter a valid email address.</div>
                     <?php
                     if (isset($errors["email"])) {
                         echo "<span style='color:red'>" . $errors['email'] . "</span>";
