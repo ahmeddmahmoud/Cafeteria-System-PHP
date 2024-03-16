@@ -11,7 +11,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin') {
 } else {
     // Redirect to login page if user is not logged in
     setcookie("msg", "You are not logged in, please login first");
-    header("Location: ../login/login.php");
+    header("Location: ../errors/err.php?err=403");
     exit(); // Stop further execution
 }
 
