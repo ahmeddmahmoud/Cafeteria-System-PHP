@@ -106,6 +106,7 @@ try {
             }
             $db->update_data("user", "name = '$name' , email = '$email' , password = '$password' , room_no = '$Room_No' , image = '$imageName'", "id = '$id'");
         }
+        header("location: usersTable.php");
     }
 } catch (Exception $e) {
     if ($e->getCode() === 1062) { // MySQL error code for duplicate entry
