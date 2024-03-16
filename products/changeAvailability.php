@@ -2,6 +2,10 @@
 include_once '../db.php'; // Include the DB class file
 $db = new DB();
 $db->__construct();
+require_once '../functions/validateSourcePage.php';
+if (!isset($_POST['id'])) {
+    validateSourcePage('productTable.php', '../errors/err.php',403);
+}
 try{
     if (isset($_GET['id']) && isset($_GET['status'])) {
     $productId = $_GET['id'];

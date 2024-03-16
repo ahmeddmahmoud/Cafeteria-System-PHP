@@ -9,6 +9,10 @@ $db->__construct();
     
 // }
 //query
+require_once '../functions/validateSourcePage.php';
+if (!isset($_POST['productname'])) {
+    validateSourcePage('productForm.php', '../errors/err.php',403);
+}
 try {
     $nameInput = validate_data($_POST['productname']);
     $name=ucwords($nameInput);

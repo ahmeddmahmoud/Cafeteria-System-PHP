@@ -6,6 +6,10 @@ $page=$_GET['page'];
 
 $db=new DB();
 $db->__construct();
+require_once '../functions/validateSourcePage.php';
+if (!isset($_POST['productname'])) {
+    validateSourcePage('editProduct.php', '../errors/err.php',403);
+}
 //query
 try {
     $nameInput = validate_data($_POST['productname']);
