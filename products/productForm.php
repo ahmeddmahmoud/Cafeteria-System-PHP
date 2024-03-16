@@ -44,9 +44,20 @@ if ($result->num_rows > 0) {
 
  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" /> -->
-    <link h>
+<style>
+    .btn-success {
+        transition: opacity 0.5s ease-out;
+    }
+    .hidden {
+        opacity: 0;
+    }
+</style>
     <div class="container">
+        <div class="btn-success w-50 border rounded text-center mx-auto my-2" id="successMsgDiv">
+    <?php if (isset($_COOKIE['successMsg'])) {
+        $successMsg = $_COOKIE['successMsg'];
+        echo "$successMsg";
+    } ?></div>
     <form action="addproduct.php" method="post" class="my-2 row g-3 needs-validation" novalidate enctype="multipart/form-data" id="addProductForm">
             <div class="row my-4">
                 <label for="validationCustom01" class="form-label">Product</label>
@@ -71,12 +82,8 @@ if ($result->num_rows > 0) {
             </div>
             <div class="row justify-content-center">
                 <a href="../categories/categoryForm.php" class="btn btn-primary w-25">Add Category</a>
-                <div>
-    <?php if (isset($_COOKIE['successMsg'])) {
-        $successMsg = $_COOKIE['successMsg'];
-        echo "$successMsg";
-    } ?>
-</div>
+              
+            </div>
 
             <div class="row">
                 <label class="form-label">Image</label>
@@ -98,7 +105,16 @@ if ($result->num_rows > 0) {
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
        <script>
+        
     document.addEventListener("DOMContentLoaded", function () {
+        var successMsgDiv = document.getElementById('successMsgDiv');
+
+    // Check if the div exists
+    if (successMsgDiv) {
+        setTimeout(function() {
+            successMsgDiv.classList.add('hidden');
+        }, 2000); // 3000 milliseconds = 3 seconds
+    }
         var form = document.getElementById('addProductForm');
         var productNameInput = document.getElementById('validationCustom01');
         var priceInput = document.getElementById('priceinput');

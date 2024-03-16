@@ -8,5 +8,5 @@ try {
 }catch (Exception $e) {
     var_dump($e->getMessage());
 }
-header("location: productTable.php");
+header("location: productTable.php?page=" . $_GET['page']);
 ?>

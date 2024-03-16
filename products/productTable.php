@@ -64,15 +64,17 @@ $result = $db->getDataPagination("product", "1", $limit, $offset);
             <tbody class="text-center">
                 <?php
                 while ($row = $result->fetch_assoc()) {
+
                     echo "<tr>";
                     echo "<td>" . $row['name'] . "</td>";
                     echo "<td>" . $row['price'] . "</td>";
                     echo "<td><img src='../imgs/products/{$row['image']}' class='rounded-circle' width='50' height='50'/></td>";
-                    echo "<td>
-                        <a href='availableProduct.php?id={$row['id']}' class='btn btn-primary'>Available</a>
-                        <a href='editProduct.php?id={$row['id']}' class='btn btn-warning'>Edit</a>
-                        <a href='deleteProduct.php?id={$row['id']}&page=$page' class='btn btn-danger'>Delete</a>
-                        </td>";
+                    echo "<td>";
+                    $availabilityText = $row['available'] == 1 ? 'Available' : 'Unavailable';
+                    echo "<a href='changeAvailability.php?id={$row['id']}&status={$row['available']}&page=$page' class='btn btn-primary mx-1'>$availabilityText</a>";
+                    echo "<a href='editProduct.php?id={$row['id']}&page=$page' class='btn btn-warning mx-1'>Edit</a>";
+                    echo "<a href='deleteProduct.php?id={$row['id']}&page=$page' class='btn btn-danger mx-1'>Delete</a>";
+                    echo "</td>";
                     echo "</tr>";
                 }
                 ?>
