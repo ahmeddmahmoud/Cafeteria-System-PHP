@@ -370,7 +370,7 @@ showDetailsButtons.forEach(button => {
                     order.forEach(order => {
                         orderDetailsContent += `
                                 <div class="pt-2 px-2" style="display:flex; align-items:center; flex-direction:column; justify-content:center;">
-                                    <img src="../imgs/products/${order['product_image']}"  style="width:60px; height:80px;">
+                                    <img src="../imgs/products/${order['product_image']}"  style="width:60px; height:80px;border-radius:5px">
                                     <p>Quantity: ${order['quantity']}</p>
                                     <p></p>Price: ${order['product_price']} $</p>
                                 </div>
