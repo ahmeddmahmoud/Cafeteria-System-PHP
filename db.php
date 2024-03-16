@@ -95,4 +95,8 @@ class DB
     {
         return $this->connection->query("select COUNT(*) as total FROM $tableName");
     }
+    function getCountCondition($tableName, $condition)
+    {
+        return $this->connection->query("select COUNT(*) as total FROM $tableName where $condition");
+    }
 }

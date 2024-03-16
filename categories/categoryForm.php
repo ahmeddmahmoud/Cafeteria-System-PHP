@@ -1,7 +1,11 @@
 <?php
 // Include the DB class file
 include_once '../db.php'; 
+// Create an instance of the DB class
+$db = new DB(); 
+
 session_start();
+
 if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin') {
     $name = $_SESSION['name'];
     $user_id = $_SESSION['id'];
@@ -11,8 +15,6 @@ if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin') {
     header("Location: ../login/login.php");
     exit(); // Stop further execution
 }
-// Create an instance of the DB class
-$db = new DB(); 
 // Query to fetch total number of records
 $result = $db->getData("category");
 ?>
@@ -54,9 +56,7 @@ $result = $db->getData("category");
     </style>
 </head>
 <body>
-    <?php
-        include_once '../components/nav.php'; 
-    ?>
+    <?php include_once '../components/nav.php';?>
 
     <section>
         <div class="text-center text-danger ">
@@ -85,16 +85,17 @@ $result = $db->getData("category");
             <form action="addCategory.php" method="post" class="needs-validation" novalidate>
                 <div>
                     <label class="col-12 form-label text-center ">Category</label>
+                    <div class="col-6 offset-3 ">
                     <input type="text" name="category" class="form-control" required >
+                    <div></div>
                     <?php
                         if(isset($_COOKIE['errMsg'])){
                         $errorMessage = $_COOKIE['errMsg'];
-                        echo "<p class='text-danger my-0 '>$errorMessage</p>";
-                        setcookie('errMsg', '', time() -1);
+                        echo "<p class='text-danger my-0 text-center'>$errorMessage</p>";
                         }
                     ?>
 
-                    <p class="invalid-feedback text-danger my-0 " style="font-size:16px">
+                    <p class="invalid-feedback text-danger my-0 text-center" style="font-size:16px">
                         Please add a category!
                     </p>
                 </div>
