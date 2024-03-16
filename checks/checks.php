@@ -131,8 +131,6 @@ if (isset($_SESSION['id'])) {
     }
     .order-full-details > div:hover{
     background-color: #FAF6F0 !important;
-    transform: scale(1.1);
-    transition: transform 1.5s;
     z-index: 1;
     border:2px solid #000000;
     border-radius: 10px;
