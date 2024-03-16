@@ -223,55 +223,17 @@ HTML;
                     }
                 });
         }
-        //accordion like behaviour
-        // Wait for the DOM content to be fully loaded
-        // Find the container element that wraps all product items
-        // const productsContainer = document.querySelector('.product-container');
-        // console.log(productsContainer);
-        // // Attach a click event listener to the container
-        // productsContainer.addEventListener('click', function(e) {
-        //     console.log(e.target.parentElement.parentElement.nextElementSibling);
-        //     // Find the closest product details element to the clicked target
-        //     const clickedOrder = e.target.parentElement.parentElement;
-        //     console.log(clickedOrder);
-        //     if (!clickedOrder.classList.contains('order-info')) return; // Ignore clicks not on product items
 
-        //     const orderDetails = clickedOrder.nextElementSibling;
-        //     // Toggle the 'showing' class to control visibility 
-        //     orderDetails.classList.toggle('showing');
-        //     // Scroll to the product details
-        //     orderDetails.parentElement.scrollIntoView({
-        //         behavior: 'smooth',
-        //         block: 'start'
-        //     });
-        //     // Close other product details if open
-        //     document.querySelectorAll('.product-details.showing').forEach(function(details) {
-        //         if (details !== orderDetails) {
-        //             details.classList.remove('showing');
-        //         }
-        //     });
-        // });
-
-        // Wait for the DOM content to be fully loaded
         document.addEventListener('DOMContentLoaded', function() {
-            // Find the container element that wraps all product items
             const productsContainer = document.querySelector('.product-container');
-
-            // Attach a click event listener to the container
             if (productsContainer) {
                 document.querySelector("body").addEventListener('click', function(e) {
                     // Find the closest parent element with the 'order-info' class
                     const clickedOrder = e.target.closest('.order-info');
                     if (!clickedOrder) return; // Ignore clicks not on product items
-
-                    // Find the next sibling element of the clicked order
                     const orderDetails = clickedOrder.nextElementSibling;
                     if (!orderDetails.classList.contains('product-details')) return; // Ensure it's a product details element
-
-                    // Toggle the 'showing' class to control visibility 
                     orderDetails.classList.toggle('showing');
-
-                    // Scroll to the product details
                     orderDetails.parentElement.scrollIntoView({
                         behavior: 'smooth',
                         block: 'start'
@@ -286,25 +248,6 @@ HTML;
                 });
             }
         });
-
-        // document.addEventListener('click', function(e) {
-        //     document.querySelectorAll('.product-details').forEach(function(order) {
-        //         order.style.display = 'none';
-        //     });
-
-        //     let prodDetails = e.target.parentElement.parentElement.nextElementSibling;
-
-        //     if (prodDetails.classList.contains('showing')) {
-        //         prodDetails.style.display = 'none';
-        //         prodDetails.classList.remove('showing');
-        //     } else {
-        //         prodDetails.style.display = 'flex';
-        //         prodDetails.classList.add('showing');
-        //     }
-
-
-        //     window.scrollTo(0, prodDetails.parentElement.offsetTop);
-        // });
     </script>
 </body>
 
