@@ -14,6 +14,7 @@ session_start();
 
 $errorMessage = ""; // Define errorMessage variable in the global scope
 $passerror = "";
+$reset_code="";
 $new_password = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["update_password"])) {
     $reset_code = $_POST["reset_code"];
@@ -22,6 +23,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["update_password"])) {
 
     if ( isset($_POST["update_password"]) && strlen($new_password) <= 3) {
         $passerror = "Password must be longer than 3 characters.";
+    } else if (empty($reset_code)) {
+        $errorMessage = "Reset Code Can't Be Empty";
     } else if ($_SESSION['reset_code'] == $reset_code) {
         // Update the password in the database
 
@@ -79,6 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["update_password"])) {
                             <div class="alert alert-danger" role="alert">
                                 <?php echo $passerror; ?>
                             </div>
+                            
                         <?php endif; ?>
 
             
