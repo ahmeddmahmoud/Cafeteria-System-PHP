@@ -149,7 +149,13 @@ $userNames = $obj->getData("user", "role!='admin'", "name")->fetch_all(MYSQLI_AS
             <hr>
             <input type="submit" value="confirm" class="btn btn-outline-success">
           </form>
+          <?php
+            if(isset($_GET["err"])){
+              echo "<h5 class='text-danger text-center'>caution: You didnt select a product</h5>";
+            }
+            ?>
         </div>
+        
         <div class="card-footer text-center">
           <h3>Total price is 00.00</h3>
         </div>

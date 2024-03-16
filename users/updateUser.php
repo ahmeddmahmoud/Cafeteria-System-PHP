@@ -3,28 +3,33 @@
 
 <?php
 
-require_once '../functions/validateSourcePage.php';
-//validateSourcePage('usersTable.php', '../errors/err.php', 403);
-
+session_start();
+// Check if admin is logged in
+    if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin') {
+    $name = $_SESSION['name'];
+    $user_id = $_SESSION['id'];
+} else {
+    // Redirect to login page if user is not logged in
+    setcookie("msg", "You are not logged in, please login first");
+    header("Location: ../login/login.php");
+    exit(); // Stop further execution
+}
 
 $id  = $_GET['id'];
 
 require "../db.php";
 $db = new DB();
 $db->__construct();
-// $data = $db->select_data("user", "id = '$id'");
+
 $data = $db->getData("user", "id = '$id' ");
 $result = $data->fetch_array(MYSQLI_ASSOC);
 
-// die();
 $roomNo = $result['room_no'];
-// $roomData = $db->select_data("rooms", "room_no = '$roomNo' ");
+
 $roomData = $db->getData("rooms",  "room_no = '$roomNo' ");
 $roomResult = $roomData->fetch_array(MYSQLI_ASSOC);
 echo "</br>";
 
-session_start();
-$_SESSION['roomNo'] = $roomNo;
 
 if (isset($_GET['errors'])) {
     $errors = json_decode($_GET['errors'], true); // Decode the JSON string into an associative array

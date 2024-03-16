@@ -14,9 +14,10 @@ $errors = [];
 
 
 
-// require_once '../functions/validateSourcePage.php';
-if (!isset($_POST['add']) || !isset($_POST['update'])) {
-    // validateSourcePage('userForm.php', '../errors/err.php', 403);
+require_once '../functions/validateSourcePage.php';
+if (!isset($_POST['name']) ) {
+    validateSourcePage('userForm.php', '../errors/err.php', 403);
+    //header('Location: ../errors/err.php?err=403');
 }
 
 $db  = new DB();
@@ -41,8 +42,7 @@ echo "</br>";
 // for update
 if (isset($_POST['update'])) {
     $id = $_POST['id'];
-    session_start();
-    $oldRoom = $_SESSION['roomNo'];
+    
 }
 
 
@@ -83,14 +83,10 @@ try {
             header("location: updateUser.php?errors=" . $errors . "&id=" . $id);
         }
     } else {
-        // check room number exist or not get_Data
-        // if exist roomno ----> table users
-        // update roomno check  exist or not 
+       
         $checkExistRoom = $db->getData("rooms", "room_no = '$Room_No'" , "room_no");
         
-        // var_dump($checkExistRoom->fetch_all());
-        // die();
-        
+     
         if (isset($_POST['add'])) {
             if ($checkExistRoom == null){
                 
@@ -110,8 +106,7 @@ try {
     }
 } catch (Exception $e) {
     if ($e->getCode() === 1062) { // MySQL error code for duplicate entry
-        // if (strpos($e->getMessage(), 'rooms') !== false) { // Check if the error message contains 'room_no'
-        //     $errors['room_no'] = "Room number already exists";
+        
         if (strpos($e->getMessage(), 'email') !== false) { // Check if the error message contains 'email'
             $errors['email'] = "Email already exists";
         } else {
