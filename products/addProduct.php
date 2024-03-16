@@ -18,7 +18,9 @@ try {
     $img=$_FILES["img"];
     $imgName=$img["name"];
     // $result = $connection->query("SELECT * FROM product WHERE name = '$name'");
-    $result = $db->getData("product" , "name = '$name'","*");
+    // $result = $db->getData("product" , "name = '$name'","*");
+    $result = $db->getDataSpec("*","product", "name = '$name'");
+
     if ($result->num_rows > 0) {
         $errors['name'] = "**Product name already exists";
     }
