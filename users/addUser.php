@@ -83,20 +83,35 @@ try {
             header("location: updateUser.php?errors=" . $errors . "&id=" . $id);
         }
     } else {
-
+        // check room number exist or not get_Data
+        // if exist roomno ----> table users
+        // update roomno check  exist or not 
+        $checkExistRoom = $db->getData("rooms", "room_no = '$Room_No'" , "room_no");
+        
+        // var_dump($checkExistRoom->fetch_all());
+        // die();
+        
         if (isset($_POST['add'])) {
-            $db->insert_data("rooms", "room_no , ext", "'$Room_No' , '$Ext'");
+            if ($checkExistRoom == null){
+                
+                $db->insert_data("rooms", "room_no , ext", "'$Room_No' , '$Ext'");
+            }
+            
             $db->insert_data("user", "name , email , password , room_no, image , role", "'$name' , '$email' , '$password'  , '$Room_No', '$imageName' , 'user'");
         } elseif (isset($_POST['update'])) {
-            $db->update_data("rooms", "room_no = '$Room_No' , ext = '$Ext'", "room_no = '$oldRoom'");
+            // $db->update_data("rooms", "room_no = '$Room_No' , ext = '$Ext'", "room_no = '$oldRoom'");
+            if ($checkExistRoom == null){
+                
+                $db->insert_data("rooms", "room_no , ext", "'$Room_No' , '$Ext'");
+            }
             $db->update_data("user", "name = '$name' , email = '$email' , password = '$password' , room_no = '$Room_No' , image = '$imageName'", "id = '$id'");
         }
     }
 } catch (Exception $e) {
     if ($e->getCode() === 1062) { // MySQL error code for duplicate entry
-        if (strpos($e->getMessage(), 'rooms') !== false) { // Check if the error message contains 'room_no'
-            $errors['room_no'] = "Room number already exists";
-        } elseif (strpos($e->getMessage(), 'email') !== false) { // Check if the error message contains 'email'
+        // if (strpos($e->getMessage(), 'rooms') !== false) { // Check if the error message contains 'room_no'
+        //     $errors['room_no'] = "Room number already exists";
+        if (strpos($e->getMessage(), 'email') !== false) { // Check if the error message contains 'email'
             $errors['email'] = "Email already exists";
         } else {
             // For other duplicate entry errors or unknown errors, you can display a generic error message
@@ -115,3 +130,5 @@ try {
         echo "An error occurred: " . $e->getMessage();
     }
 }
+
+
