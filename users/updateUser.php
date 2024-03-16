@@ -37,55 +37,68 @@ if (isset($_GET['errors'])) {
     }
 </style>
 
+<!DOCTYPE html>
+<html lang="en">
 
-<div class="card w-50 my-2 mx-auto">
-    <div class="card-header text-center">
-        <h3>Edit User</h3>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update user</title>
+</head>
+
+<body>
+
+    <div class="card w-50 my-2 mx-auto">
+        <div class="card-header text-center">
+            <h3>Edit User</h3>
+        </div>
+        <form action="addUser.php" method="post" enctype="multipart/form-data">
+            <div class="my-2 form-floating w-75 mx-auto">
+                <input type="text" name="id" placeholder="ID" class="form-control" required value="<?= $result['id'] ?>" readonly>
+                <label for="id">ID</label>
+            </div>
+            <div class="my-2 form-floating w-75 mx-auto">
+                <input type="text" name="name" class="form-control" required value="<?= $result['name'] ?>" placeholder="name">
+                <label for="name">Name</label>
+                <p class="text-danger"><?php if (isset($errors['name'])) echo $errors['name']; ?></p>
+            </div>
+            <div class="my-2 form-floating w-75 mx-auto">
+                <input type="email" name="email" class="form-control" required value="<?= $result['email'] ?>" placeholder="email">
+                <label for="email">Email</label>
+                <p class="text-danger"><?php if (isset($errors['email'])) echo $errors['email']; ?></p>
+            </div>
+            <div class="my-2 form-floating w-75 mx-auto">
+                <input type="password" name="password" class="form-control" required value="<?= $result['password'] ?>" placeholder="password">
+                <label for="password">Password</label>
+                <p class="text-danger"><?php if (isset($errors['password'])) echo $errors['password']; ?></p>
+            </div>
+            <div class="my-2 form-floating w-75 mx-auto">
+                <input type="password" name="confirm_password" class="form-control" required placeholder="confirm password">
+                <label for="password">Confirm Password</label>
+                <p class="text-danger"><?php if (isset($errors['confirm_password'])) echo $errors['confirm_password']; ?></p>
+            </div>
+            <div class="my-2 form-floating w-75 mx-auto">
+                <input type="text" name="room_no" class="form-control" required value="<?= $result['room_no'] ?>" placeholder="roomNo">
+                <label for="Room No">Room No.</label>
+                <p class="text-danger"><?php if (isset($errors['room_no'])) echo $errors['room_no']; ?></p>
+            </div>
+            <div class="my-2 form-floating w-75 mx-auto">
+                <input type="text" name="ext" class="form-control" required placeholder="ext" value="<?= $roomResult['ext'] ?>">
+                <label for="Ext">Ext.</label>
+                <p class="text-danger"><?php if (isset($errors['ext'])) echo $errors['ext']; ?></p>
+            </div>
+            <div class="my-2  w-75 mx-auto">
+                <label for="image">Profile Picture</label>
+                <input type="file" class="form-control" name="image" required value="<?= $result['image'] ?>">
+                <p class="text-danger"><?php if (isset($errors['image'])) echo $errors['image']; ?></p>
+            </div>
+            <div class="card-footer text-center">
+                <button type="submit" class="btn btn-primary" name="update" value="update">Save</button>
+                <a href="./usersTable.php" class="btn btn-danger">Cancel</a>
+            </div>
+        </form>
+
     </div>
-    <form action="addUser.php" method="post" enctype="multipart/form-data">
-        <div class="my-2 form-floating w-75 mx-auto">
-            <input type="text" name="id" placeholder="ID" class="form-control" required value="<?= $result['id'] ?>" readonly>
-            <label for="id">ID</label>
-        </div>
-        <div class="my-2 form-floating w-75 mx-auto">
-            <input type="text" name="name" class="form-control" required value="<?= $result['name'] ?>" placeholder="name">
-            <label for="name">Name</label>
-            <p class="text-danger"><?php if (isset($errors['name'])) echo $errors['name']; ?></p>
-        </div>
-        <div class="my-2 form-floating w-75 mx-auto">
-            <input type="email" name="email" class="form-control" required value="<?= $result['email'] ?>" placeholder="email">
-            <label for="email">Email</label>
-            <p class="text-danger"><?php if (isset($errors['email'])) echo $errors['email']; ?></p>
-        </div>
-        <div class="my-2 form-floating w-75 mx-auto">
-            <input type="password" name="password" class="form-control" required value="<?= $result['password'] ?>" placeholder="password">
-            <label for="password">Password</label>
-            <p class="text-danger"><?php if (isset($errors['password'])) echo $errors['password']; ?></p>
-        </div>
-        <div class="my-2 form-floating w-75 mx-auto">
-            <input type="password" name="confirm_password" class="form-control" required placeholder="confirm password">
-            <label for="password">Confirm Password</label>
-            <p class="text-danger"><?php if (isset($errors['confirm_password'])) echo $errors['confirm_password']; ?></p>
-        </div>
-        <div class="my-2 form-floating w-75 mx-auto">
-            <input type="text" name="room_no" class="form-control" required value="<?= $result['room_no'] ?>" placeholder="roomNo">
-            <label for="Room No">Room No.</label>
-            <p class="text-danger"><?php if (isset($errors['room_no'])) echo $errors['room_no']; ?></p>
-        </div>
-        <div class="my-2 form-floating w-75 mx-auto">
-            <input type="text" name="ext" class="form-control" required placeholder="ext" value="<?= $roomResult['ext'] ?>">
-            <label for="Ext">Ext.</label>
-            <p class="text-danger"><?php if (isset($errors['ext'])) echo $errors['ext']; ?></p>
-        </div>
-        <div class="my-2  w-75 mx-auto">
-            <label for="image">Profile Picture</label>
-            <input type="file" class="form-control" name="image" required value="<?= $result['image'] ?>">
-            <p class="text-danger"><?php if (isset($errors['image'])) echo $errors['image']; ?></p>
-        </div>
-        <div class="card-footer text-center">
-            <button type="submit" class="btn btn-primary" name="update" value="update">Save</button>
-            <a href="./usersTable.php" class="btn btn-danger">Cancel</a>
-        </div>
-    </form>
+</body>
 
-</div>
+</html>

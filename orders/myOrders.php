@@ -31,10 +31,8 @@ try {
 
 <!-- Table -->
 <?php
-// $query = "SELECT * FROM UserOrdersInfo WHERE user_id = " . $_SESSION['user_id'];
 $filter_condition = "user_id =1 AND DATE(order_date) BETWEEN '2024-03-01' AND '2024-03-25'"; //to be changed with variable dates
 $crrentDate = date("Y-m-d");
-// $orders = $db->getData($table);
 ?>
 
 <!DOCTYPE html>
@@ -180,22 +178,6 @@ HTML;
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.min.js" integrity="sha512-ykZ1QQr0Jy/4ZkvKuqWn4iF3lqPZyij9iRv6sGqLRdTPkY69YX6+7wvVGmsdBbiIfN/8OdsI7HABjvEok6ZopQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>
-        // Toggle product details when button is clicked
-        // document.querySelectorAll('.show-details').forEach(function(button) {
-        //     button.addEventListener('click', function() {
-        //         var order = this.closest('.order');
-        //         var productDetails = order.querySelector('.product-details');
-        //         var orderInfo = order.querySelector('.order-info');
-
-        //         if (productDetails.style.display != 'flex') {
-        //             productDetails.style.display = 'flex';
-        //         } else {
-        //             productDetails.style.display = 'none';
-        //         }
-
-        //     });
-        // });
-        //remove last three letter from all .date 
         document.querySelectorAll('.date').forEach(function(date) {
             var formattedDate = date.innerText.substring(0, date.innerText.length - 3);
             date.innerText = formattedDate;
