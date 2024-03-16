@@ -44,34 +44,36 @@ if (isset($_GET['errors'])) {
     </div>
     <form action="addUser.php" method="post" enctype="multipart/form-data">
         <div class="my-2 form-floating w-75 mx-auto">
-            <input type="text" name="id" placeholder="ID" class="form-control" value="<?= $result['id'] ?>" readonly>
+            <input type="text" name="id" placeholder="ID" class="form-control" required value="<?= $result['id'] ?>" readonly>
             <label for="id">ID</label>
         </div>
         <div class="my-2 form-floating w-75 mx-auto">
-            <input type="text" name="name" class="form-control" value="<?= $result['name'] ?>" placeholder="name">
+            <input type="text" name="name" class="form-control" required value="<?= $result['name'] ?>" placeholder="name">
             <label for="name">Name</label>
             <p class="text-danger"><?php if (isset($errors['name'])) echo $errors['name']; ?></p>
         </div>
         <div class="my-2 form-floating w-75 mx-auto">
-            <input type="email" name="email" class="form-control" value="<?= $result['email'] ?>" placeholder="email">
+            <input type="email" name="email" class="form-control" required value="<?= $result['email'] ?>" placeholder="email">
             <label for="email">Email</label>
             <p class="text-danger"><?php if (isset($errors['email'])) echo $errors['email']; ?></p>
         </div>
         <div class="my-2 form-floating w-75 mx-auto">
-            <input type="password" name="password" class="form-control" value="<?= $result['password'] ?>" placeholder="password">
+            <input type="password" name="password" class="form-control" required value="<?= $result['password'] ?>" placeholder="password">
             <label for="password">Password</label>
+            <p class="text-danger"><?php if (isset($errors['password'])) echo $errors['password']; ?></p>
         </div>
         <div class="my-2 form-floating w-75 mx-auto">
-            <input type="password" name="confirm_password" class="form-control" placeholder="confirm password">
+            <input type="password" name="confirm_password" class="form-control" required placeholder="confirm password">
             <label for="password">Confirm Password</label>
+            <p class="text-danger"><?php if (isset($errors['confirm_password'])) echo $errors['confirm_password']; ?></p>
         </div>
         <div class="my-2 form-floating w-75 mx-auto">
-            <input type="text" name="room_no" class="form-control" value="<?= $result['room_no'] ?>" placeholder="roomNo">
+            <input type="text" name="room_no" class="form-control" required value="<?= $result['room_no'] ?>" placeholder="roomNo">
             <label for="Room No">Room No.</label>
             <p class="text-danger"><?php if (isset($errors['room_no'])) echo $errors['room_no']; ?></p>
         </div>
         <div class="my-2 form-floating w-75 mx-auto">
-            <input type="text" name="ext" class="form-control" placeholder="ext" value="<?= $roomResult['ext'] ?>">
+            <input type="text" name="ext" class="form-control" required placeholder="ext" value="<?= $roomResult['ext'] ?>">
             <label for="Ext">Ext.</label>
             <p class="text-danger"><?php if (isset($errors['ext'])) echo $errors['ext']; ?></p>
         </div>
