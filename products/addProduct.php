@@ -48,7 +48,7 @@ try {
     // $insert=$connection->prepare("INSERT INTO product (name,price,category_id,image) VALUES (?,?,?,?)");
     // $insert->execute([$name,$price,$category,$img['name']]);
     $db->insertInto("product", "(name,price,category_id,image)", "('$name','$price','$category','$imgName')");
-    header("location: productTable.php");
+    header("location: productTable.php?page=" . $_GET['page']);
     }
 }catch (Exception $e) {
     var_dump($e->getMessage());

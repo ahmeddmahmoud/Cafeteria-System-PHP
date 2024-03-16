@@ -81,7 +81,7 @@ if ($result->num_rows > 0) {
             </div>
         <div class="row justify-content-center my-5">
             <button class="btn btn-primary w-auto" type="submit">Submit</button>
-            <a href="productTable.php" class="btn btn-danger mx-3 w-auto">Cancel</a>
+            <a href="productTable.php?page=<?= $page; ?>" class="btn btn-danger mx-3 w-auto">Cancel</a>
         </div>
     </form>
 </div>

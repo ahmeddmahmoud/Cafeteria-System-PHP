@@ -51,7 +51,7 @@ $result = $db->getDataPagination("product", "1", $limit, $offset);
 
     <div class="d-flex justify-content-between mx-5 mt-1 align-items-center ">
         <p class="fs-3 fw-bold ">All Products</p>
-        <a href="productForm.php" class="btn btn-primary">Add Product</a>
+        <a href="productForm.php?page=<?= $page; ?>" class="btn btn-primary">Add Product</a>
     </div>
 
     <div class="mx-5 my-1 text-center ">

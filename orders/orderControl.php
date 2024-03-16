@@ -1,4 +1,11 @@
 <?php 
+if(!(isset($_POST["name"]))){
+  if(isset($_POST["userNameByAdmin"])){
+    header("Location:makeOrderAdmin.php?err=1");
+  }else{
+    header("Location:makeOrderUser.php?err=1");
+  }
+}
 require("../db.php");
 session_start();
 $obj=new DB();
@@ -15,6 +22,8 @@ if(isset($_POST["userNameByAdmin"])){
   $userID=$_SESSION['id'];
   
 }
+// var_dump($_POST);
+// die();
 try {
   $obj->getConnection()->begin_transaction();
   $obj->insertInto("orders","(user_id, date, status, notes, room_no)","('$userID', now(), 'processing', '$notes', '$roomNum')");
