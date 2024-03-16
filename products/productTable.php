@@ -40,7 +40,6 @@ $result = $db->getDataPagination("product", "1", $limit, $offset);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="../style/nav.css">
 
-
 </head>
 
 <body>
@@ -71,7 +70,8 @@ $result = $db->getDataPagination("product", "1", $limit, $offset);
                     echo "<td><img src='../imgs/products/{$row['image']}' class='rounded-circle' width='50' height='50'/></td>";
                     echo "<td>";
                     $availabilityText = $row['available'] == 1 ? 'Available' : 'Unavailable';
-                    echo "<a href='changeAvailability.php?id={$row['id']}&status={$row['available']}&page=$page' class='btn btn-primary mx-1'>$availabilityText</a>";
+                    $availabilityClass = $row['available'] == 1 ? 'btn-primary' : 'btn-dark';
+                    echo "<a href='changeAvailability.php?id={$row['id']}&status={$row['available']}&page=$page' class='btn $availabilityClass mx-1'>$availabilityText</a>";
                     echo "<a href='editProduct.php?id={$row['id']}&page=$page' class='btn btn-warning mx-1'>Edit</a>";
                     echo "<a href='deleteProduct.php?id={$row['id']}&page=$page' class='btn btn-danger mx-1'>Delete</a>";
                     echo "</td>";
