@@ -36,7 +36,7 @@ if ($result->num_rows > 0) {
  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <div class="container">
-            <div class="card-header text-center"><h3>Edit Product</h3></div>
+            <div class="card-header w-50 mx-auto text-center"><h3>Edit Product</h3></div>
 
     <form action="updateproduct.php?id=<?= $id; ?>&page=<?= $page; ?>" method="post" class="my-2 border rounded row g-3 needs-validation w-50 justify-content-center aligm-items-center mx-auto" novalidate enctype="multipart/form-data" id="addProductForm">
             <div class="row my-4 mx-auto">
@@ -76,7 +76,6 @@ if ($result->num_rows > 0) {
             </div>
         <div class="row justify-content-center my-5">
             <button class="btn btn-primary w-auto" type="submit">Submit</button>
-            <!-- <button type="reset" class="btn btn-danger mx-3 w-auto">Cancel</button> -->
             <a href="productTable.php" class="btn btn-danger mx-3 w-auto">Cancel</a>
         </div>
     </form>

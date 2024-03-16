@@ -22,14 +22,7 @@ session_start();
 //open connection
 $db = new DB();
 $db->__construct();
-// $connection = new mysqli("localhost", "php", "1234", "cafe");
 
-// if ($connection->connect_errno) {
-//     die("Connection failed...");
-    
-// }
-// $query = "SELECT * FROM category";
-// $result = $connection->query($query);
 $result=$db->getData("category");
 
 $categories = [];
@@ -53,12 +46,13 @@ if ($result->num_rows > 0) {
     }
 </style>
     <div class="container">
+        <div class="card-header w-50 mx-auto text-center"><h3>Add New Product</h3></div>
         <div class="btn-success w-50 border rounded text-center mx-auto my-2" id="successMsgDiv">
     <?php if (isset($_COOKIE['successMsg'])) {
         $successMsg = $_COOKIE['successMsg'];
         echo "$successMsg";
     } ?></div>
-    <form action="addproduct.php" method="post" class="my-2 row g-3 needs-validation" novalidate enctype="multipart/form-data" id="addProductForm">
+    <form action="addproduct.php" method="post" class="my-2 row g-3 needs-validation border rounded w-50 justify-content-center mx-auto" novalidate enctype="multipart/form-data" id="addProductForm">
             <div class="row my-4">
                 <label for="validationCustom01" class="form-label">Product</label>
                 <input type="text" class="form-control" id="validationCustom01" placeholder="Product" required name="productname">
@@ -94,9 +88,10 @@ if ($result->num_rows > 0) {
 
 
             </div>
-        <div class="row justify-content-center my-5">
+        <div class="row justify-content-center my-3">
             <button class="btn btn-primary w-auto" type="submit">Submit</button>
-            <button type="reset" class="btn btn-primary mx-3 w-auto">Reset</button>
+            <a href="productTable.php" class="btn btn-danger mx-3 w-auto">Cancel</a>
+
         </div>
     </form>
 </div>
