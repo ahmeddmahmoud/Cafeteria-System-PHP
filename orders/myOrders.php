@@ -99,6 +99,10 @@ $crrentDate = date("Y-m-d");
         .red-border {
             border: 2px solid red;
         }
+
+        body {
+            background-color: #F4EAE0 !important;
+        }
     </style>
 </head>
 

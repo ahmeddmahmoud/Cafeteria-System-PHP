@@ -115,6 +115,10 @@ $productsImgsPath = "../imgs/products/";
             color: white;
             border-color: #007bff;
         }
+
+        body {
+            background-color: #F4EAE0 !important;
+        }
     </style>
 </head>
 <?PHP include "../components/nav.php" ?>
