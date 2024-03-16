@@ -33,6 +33,11 @@ if ($result->num_rows > 0) {
     }
 }
 ?>
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>Edit Product</title>
+
  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         <style>
@@ -40,6 +45,8 @@ if ($result->num_rows > 0) {
         background-color: #F4EAE0 !important;
     }
     </style>
+    </head>
+    <body>
     <div class="container">
             <div class="card-header w-50 mx-auto text-center"><h3>Edit Product</h3></div>
 
@@ -152,3 +159,6 @@ if ($result->num_rows > 0) {
         });
     });
 </script>
+</body>
+
+</html>

@@ -21,7 +21,7 @@ GROUP BY u.id, u.name;";
 $userOrdersResult = $db->getConnection()->query($query);
 
 // Fetch user orders based on date
-$query2= " SELECT
+$query2 = " SELECT
 u.id,
 u.name,
 o.user_id,
@@ -36,7 +36,7 @@ ORDER BY o.user_id, o.date;";
 $userOrdersDate = $db->getConnection()->query($query2);
 
 // Fetch order details based on date
-$query3="SELECT
+$query3 = "SELECT
 o.user_id,
 o.date,
 p.name AS product_name,
@@ -115,70 +115,85 @@ if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin') {
         border-radius: 50%;
         height: 50px;
     }
-    body{
-    background-color: #F4EAE0 !important;
+
+    body {
+        background-color: #F4EAE0 !important;
     }
+
     .allproduct img {
         cursor: pointer;
         margin: auto;
         display: inline-block;
     }
-    .order-details > table > tbody > tr:hover{
+
+    .order-details>table>tbody>tr:hover {
         background-color: #F4EAE0 !important;
     }
-    .order-full-details > div{
+
+    .order-full-details>div {
         text-align: center;
     }
-    .order-full-details > div:hover{
-    background-color: #FAF6F0 !important;
-    z-index: 1;
-    border:2px solid #000000;
-    border-radius: 10px;
+
+    .order-full-details>div:hover {
+        background-color: #FAF6F0 !important;
+        z-index: 1;
+        border: 2px solid #000000;
+        border-radius: 10px;
     }
-    .order-full-details{
+
+    .order-full-details {
         margin-top: 5px;
         justify-content: space-around;
         align-items: center;
         display: none;
     }
 </style>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<?PHP include "../components/nav.php" ?>
-<div class="container row justify-content-between mx-auto">
-    <div class=" card h-50 shadow px-4 mb-1 col-12">
-        <!-- <div class="col-md-6 offset-md-3"> -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Checks</title>
+</head>
+
+<body>
+    <?PHP include "../components/nav.php" ?>
+    <div class="container row justify-content-between mx-auto">
+        <div class=" card h-50 shadow px-4 mb-1 col-12">
+            <!-- <div class="col-md-6 offset-md-3"> -->
             <h2 class="mx-auto">Checks</h2>
             <form class="my-0">
                 <div class="form-row text-center align-items-center">
                     <div class="form-group col-3">
                         <label for="date_from">From:</label>
-                        <input  type="date" id="date_from">
+                        <input type="date" id="date_from">
                     </div>
                     <div class="form-group col-3">
                         <label for="date_to">To:</label>
-                        <input  type="date" id="date_to">
+                        <input type="date" id="date_to">
                     </div>
                     <div class="form-group col-4">
-                    <label for="user">Select User:</label>
-                    <select  id="user">
-                        <option value="all" selected>Show All</option> <!-- Add the selected attribute -->
-                        <?php foreach ($userOrders as $order): ?>    <!-- first query-->
-                        <option value="<?php echo $order['id']; ?>"><?php echo $order['name']; ?></option>
-                        <?php endforeach; ?>
-                    </select>
+                        <label for="user">Select User:</label>
+                        <select id="user">
+                            <option value="all" selected>Show All</option> <!-- Add the selected attribute -->
+                            <?php foreach ($userOrders as $order) : ?> <!-- first query-->
+                                <option value="<?php echo $order['id']; ?>"><?php echo $order['name']; ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
-                    <div class="form-group col-2"><button type="button" id="filter" onclick="filterOrders()" class="btn btn-primary"
-                        style="height: fit-content;">Filter</button></div>
+                    <div class="form-group col-2"><button type="button" id="filter" onclick="filterOrders()" class="btn btn-primary" style="height: fit-content;">Filter</button></div>
                 </div>
 
 
             </form>
-        <!-- </div> -->
-    </div>
-    <div class=" bg-light shadow-lg col-5" style="overflow-y: auto; max-height: 420px;">
-        
+            <!-- </div> -->
+        </div>
+        <div class=" bg-light shadow-lg col-5" style="overflow-y: auto; max-height: 420px;">
+
             <div class="text-center">
-                <h2 >User Orders</h2>
+                <h2>User Orders</h2>
                 <table class="table">
                     <thead>
                         <tr>
@@ -190,101 +205,103 @@ if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin') {
                     </tbody>
                 </table>
             </div>
-    </div>
-            <div class="col-7 px-1 ">
-                <div class="order-details bg-light mb-2" style="display:none;overflow-y:auto; max-height:160px;"></div>
-                <div class="order-full-details bg-light" style="max-height:400px; overflow-x:auto;"></div>
-            </div>
+        </div>
+        <div class="col-7 px-1 ">
+            <div class="order-details bg-light mb-2" style="display:none;overflow-y:auto; max-height:160px;"></div>
+            <div class="order-full-details bg-light" style="max-height:400px; overflow-x:auto;"></div>
+        </div>
 
-</div>
+    </div>
+</body>
+
+</html>
 
 <style>
-    .order-full-details{
+    .order-full-details {
         margin-top: 5px;
         justify-content: space-around;
         align-items: center;
         display: none;
     }
-
 </style>
 
 <script>
-// Retrieve user orders from PHP variable
-const userOrders = <?php echo $userOrdersJson; ?>; //get data from json string
-const ordersDate = <?php echo $ordersDateJson; ?>; //get data from json string
-const orderDetails = <?php echo $detailsJson; ?>; //get data from json string
-const orderDetailsDiv = document.querySelector('.order-details');
-const orderFullDetails = document.querySelector('.order-full-details');
+    // Retrieve user orders from PHP variable
+    const userOrders = <?php echo $userOrdersJson; ?>; //get data from json string
+    const ordersDate = <?php echo $ordersDateJson; ?>; //get data from json string
+    const orderDetails = <?php echo $detailsJson; ?>; //get data from json string
+    const orderDetailsDiv = document.querySelector('.order-details');
+    const orderFullDetails = document.querySelector('.order-full-details');
 
-function filterOrders() {
-    orderDetailsDiv.style.display = 'none';
-    orderFullDetails.style.display = 'none';
-    const dateFrom = document.getElementById('date_from').value;
-    const dateTo = document.getElementById('date_to').value;
-    const selectedUserId = document.getElementById('user').value;
+    function filterOrders() {
+        orderDetailsDiv.style.display = 'none';
+        orderFullDetails.style.display = 'none';
+        const dateFrom = document.getElementById('date_from').value;
+        const dateTo = document.getElementById('date_to').value;
+        const selectedUserId = document.getElementById('user').value;
 
-    // Check if the user selected any filtering criteria
-    if (!dateFrom && !dateTo && selectedUserId === 'all') {
-        // If 'Show All' option selected, display all orders
-        displayAllOrders();
-        return;
+        // Check if the user selected any filtering criteria
+        if (!dateFrom && !dateTo && selectedUserId === 'all') {
+            // If 'Show All' option selected, display all orders
+            displayAllOrders();
+            return;
+        }
+
+        // Filter user orders based on selected user and date range
+        let filteredOrders = ordersDate.filter(order => { //second query
+            const orderDate = new Date(order['date']);
+            const fromDate = new Date(dateFrom);
+            const toDate = new Date(dateTo);
+
+            // Check if the order matches the selected user
+            const userIdMatch = selectedUserId === '' || selectedUserId === 'all' || order['id'] === selectedUserId;
+
+            // Check if the order falls within the selected date range
+            const dateRangeMatch = (!dateFrom || !dateTo) || (orderDate >= fromDate && orderDate <= toDate);
+
+            return userIdMatch && dateRangeMatch;
+        });
+
+        // Update table with filtered user orders
+        updateOrdersTable(filteredOrders, ordersDate, orderDetails);
     }
 
-    // Filter user orders based on selected user and date range
-    let filteredOrders = ordersDate.filter(order => {                     //second query
-        const orderDate = new Date(order['date']);
-        const fromDate = new Date(dateFrom);
-        const toDate = new Date(dateTo);
+    // Function to display all orders
+    function displayAllOrders() {
+        updateOrdersTable(ordersDate, ordersDate, orderDetails); //second query
+    }
+    //**************************************************************** */
+    // Function to update the orders table
+    function updateOrdersTable(orders, ordersDate, orderDetails) {
 
-        // Check if the order matches the selected user
-        const userIdMatch = selectedUserId === '' || selectedUserId === 'all' || order['id'] === selectedUserId;
+        const userOrdersTableBody = document.getElementById('userOrdersTableBody');
+        userOrdersTableBody.innerHTML = ''; // Clear the existing content in the table body
 
-        // Check if the order falls within the selected date range
-        const dateRangeMatch = (!dateFrom || !dateTo) || (orderDate >= fromDate && orderDate <= toDate);
+        // Create an object to store total prices for each user
+        const userTotalPrices = {};
 
-        return userIdMatch && dateRangeMatch;
-    });
+        // Iterate over the orders to group them by user ID and sum the total prices
+        orders.forEach(order => {
+            const userId = order['id'];
+            const totalPrice = parseFloat(order['total_price']);
 
-    // Update table with filtered user orders
-    updateOrdersTable(filteredOrders, ordersDate, orderDetails);
-}
+            if (userId in userTotalPrices) {
+                // If the user ID already exists in the object, add the total price to it
+                userTotalPrices[userId] += totalPrice;
+            } else {
+                // If the user ID doesn't exist, initialize it with the total price
+                userTotalPrices[userId] = totalPrice;
+            }
+        });
 
-// Function to display all orders
-function displayAllOrders() {
-    updateOrdersTable(ordersDate, ordersDate, orderDetails);                      //second query
-}
-//**************************************************************** */
-// Function to update the orders table
-function updateOrdersTable(orders, ordersDate, orderDetails) {
-
-    const userOrdersTableBody = document.getElementById('userOrdersTableBody');
-    userOrdersTableBody.innerHTML = ''; // Clear the existing content in the table body
-    
-    // Create an object to store total prices for each user
-    const userTotalPrices = {};
-    
-    // Iterate over the orders to group them by user ID and sum the total prices
-    orders.forEach(order => {
-        const userId = order['id'];
-        const totalPrice = parseFloat(order['total_price']);
-        
-        if (userId in userTotalPrices) {
-            // If the user ID already exists in the object, add the total price to it
-            userTotalPrices[userId] += totalPrice;
-        } else {
-            // If the user ID doesn't exist, initialize it with the total price
-            userTotalPrices[userId] = totalPrice;
-        }
-    });
-    
-    // Iterate over the userTotalPrices object to create rows for each user
-    for (const userId in userTotalPrices) {
-        const userName = orders.find(order => order['id'] === userId)['name'];
-        const totalPrice = userTotalPrices[userId].toFixed(2);
-        const userOrder = orders.find(order => order['id'] === userId); // Find the user's order
-        const date = userOrder['date'];    
-        // console.log(date);
-        const row = `
+        // Iterate over the userTotalPrices object to create rows for each user
+        for (const userId in userTotalPrices) {
+            const userName = orders.find(order => order['id'] === userId)['name'];
+            const totalPrice = userTotalPrices[userId].toFixed(2);
+            const userOrder = orders.find(order => order['id'] === userId); // Find the user's order
+            const date = userOrder['date'];
+            // console.log(date);
+            const row = `
             <tr>
                 <td>                                                 
                     <button class="show-details-btn btn btn-info" data-date=${date} data-userid="${userId}">+</button> ${userName}      
@@ -292,115 +309,115 @@ function updateOrdersTable(orders, ordersDate, orderDetails) {
                 <td>${totalPrice}</td>
             </tr>
         `;
-        userOrdersTableBody.insertAdjacentHTML('beforeend', row);
-    }
-
-//**************************************************/ */
-
-const showDetailsButtons = document.querySelectorAll('.show-details-btn');
-showDetailsButtons.forEach(button => {
-    button.addEventListener('click', function() {
-        orderFullDetails.style.display = 'none';
-        const userId = this.getAttribute('data-userid');
-        const userdate = this.getAttribute('data-date');
-
-        if (this.innerText === '-') {
-            orderDetailsDiv.style.display = 'none';
-            this.innerText = '+';
-            return; 
+            userOrdersTableBody.insertAdjacentHTML('beforeend', row);
         }
-        // Reset all buttons to show '+'
-        showDetailsButtons.forEach(btn => {
-            btn.innerText = '+';
-        });
-        // Set the clicked button's text to '-'
-        this.innerText = '-';
-        // Retrieve the selected date range
-        const dateFrom = document.getElementById('date_from').value;
-        const dateTo = document.getElementById('date_to').value;
-        // Convert date strings to Date objects
-        const fromDate = new Date(dateFrom);
-        const toDate = new Date(dateTo);
-        // console.log(fromDate);
-        // console.log(toDate);
 
-        // Find orders associated with the user ID and within the date range
-        const userOrders = ordersDate.filter(order => {                               //check if date range selected
-        // Check if isDateInRange function exists and is a function
-        if (dateFrom && dateTo ) {
-            return order['user_id'] === userId && isDateInRange(order['date'], fromDate, toDate);
-        } else {
-            return order['user_id'] === userId ;
-        }
-});
-        // Generate HTML to display order date and amount
-        let orderDetailsHTML = '<table class="table"><tr><th>Order Date</th><th>Amount</th></tr>';
-        userOrders.forEach(order => {
-            orderDetailsHTML += `<tr>
+        //**************************************************/ */
+
+        const showDetailsButtons = document.querySelectorAll('.show-details-btn');
+        showDetailsButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                orderFullDetails.style.display = 'none';
+                const userId = this.getAttribute('data-userid');
+                const userdate = this.getAttribute('data-date');
+
+                if (this.innerText === '-') {
+                    orderDetailsDiv.style.display = 'none';
+                    this.innerText = '+';
+                    return;
+                }
+                // Reset all buttons to show '+'
+                showDetailsButtons.forEach(btn => {
+                    btn.innerText = '+';
+                });
+                // Set the clicked button's text to '-'
+                this.innerText = '-';
+                // Retrieve the selected date range
+                const dateFrom = document.getElementById('date_from').value;
+                const dateTo = document.getElementById('date_to').value;
+                // Convert date strings to Date objects
+                const fromDate = new Date(dateFrom);
+                const toDate = new Date(dateTo);
+                // console.log(fromDate);
+                // console.log(toDate);
+
+                // Find orders associated with the user ID and within the date range
+                const userOrders = ordersDate.filter(order => { //check if date range selected
+                    // Check if isDateInRange function exists and is a function
+                    if (dateFrom && dateTo) {
+                        return order['user_id'] === userId && isDateInRange(order['date'], fromDate, toDate);
+                    } else {
+                        return order['user_id'] === userId;
+                    }
+                });
+                // Generate HTML to display order date and amount
+                let orderDetailsHTML = '<table class="table"><tr><th>Order Date</th><th>Amount</th></tr>';
+                userOrders.forEach(order => {
+                    orderDetailsHTML += `<tr>
                                     <td><button class="btn btn-secondary showOrder" data-userid="${order['user_id']}" data-orderDate="${order['date']}" >+</button> ${order['date']}</td>
                                     <td>${order['total_price']}</td>
                                 </tr>`;
-        });
-        orderDetailsHTML += '</table>';
+                });
+                orderDetailsHTML += '</table>';
 
-        // Update the order details div
-        orderDetailsDiv.innerHTML = orderDetailsHTML;
-        orderDetailsDiv.style.display = 'block';
+                // Update the order details div
+                orderDetailsDiv.innerHTML = orderDetailsHTML;
+                orderDetailsDiv.style.display = 'block';
 
-        // Function to check if a date falls within a specified range
-        function isDateInRange(date, fromDate, toDate) {
-            const orderDate = new Date(date);
-            return orderDate >= fromDate && orderDate <= toDate;
-        }
+                // Function to check if a date falls within a specified range
+                function isDateInRange(date, fromDate, toDate) {
+                    const orderDate = new Date(date);
+                    return orderDate >= fromDate && orderDate <= toDate;
+                }
 
-            const showOrderButtons = document.querySelectorAll('.showOrder');
-            showOrderButtons.forEach(showButton => {
-                showButton.addEventListener('click', function() {
-                    const orderUserid = this.getAttribute('data-userid');
+                const showOrderButtons = document.querySelectorAll('.showOrder');
+                showOrderButtons.forEach(showButton => {
+                    showButton.addEventListener('click', function() {
+                        const orderUserid = this.getAttribute('data-userid');
 
-                    const orderDate = this.getAttribute('data-orderDate');
-                    const order = orderDetails.filter(order => order['user_id'] === orderUserid && order['date'] === orderDate);
-                    if (this.innerText === '-') {
-                        orderFullDetails.style.display = 'none';
-                        this.innerText = '+';
-                        return; 
-                    }
+                        const orderDate = this.getAttribute('data-orderDate');
+                        const order = orderDetails.filter(order => order['user_id'] === orderUserid && order['date'] === orderDate);
+                        if (this.innerText === '-') {
+                            orderFullDetails.style.display = 'none';
+                            this.innerText = '+';
+                            return;
+                        }
 
-                    let orderDetailsContent = '';
-                    order.forEach(order => {
-                        orderDetailsContent += `
+                        let orderDetailsContent = '';
+                        order.forEach(order => {
+                            orderDetailsContent += `
                                 <div class="pt-2 px-2" style="display:flex; align-items:center; flex-direction:column; justify-content:center;">
                                     <img src="../imgs/products/${order['product_image']}"  style="width:60px; height:80px;border-radius:5px">
                                     <p>Quantity: ${order['quantity']}</p>
                                     <p></p>Price: ${order['product_price']} $</p>
                                 </div>
                             `;
-                        // Append the order details to the existing content
-                        orderFullDetails.innerHTML = orderDetailsContent;
-                    });
-                    orderFullDetails.style.display = 'flex';
-                    // Reset all buttons to show '+'
-                    showOrderButtons.forEach(btn => {
-                    btn.innerText = '+';
-                    });
-                    // Set the clicked button's text to '-'
-                    this.innerText = '-';
+                            // Append the order details to the existing content
+                            orderFullDetails.innerHTML = orderDetailsContent;
+                        });
+                        orderFullDetails.style.display = 'flex';
+                        // Reset all buttons to show '+'
+                        showOrderButtons.forEach(btn => {
+                            btn.innerText = '+';
+                        });
+                        // Set the clicked button's text to '-'
+                        this.innerText = '-';
 
+                    });
                 });
             });
         });
+    }
+    document.addEventListener("DOMContentLoaded", function() {
+        filterOrders();
     });
-}
-document.addEventListener("DOMContentLoaded", function() {
-    filterOrders();
-});
 </script>
 
 
 
 
 <script>
-/*
+    /*
 function filterOrders() {
     orderDetailsDiv.style.display = 'none';
     orderFullDetails.style.display = 'none';
