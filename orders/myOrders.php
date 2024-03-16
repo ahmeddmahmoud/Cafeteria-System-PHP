@@ -48,6 +48,14 @@ $crrentDate = date("Y-m-d");
     <title>My orders</title>
     <link rel="stylesheet" href="../style/nav.css">
     <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .showing {
+            display: flex !important;
+        }
+
         /* Styles for order */
         .order {
             border: 1px solid #ccc;
@@ -65,8 +73,9 @@ $crrentDate = date("Y-m-d");
 
         /* Styles for product details */
         .product-details {
-            display: flex;
+            display: none;
             flex-wrap: wrap;
+            justify-content: space-evenly;
         }
 
         /* Styles for product */
@@ -123,6 +132,7 @@ $crrentDate = date("Y-m-d");
 
             // Output each order using heredoc syntax
             echo <<<HTML
+    <div class="product-container">
     <div class='order'>
         <div class='order-info'>
             <p class='date'>Date: {$row['order_date']}</p>
@@ -135,7 +145,7 @@ $crrentDate = date("Y-m-d");
         </div> <!-- Closing div for order-info -->
 
         <!-- Output product details (image, quantity, price) in a div -->
-        <div class='product-details' style='display:none;'>
+        <div class='product-details' class="" style=''>
 HTML;
             foreach ($imgArr as $key => $image) {
                 $quantity = $quantityArr[$key];
@@ -151,7 +161,7 @@ HTML;
             }
             echo "</div> <!-- Closing div for product-details -->";
             echo "</div> <!-- Closing div for order -->";
-
+            echo "</div> <!-- closing for product-container -->";
             // Accumulate total price
             $totalPrice += $row['total_amount'];
         }
@@ -171,20 +181,20 @@ HTML;
 
     <script>
         // Toggle product details when button is clicked
-        document.querySelectorAll('.show-details').forEach(function(button) {
-            button.addEventListener('click', function() {
-                var order = this.closest('.order');
-                var productDetails = order.querySelector('.product-details');
-                var orderInfo = order.querySelector('.order-info');
+        // document.querySelectorAll('.show-details').forEach(function(button) {
+        //     button.addEventListener('click', function() {
+        //         var order = this.closest('.order');
+        //         var productDetails = order.querySelector('.product-details');
+        //         var orderInfo = order.querySelector('.order-info');
 
-                if (productDetails.style.display != 'flex') {
-                    productDetails.style.display = 'flex';
-                } else {
-                    productDetails.style.display = 'none';
-                }
+        //         if (productDetails.style.display != 'flex') {
+        //             productDetails.style.display = 'flex';
+        //         } else {
+        //             productDetails.style.display = 'none';
+        //         }
 
-            });
-        });
+        //     });
+        // });
         //remove last three letter from all .date 
         document.querySelectorAll('.date').forEach(function(date) {
             var formattedDate = date.innerText.substring(0, date.innerText.length - 3);
@@ -213,22 +223,29 @@ HTML;
                     }
                 });
         }
-        //give the neareset elemnt that have order class a red border on clicking button that have show details class 
 
-        document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('show-details')) {
-                let order = e.target.closest('.order');
-                let allOrders = document.querySelectorAll('.order');
-                //close other orders
-                allOrders.forEach(function(order) {
-                    if (order.classList.contains('red-border')) {
-                        order.classList.toggle('red-border');
-                        order.closest('.product-details').display = 'none';
+        document.addEventListener('DOMContentLoaded', function() {
+            const productsContainer = document.querySelector('.product-container');
+            if (productsContainer) {
+                document.querySelector("body").addEventListener('click', function(e) {
+                    // Find the closest parent element with the 'order-info' class
+                    const clickedOrder = e.target.closest('.order-info');
+                    if (!clickedOrder) return; // Ignore clicks not on product items
+                    const orderDetails = clickedOrder.nextElementSibling;
+                    if (!orderDetails.classList.contains('product-details')) return; // Ensure it's a product details element
+                    orderDetails.classList.toggle('showing');
+                    orderDetails.parentElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
 
-                    }
+                    // Close other product details if open
+                    document.querySelectorAll('.product-details.showing').forEach(function(details) {
+                        if (details !== orderDetails) {
+                            details.classList.remove('showing');
+                        }
+                    });
                 });
-                order.classList.toggle('red-border');
-                order.closest('.product-details').display = 'block';
             }
         });
     </script>

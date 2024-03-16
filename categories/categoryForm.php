@@ -15,8 +15,8 @@ if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin') {
     header("Location: ../login/login.php");
     exit(); // Stop further execution
 }
-// Query to fetch total number of records
-$result = $db->getData("category");
+
+    $result = $db->getData("category");
 ?>
 
 <!doctype html>
@@ -27,6 +27,9 @@ $result = $db->getData("category");
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="../style/nav.css">
     <style>
+        body {
+        background-color: #F4EAE0 !important;
+        }
         .category-container {
             display: flex;
             flex-wrap: wrap;
@@ -70,7 +73,7 @@ $result = $db->getData("category");
             } else {
                 while ($row = $result->fetch_assoc()) {
                     // echo "<div class='category-item'>" . ucwords($row['name']) . "</div>";
-                    echo "<div class='category-item'>" . ucwords($row['name']) . " <a href='deleteCategory.php?id={$row['id']}' class='delete-category'>&times;</a></div>";
+                    echo "<div class='category-item'>" . ucwords($row['name']) . "</div>";
                 }
             }
             ?>
@@ -100,7 +103,7 @@ $result = $db->getData("category");
                     </p>
                 </div>
                 <div class="col-12 text-center">
-                    <button class="btn btn-primary" type="submit">Add Category</button>
+                    <button class="btn btn-primary my-3" type="submit">Add Category</button>
                 </div>
             </form>
         </div>

@@ -30,6 +30,9 @@ if ($_SESSION['role'] === 'user') {
         <li class="">
           <a class="btn btn-outline-dark mx-2  border-0" href="../orders/myorders.php">My Orders</a>
         </li>
+        <li class="">
+          <a class="btn btn-outline-dark mx-2  border-0" href="../orders/makeOrderUser.php">Make Order</a>
+        </li>
 HTML;
 } else if ($_SESSION['role'] === 'admin') {
   echo <<<HTML

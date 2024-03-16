@@ -32,7 +32,6 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
             exit();
         }
         $db->insert_data("category","name", "'$category'");
-        //setcookie("successMsg","The Category Has been added successfully!");
         setcookie("successMsg", "The Category ($category) Has been added successfully!", time() + 1, "/");
 
         header('Location: ../products/productForm.php');

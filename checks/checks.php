@@ -131,8 +131,6 @@ if (isset($_SESSION['id'])) {
     }
     .order-full-details > div:hover{
     background-color: #FAF6F0 !important;
-    transform: scale(1.2);
-    transition: transform 1.5s;
     z-index: 1;
     border:2px solid #000000;
     border-radius: 10px;
@@ -177,7 +175,7 @@ if (isset($_SESSION['id'])) {
             </form>
         <!-- </div> -->
     </div>
-    <div class=" bg-light shadow-lg col-6" style="overflow-y: auto; max-height: 420px;">
+    <div class=" bg-light shadow-lg col-5" style="overflow-y: auto; max-height: 420px;">
         
             <div class="text-center">
                 <h2 >User Orders</h2>
@@ -193,9 +191,9 @@ if (isset($_SESSION['id'])) {
                 </table>
             </div>
     </div>
-            <div class="col-6 px-1 ">
+            <div class="col-7 px-1 ">
                 <div class="order-details bg-light mb-2" style="display:none;overflow-y:auto; max-height:160px;"></div>
-                <div class="order-full-details bg-light" style="max-height:350px;"></div>
+                <div class="order-full-details bg-light" style="max-height:400px; overflow-x:auto;"></div>
             </div>
 
 </div>
@@ -368,15 +366,13 @@ showDetailsButtons.forEach(button => {
                         return; 
                     }
 
-
                     let orderDetailsContent = '';
                     order.forEach(order => {
                         orderDetailsContent += `
-                                <div class="pt-2">
-                                <img src="../imgs/products/${order['product_image']}"  style="max-width: 80px;">
-                                    <p>${order['product_name']}</p>
+                                <div class="pt-2 px-2" style="display:flex; align-items:center; flex-direction:column; justify-content:center;">
+                                    <img src="../imgs/products/${order['product_image']}"  style="width:60px; height:80px;border-radius:5px">
                                     <p>Quantity: ${order['quantity']}</p>
-                                    <p>Price: ${order['product_price']}</p>
+                                    <p></p>Price: ${order['product_price']} $</p>
                                 </div>
                             `;
                         // Append the order details to the existing content

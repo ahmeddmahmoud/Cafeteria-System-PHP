@@ -13,13 +13,19 @@ try {
 session_start();
 
 $errorMessage = ""; // Define errorMessage variable in the global scope
-
+$passerror = "";
+$reset_code="";
+$new_password = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["update_password"])) {
     $reset_code = $_POST["reset_code"];
     $new_password = $_POST["new_password"];
     $email =  $_SESSION['email'];
 
-    if ($_SESSION['reset_code'] == $reset_code) {
+    if ( isset($_POST["update_password"]) && strlen($new_password) <= 3) {
+        $passerror = "Password must be longer than 3 characters.";
+    } else if (empty($reset_code)) {
+        $errorMessage = "Reset Code Can't Be Empty";
+    } else if ($_SESSION['reset_code'] == $reset_code) {
         // Update the password in the database
 
         // $sql=$db->updateData("user", "password = ?"," email = ?");
@@ -64,16 +70,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["update_password"])) {
                 <form action="" method="POST" autocomplete="off">
                     <p class="text-center">Enter the reset code and your new password</p>
                          <!-- Error message display area -->
-                <?php if (!empty($errorMessage)): ?>
-                    <div class="alert alert-danger" role="alert">
-                        <?php echo $errorMessage; ?>
-                    </div>
-                <?php endif; ?>
+                         <?php if (!empty($errorMessage)): ?>
+                            <div class="alert alert-danger" role="alert">
+                                <?php echo $errorMessage; ?>
+                            </div>
+                        <?php elseif ($_SERVER["REQUEST_METHOD"] == "POST" && empty($new_password)): ?>
+                            <div class="alert alert-danger" role="alert">
+                                <?php echo "Password Can't Be Empty"; ?>
+                            </div>
+                        <?php elseif (!empty($passerror)): ?>
+                            <div class="alert alert-danger" role="alert">
+                                <?php echo $passerror; ?>
+                            </div>
+                            
+                        <?php endif; ?>
+
+            
                     <div class="form-group">
-                        <input class="form-control" type="text" name="reset_code" placeholder="Enter reset code" required>
+                        <input class="form-control" type="text" name="reset_code" placeholder="Enter reset code" >
                     </div>
                     <div class="form-group">
-                        <input class="form-control" type="password" name="new_password" placeholder="Enter new password" required>
+                        <input class="form-control" type="password" name="new_password" placeholder="Enter new password" >
                     </div>
                     <input type="hidden" name="email" value="<?php echo $email; ?>">
                     <div class="form-group">

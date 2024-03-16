@@ -1,31 +1,30 @@
 <?php
 require_once '../db.php';
-// session_start();
-//get the page that redirected to this page
-//if this page loaded with info from before
-$db = new DB();
-$table = 'order_details_view'; //In fact this is a view not a table
 session_start();
-//to ve changed Waiting on AWAD
-//*********************** */
-// if (isset($_SESSION['login'])) {
-// if (isset($_SESSION['login'])) { 
-//     $name = $_SESSION['name'];
-//     $user_id = $_SESSION['user_id'];
-// } else {
-//     //set cookie msg 
-//     setcookie("msg", "You are not logged in, plz login first");
-//     header("Location: ../login/login.php");
-// }
-// 
-?>
 
-<!-- Table -->
-<?php
-// $query = "SELECT * FROM UserOrdersInfo WHERE user_id = " . $_SESSION['user_id'];
-$filter_condition = "user_id =1 AND DATE(order_date) BETWEEN '2024-03-01' AND '2024-03-25'"; //to be changed with variable dates
-$crrentDate = date("Y-m-d");
-$orders = $db->getData($table, "status != 'done'");
+// Security: Check if the user is logged in and has admin role
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
+    // Redirect to login page with a message
+    setcookie("msg", "You are not logged in, please login first");
+    header("Location: ../login/login.php");
+    exit; // Stop execution to prevent further processing
+}
+
+$db = new DB();
+$table = 'order_details_view'; // This is a view, not a table
+$limit = 4;
+if (isset($_GET['page'])) {
+    $page = $_GET['page'];
+} else {
+    $page = 1;
+}
+
+// Pagination Logic
+$totalOrders = $db->getData($table, "status != 'done'")->num_rows;
+$total_pages = ceil($totalOrders / $limit);
+$offset = ($page - 1) * $limit;
+// $orders = $db->getData($table, "status != 'done' LIMIT $limit OFFSET $offset");
+$orders = $db->getData($table, "status != 'done' LIMIT $limit OFFSET $offset");
 $productsImgsPath = "../imgs/products/";
 ?>
 
@@ -62,18 +61,21 @@ $productsImgsPath = "../imgs/products/";
 
         /* Styles for product */
         .product {
+            display: flex;
+            flex-direction: column;
             flex: 0 0 30%;
-            /* Adjust as needed */
             padding: 10px;
             margin: 5px;
             border: 1px solid #ddd;
             text-align: center;
+            justify-content: space-between;
         }
 
         /* Styles for actions */
         .actions {
             margin-top: 10px;
         }
+
         .userimg {
             width: 50px;
             border-radius: 50%;
@@ -85,49 +87,73 @@ $productsImgsPath = "../imgs/products/";
             margin: auto;
             display: inline-block;
         }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .pagination a {
+            display: inline-block;
+            padding: 6px 12px;
+            margin: 0 5px;
+            border: 1px solid #ddd;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .pagination a:hover,
+        .pagination a.active {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
     </style>
 </head>
 <?PHP include "../components/nav.php" ?>
+
 <body class="">
-<div class="container">
-    <form class="row ">
-        <div class=" form-group col">
-            <label for="start_date">Start Date:</label>
-            <input type="date" class="form-control" id="start_date" name="start_date">
-        </div>
-        <div class=" form-group col">
-            <label for="end_date">End Date:</label>
-            <input type="date" class="form-control" id="end_date" name="end_date" max="<?php echo $crrentDate ?>">
-        </div>
-    </form>
-    <button onclick="filterOrders()" class="btn btn-primary  " style="height: fit-content;">Filter</button>
+    <div class="container">
+        <form class="row ">
+            <div class=" form-group col">
+                <label for="start_date">Start Date:</label>
+                <input type="date" class="form-control" id="start_date" name="start_date">
+            </div>
+            <div class=" form-group col">
+                <label for="end_date">End Date:</label>
+                <input type="date" class="form-control" id="end_date" name="end_date" max="<?php echo $crrentDate ?>">
+            </div>
+        </form>
+        <button onclick="filterOrders()" class="btn btn-primary  my-3" style="height: fit-content;">Filter</button>
 
-    <h2 class="h2">All orders</h2>
+        <h2 class="h2 my-3">All orders</h2>
 
 
-    <?php
-    $totalPrice = 0;
+        <?php
+        $totalPrice = 0;
 
-    foreach ($orders as $row) {
-        // Splitting item quantities, prices, and images into arrays
-        $quantityArr = explode(",", $row['item_quantities']);
-        $priceArr = explode(",", $row['item_prices']);
-        $imgArr = explode(",", $row['item_images']);
-        $nextStatus = $row['status'];
-        if ($nextStatus == 'processing') {
-            $nextStatus = 'Deliver';
-            $changeStatusButton =  "<a href='../orders/changeOrderStatus.php?id={$row['order_id']}&status={$row['status']}' class='btn btn-warning mx-auto'>$nextStatus</a>";
-        } elseif ($nexStatus = 'out for delivery') {
-            $nextStatus = 'Finish';
-            $changeStatusButton =  "<a href='../orders/changeOrderStatus.php?id={$row['order_id']}&status={$row['status']}' class='btn btn-success mx-auto'>$nextStatus</a>";
-        }
+        foreach ($orders as $row) {
+            // Splitting item quantities, prices, and images into arrays
+            $quantityArr = explode(",", $row['item_quantities']);
+            $priceArr = explode(",", $row['item_prices']);
+            $imgArr = explode(",", $row['item_images']);
+            $nextStatus = $row['status'];
+            if ($nextStatus == 'processing') {
+                $nextStatus = 'Deliver';
+                $changeStatusButton =  "<a href='../orders/changeOrderStatus.php?id={$row['order_id']}&status={$row['status']}' class='btn btn-warning mx-auto'>$nextStatus</a>";
+            } elseif ($nexStatus = 'out for delivery') {
+                $nextStatus = 'Finish';
+                $changeStatusButton =  "<a href='../orders/changeOrderStatus.php?id={$row['order_id']}&status={$row['status']}' class='btn btn-success mx-auto'>$nextStatus</a>";
+            }
 
-        // Initialize the cancel button HTML
-        $nexButton = '';
-        if ($nextStatus == 'Deliver') {
-        }
-        // Output each order using heredoc syntax
-        echo <<<HTML
+            // Initialize the cancel button HTML
+            $nexButton = '';
+            if ($nextStatus == 'Deliver') {
+            }
+            // Output each order using heredoc syntax
+            echo <<<HTML
     <div class='order'>
         <div class='order-info'>
             <p class='date'>Date: {$row['order_date']}</p>
@@ -145,31 +171,38 @@ $productsImgsPath = "../imgs/products/";
         <!-- Output product details (image, quantity, price) in a div -->
         <div class='product-details' style='display:none;'>
 HTML;
-        foreach ($imgArr as $key => $image) {
-            $quantity = $quantityArr[$key];
-            $price = $priceArr[$key];
+            foreach ($imgArr as $key => $image) {
+                $quantity = $quantityArr[$key];
+                $price = $priceArr[$key];
 
-            echo <<<HTML
+                echo <<<HTML
             <div class='product'>
-                <img src='$productsImgsPath$image' alt='Product Image' style='width: 100px; height: auto;'>
-                <p>Quantity: $quantity</p>
+                <img src='$productsImgsPath$image' class="d-block mx-auto my-auto" alt='Product Image' style='width: 100px; height: auto;'>
+                <div style="margin-top:auto;">
+                    <p>Quantity: $quantity</p>
                 <p>Price: $price</p>
+                </div>
+                
             </div> <!-- Closing div for product -->
 HTML;
+            }
+            echo "</div> <!-- Closing div for product-details -->";
+            echo "</div> <!-- Closing div for order -->";
+
+            // Accumulate total price
+            $totalPrice += $row['total_amount'];
         }
-        echo "</div> <!-- Closing div for product-details -->";
-        echo "</div> <!-- Closing div for order -->";
 
-        // Accumulate total price
-        $totalPrice += $row['total_amount'];
-    }
-
-    ?>
+        ?>
 
 
-</div>
+    </div>
 
-
+    <div class="pagination my-5">
+        <?php for ($i = 1; $i <= $total_pages; $i++) : ?>
+            <a href="allOrders.php?page=<?php echo $i; ?>" class="<?php echo $i == $page ? 'active' : ''; ?>"><?php echo $i; ?></a>
+        <?php endfor; ?>
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.min.js" integrity="sha512-ykZ1QQr0Jy/4ZkvKuqWn4iF3lqPZyij9iRv6sGqLRdTPkY69YX6+7wvVGmsdBbiIfN/8OdsI7HABjvEok6ZopQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>
