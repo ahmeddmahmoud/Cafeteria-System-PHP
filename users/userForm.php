@@ -6,20 +6,17 @@
 
 
 
-// $filename = basename($_SERVER['SCRIPT_FILENAME']);
-// echo "Current Filename: $filename";
-// //die();
-
-// if (!isset($_SERVER['HTTP_REFERER']) || 
-//     (basename($_SERVER['HTTP_REFERER']) !== 'usersTable.php' && basename($_SERVER['HTTP_REFERER']) !== 'addUser.php')) {
-//     // Redirect to the error page if the referring page is not one of the allowed pages
-//     header('Location: ../errors/err.php?err=403');
-//     exit; // Terminate script execution
-// }
-
-//require_once '../functions/validateSourcePage.php';
-
-//validateSourcePage('usersTable.php', '../errors/err.php', 403);
+session_start();
+// Check if admin is logged in
+    if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin') {
+    $name = $_SESSION['name'];
+    $user_id = $_SESSION['id'];
+} else {
+    // Redirect to login page if user is not logged in
+    setcookie("msg", "You are not logged in, please login first");
+    header("Location: ../login/login.php");
+    exit(); // Stop further execution
+}
 
 
 if (isset($_GET['errors'])) {
