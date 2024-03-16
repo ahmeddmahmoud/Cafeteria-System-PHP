@@ -15,9 +15,10 @@ $errors = [];
 
 
 // require_once '../functions/validateSourcePage.php';
-if (!isset($_POST['add']) || !isset($_POST['update'])) {
-    // validateSourcePage('userForm.php', '../errors/err.php', 403);
-}
+// if (!isset($_POST['add']) || !isset($_POST['update'])) {
+//     // validateSourcePage('userForm.php', '../errors/err.php', 403);
+//     header('Location: ../errors/err.php?err=403');
+// }
 
 $db  = new DB();
 $db->__construct();
@@ -110,8 +111,7 @@ try {
     }
 } catch (Exception $e) {
     if ($e->getCode() === 1062) { // MySQL error code for duplicate entry
-        // if (strpos($e->getMessage(), 'rooms') !== false) { // Check if the error message contains 'room_no'
-        //     $errors['room_no'] = "Room number already exists";
+        
         if (strpos($e->getMessage(), 'email') !== false) { // Check if the error message contains 'email'
             $errors['email'] = "Email already exists";
         } else {

@@ -5,7 +5,19 @@
 
 
 
-require_once '../functions/validateSourcePage.php';
+
+// $filename = basename($_SERVER['SCRIPT_FILENAME']);
+// echo "Current Filename: $filename";
+// //die();
+
+// if (!isset($_SERVER['HTTP_REFERER']) || 
+//     (basename($_SERVER['HTTP_REFERER']) !== 'usersTable.php' && basename($_SERVER['HTTP_REFERER']) !== 'addUser.php')) {
+//     // Redirect to the error page if the referring page is not one of the allowed pages
+//     header('Location: ../errors/err.php?err=403');
+//     exit; // Terminate script execution
+// }
+
+//require_once '../functions/validateSourcePage.php';
 
 //validateSourcePage('usersTable.php', '../errors/err.php', 403);
 
@@ -71,7 +83,7 @@ background-color: #F4EAE0 !important;
 
 <script>
 document.getElementById('registrationForm').addEventListener('submit', function(event) {
-     var name = document.getElementById('name').value;
+    var name = document.getElementById('name').value;
     var nameError = document.getElementById('nameError');
     var lettersRegex = /^[A-Za-z]+$/;
 
