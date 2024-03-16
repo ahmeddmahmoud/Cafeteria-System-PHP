@@ -16,8 +16,7 @@ session_start();
     header("Location: ../login/login.php");
     exit(); // Stop further execution
 }
-
-
+$page=$_GET['page'];
 
 //open connection
 $db = new DB();
@@ -55,7 +54,7 @@ if ($result->num_rows > 0) {
         $successMsg = $_COOKIE['successMsg'];
         echo "$successMsg";
     } ?></div>
-    <form action="addproduct.php" method="post" class="my-2 row g-3 needs-validation border rounded w-50 justify-content-center mx-auto" novalidate enctype="multipart/form-data" id="addProductForm">
+    <form action="addproduct.php?page=<?= $page; ?>" method="post" class="my-2 row g-3 needs-validation border rounded w-50 justify-content-center mx-auto" novalidate enctype="multipart/form-data" id="addProductForm">
             <div class="row my-4">
                 <label for="validationCustom01" class="form-label">Product</label>
                 <input type="text" class="form-control" id="validationCustom01" placeholder="Product" required name="productname">
@@ -93,7 +92,7 @@ if ($result->num_rows > 0) {
             </div>
         <div class="row justify-content-center my-3">
             <button class="btn btn-primary w-auto" type="submit">Submit</button>
-            <a href="productTable.php" class="btn btn-danger mx-3 w-auto">Cancel</a>
+            <a href="productTable.php?page=<?= $page; ?>" class="btn btn-danger mx-3 w-auto">Cancel</a>
 
         </div>
     </form>
