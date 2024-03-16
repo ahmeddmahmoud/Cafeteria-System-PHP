@@ -5,7 +5,11 @@ $db = new DB(); // Create an instance of the DB class
 
 session_start();
 // Check if admin is logged in
+<<<<<<< HEAD
+    if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin') {
+=======
 if ($_SESSION['role'] == 'admin') {
+>>>>>>> 257782a2ef9c0327c8a18fb65912a6a65d7cc51d
     $name = $_SESSION['name'];
     $user_id = $_SESSION['id'];
 } else {
@@ -39,6 +43,8 @@ $result = $db->getDataPagination("product", "1", $limit, $offset);
     <title>All Products</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="../style/nav.css">
+
+
 </head>
 
 <body>

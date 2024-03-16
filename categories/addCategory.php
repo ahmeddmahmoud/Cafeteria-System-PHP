@@ -3,7 +3,13 @@
 include_once '../db.php'; 
 
 // Create an instance of the DB class
-$db = new DB(); 
+$db = new DB();
+
+//Checking
+require_once '../functions/validateSourcePage.php';
+if (!isset($_POST['category'])){
+    validateSourcePage('categoryForm.php', '../errors/err.php', 403);
+}
 
 if ($_SERVER["REQUEST_METHOD"]=="POST"){
     if(isset($_POST['category'])){

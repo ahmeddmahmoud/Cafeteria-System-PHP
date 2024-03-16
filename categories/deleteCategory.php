@@ -1,4 +1,10 @@
 <?php 
+    //Checking 
+    require_once '../functions/validateSourcePage.php';
+    if (!isset($_GET['id'])){
+        validateSourcePage('categoryForm.php', '../errors/err.php', 403);
+    }
+
     //Getting Variables
     $id=$_GET["id"];
 
