@@ -35,6 +35,11 @@ if ($result->num_rows > 0) {
 ?>
  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <style>
+    body {
+        background-color: #F4EAE0 !important;
+    }
+    </style>
     <div class="container">
             <div class="card-header w-50 mx-auto text-center"><h3>Edit Product</h3></div>
 
@@ -57,9 +62,9 @@ if ($result->num_rows > 0) {
                     <option value="">Select Category</option>\
                     <?php foreach ($categories as $category) : ?>
                         <?php if ($category['id'] == $product['category_id']) : ?>
-                            <option value="<?= $category['id']; ?>" selected><?= $category['name']; ?></option>
+                            <option value="<?= $category['id']; ?>" selected><?= ucwords($category['name']); ?></option>
                         <?php else : ?>
-                            <option value="<?= $category['id']; ?>"><?= $category['name']; ?></option>
+                            <option value="<?= $category['id']; ?>"><?= ucwords($category['name']); ?></option>
                         <?php endif; ?>
                      <?php endforeach; ?>
                 </select>

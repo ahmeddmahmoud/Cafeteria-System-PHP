@@ -44,6 +44,9 @@ if ($result->num_rows > 0) {
     .hidden {
         opacity: 0;
     }
+    body {
+        background-color: #F4EAE0 !important;
+    }
 </style>
     <div class="container">
         <div class="card-header w-50 mx-auto text-center"><h3>Add New Product</h3></div>
@@ -69,7 +72,7 @@ if ($result->num_rows > 0) {
                 <select name="category" class="form-select form-control p-3" id="validationCustom04" required>
                     <option selected value="">Select Category</option>
                     <?php foreach ($categories as $category) : ?>
-                        <option value="<?= $category['id']; ?>"><?= $category['name']; ?></option>
+                        <option value="<?= $category['id']; ?>"><?= ucwords($category['name']); ?></option>
                     <?php endforeach; ?>
                 </select>
                 <div class="invalid-feedback">Please select a category.</div>
