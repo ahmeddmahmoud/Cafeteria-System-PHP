@@ -23,6 +23,12 @@ try {
 
     // Retrieve orders based on user ID and date range
     $orders = $db->getData($table, "user_id = '$user_id'");
+    $ordersCount = "";
+    if (!$orders) {
+        $ordersCount = 0;
+    } else {
+        $ordersCount = $orders->num_rows;
+    }
 } catch (Exception $e) {
     // Handle exceptions
     echo "Error: " . $e->getMessage();
@@ -31,7 +37,6 @@ try {
 
 <!-- Table -->
 <?php
-$filter_condition = "user_id =1 AND DATE(order_date) BETWEEN '2024-03-01' AND '2024-03-25'"; //to be changed with variable dates
 $crrentDate = date("Y-m-d");
 ?>
 
@@ -118,18 +123,19 @@ $crrentDate = date("Y-m-d");
 
         <?php
         $totalPrice = 0;
+        //check if there are any orders
+        if ($ordersCount > 0) {
+            foreach ($orders as $row) {
+                // Splitting item quantities, prices, and images into arrays
+                $quantityArr = explode(",", $row['item_quantities']);
+                $priceArr = explode(",", $row['item_prices']);
+                $imgArr = explode(",", $row['item_images']);
 
-        foreach ($orders as $row) {
-            // Splitting item quantities, prices, and images into arrays
-            $quantityArr = explode(",", $row['item_quantities']);
-            $priceArr = explode(",", $row['item_prices']);
-            $imgArr = explode(",", $row['item_images']);
+                // Initialize the cancel button HTML
+                $cancelButton = ($row['status'] == 'processing') ? "<a href='../orders/deleteOrder.php?id={$row['order_id']}' class='btn btn-danger mx-auto'>Cancel</a>" : '';
 
-            // Initialize the cancel button HTML
-            $cancelButton = ($row['status'] == 'processing') ? "<a href='../orders/deleteOrder.php?id={$row['order_id']}' class='btn btn-danger mx-auto'>Cancel</a>" : '';
-
-            // Output each order using heredoc syntax
-            echo <<<HTML
+                // Output each order using heredoc syntax
+                echo <<<HTML
     <div class="product-container">
     <div class='order'>
         <div class='order-info'>
@@ -145,30 +151,34 @@ $crrentDate = date("Y-m-d");
         <!-- Output product details (image, quantity, price) in a div -->
         <div class='product-details' class="" style=''>
 HTML;
-            foreach ($imgArr as $key => $image) {
-                $quantity = $quantityArr[$key];
-                $price = $priceArr[$key];
+                foreach ($imgArr as $key => $image) {
+                    $quantity = $quantityArr[$key];
+                    $price = $priceArr[$key];
 
-                echo <<<HTML
+                    echo <<<HTML
             <div class='product'>
                 <img src='../imgs/products/$image' alt='Product Image' style='width: 100px; height: auto;'>
                 <p>Quantity: $quantity</p>
                 <p>Price: $price</p>
             </div> <!-- Closing div for product -->
 HTML;
+                }
+                echo "</div> <!-- Closing div for product-details -->";
+                echo "</div> <!-- Closing div for order -->";
+                echo "</div> <!-- closing for product-container -->";
+                // Accumulate total price
+                $totalPrice += $row['total_amount'];
             }
-            echo "</div> <!-- Closing div for product-details -->";
-            echo "</div> <!-- Closing div for order -->";
-            echo "</div> <!-- closing for product-container -->";
-            // Accumulate total price
-            $totalPrice += $row['total_amount'];
-        }
 
-        echo "<hr>";
-        echo "<div class='total-container order-info'>";
-        echo "<h3>Total</h3>";
-        echo "<div class='total-price'>$totalPrice</div>";
-        echo "</div>";
+            echo "<hr>";
+            echo "<div class='total-container order-info'>";
+            echo "<h3>Total</h3>";
+            echo "<div class='total-price'>$totalPrice</div>";
+            echo "</div>";
+        } else {
+            //echo no orders styled div 
+            echo "<span class='h1 text-center mx-auto d-block'>No Orders</span>";
+        }
         ?>
 
 

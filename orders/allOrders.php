@@ -20,7 +20,12 @@ if (isset($_GET['page'])) {
 }
 
 // Pagination Logic
-$totalOrders = $db->getData($table, "status != 'done'")->num_rows;
+$totalOrders = $db->getData($table, "status != 'done'");
+if (!$totalOrders) {
+    $totalOrders = 0;
+} else {
+    $totalOrders = $totalOrders->num_rows;
+}
 $total_pages = ceil($totalOrders / $limit);
 $offset = ($page - 1) * $limit;
 // $orders = $db->getData($table, "status != 'done' LIMIT $limit OFFSET $offset");
@@ -133,119 +138,118 @@ $productsImgsPath = "../imgs/products/";
 
         <?php
         $totalPrice = 0;
+        if ($totalOrders > 0) {
+            foreach ($orders as $row) {
+                // Splitting item quantities, prices, and images into arrays
+                $quantityArr = explode(",", $row['item_quantities']);
+                $priceArr = explode(",", $row['item_prices']);
+                $imgArr = explode(",", $row['item_images']);
+                $nextStatus = $row['status'];
+                $changeStatusButton = ''; // Initialize change status button HTML
 
-        foreach ($orders as $row) {
-            // Splitting item quantities, prices, and images into arrays
-            $quantityArr = explode(",", $row['item_quantities']);
-            $priceArr = explode(",", $row['item_prices']);
-            $imgArr = explode(",", $row['item_images']);
-            $nextStatus = $row['status'];
-            if ($nextStatus == 'processing') {
-                $nextStatus = 'Deliver';
-                $changeStatusButton =  "<a href='../orders/changeOrderStatus.php?id={$row['order_id']}&status={$row['status']}' class='btn btn-warning mx-auto'>$nextStatus</a>";
-            } elseif ($nexStatus = 'out for delivery') {
-                $nextStatus = 'Finish';
-                $changeStatusButton =  "<a href='../orders/changeOrderStatus.php?id={$row['order_id']}&status={$row['status']}' class='btn btn-success mx-auto'>$nextStatus</a>";
-            }
+                if ($nextStatus == 'processing') {
+                    $nextStatus = 'Deliver';
+                    $changeStatusButton =  "<a href='../orders/changeOrderStatus.php?id={$row['order_id']}&status={$row['status']}' class='btn btn-warning mx-auto'>$nextStatus</a>";
+                } elseif ($nextStatus == 'out for delivery') { // Fixed typo here
+                    $nextStatus = 'Finish';
+                    $changeStatusButton =  "<a href='../orders/changeOrderStatus.php?id={$row['order_id']}&status={$row['status']}' class='btn btn-success mx-auto'>$nextStatus</a>";
+                }
 
-            // Initialize the cancel button HTML
-            $nexButton = '';
-            if ($nextStatus == 'Deliver') {
-            }
-            // Output each order using heredoc syntax
-            echo <<<HTML
-    <div class='order'>
-        <div class='order-info'>
-            <p class='date'>Date: {$row['order_date']}</p>
-            <p>Status: {$row['status']}</p>
-            <p>Name: {$row['user_name']}</p>
-            <p>Room: {$row['room_number']}</p>
-            <p>Ext. No.: {$row['extension_number']}</p>
-            <p>Total Amount: {$row['total_amount']}</p>
-            <div class='actions'>
-                <button class='show-details btn btn-primary' style='height: fit-content; margin: 10px;'>Details</button>
-                $changeStatusButton
-            </div>
-        </div> <!-- Closing div for order-info -->
-
-        <!-- Output product details (image, quantity, price) in a div -->
-        <div class='product-details' style='display:none;'>
-HTML;
-            foreach ($imgArr as $key => $image) {
-                $quantity = $quantityArr[$key];
-                $price = $priceArr[$key];
-
+                // Output each order using heredoc syntax
                 echo <<<HTML
-            <div class='product'>
-                <img src='$productsImgsPath$image' class="d-block mx-auto my-auto" alt='Product Image' style='width: 100px; height: auto;'>
-                <div style="margin-top:auto;">
-                    <p>Quantity: $quantity</p>
-                <p>Price: $price</p>
+        <div class='order'>
+            <div class='order-info'>
+                <p class='date'>Date: {$row['order_date']}</p>
+                <p>Status: {$row['status']}</p>
+                <p>Name: {$row['user_name']}</p>
+                <p>Room: {$row['room_number']}</p>
+                <p>Ext. No.: {$row['extension_number']}</p>
+                <p>Total Amount: {$row['total_amount']}</p>
+                <div class='actions'>
+                    <button class='show-details btn btn-primary' style='height: fit-content; margin: 10px;'>Details</button>
+                    $changeStatusButton
                 </div>
-                
-            </div> <!-- Closing div for product -->
-HTML;
-            }
-            echo "</div> <!-- Closing div for product-details -->";
-            echo "</div> <!-- Closing div for order -->";
+            </div> <!-- Closing div for order-info -->
 
-            // Accumulate total price
-            $totalPrice += $row['total_amount'];
+            <!-- Output product details (image, quantity, price) in a div -->
+            <div class='product-details' style='display:none;'>
+HTML;
+                foreach ($imgArr as $key => $image) {
+                    $quantity = $quantityArr[$key];
+                    $price = $priceArr[$key];
+
+                    echo <<<HTML
+                <div class='product'>
+                    <img src='$productsImgsPath$image' class="d-block mx-auto my-auto" alt='Product Image' style='width: 100px; height: auto;'>
+                    <div style="margin-top:auto;">
+                        <p>Quantity: $quantity</p>
+                        <p>Price: $price</p>
+                    </div>
+                </div> <!-- Closing div for product -->
+HTML;
+                }
+                echo "</div> <!-- Closing div for product-details -->";
+                echo "</div> <!-- Closing div for order -->";
+
+                // Accumulate total price
+                $totalPrice += $row['total_amount'];
+            }
+        } else {
+            //echo no orders styled div 
+            echo "<span class='h1 text-center mx-auto d-block'>No Orders</span>";
         }
 
         ?>
 
 
-    </div>
+        <div class="pagination my-5">
+            <?php for ($i = 1; $i <= $total_pages; $i++) : ?>
+                <a href="allOrders.php?page=<?php echo $i; ?>" class="<?php echo $i == $page ? 'active' : ''; ?>"><?php echo $i; ?></a>
+            <?php endfor; ?>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.min.js" integrity="sha512-ykZ1QQr0Jy/4ZkvKuqWn4iF3lqPZyij9iRv6sGqLRdTPkY69YX6+7wvVGmsdBbiIfN/8OdsI7HABjvEok6ZopQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-    <div class="pagination my-5">
-        <?php for ($i = 1; $i <= $total_pages; $i++) : ?>
-            <a href="allOrders.php?page=<?php echo $i; ?>" class="<?php echo $i == $page ? 'active' : ''; ?>"><?php echo $i; ?></a>
-        <?php endfor; ?>
-    </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.min.js" integrity="sha512-ykZ1QQr0Jy/4ZkvKuqWn4iF3lqPZyij9iRv6sGqLRdTPkY69YX6+7wvVGmsdBbiIfN/8OdsI7HABjvEok6ZopQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script>
+            // Toggle product details when button is clicked
+            document.querySelectorAll('.show-details').forEach(function(button) {
+                button.addEventListener('click', function() {
+                    var order = this.closest('.order');
+                    var productDetails = order.querySelector('.product-details');
+                    var orderInfo = order.querySelector('.order-info');
 
-    <script>
-        // Toggle product details when button is clicked
-        document.querySelectorAll('.show-details').forEach(function(button) {
-            button.addEventListener('click', function() {
-                var order = this.closest('.order');
-                var productDetails = order.querySelector('.product-details');
-                var orderInfo = order.querySelector('.order-info');
-
-                if (productDetails.style.display != 'flex') {
-                    productDetails.style.display = 'flex';
-                } else {
-                    productDetails.style.display = 'none';
-                }
-
-            });
-        });
-        //remove last three letter from all .date 
-        document.querySelectorAll('.date').forEach(function(date) {
-            var formattedDate = date.innerText.substring(0, date.innerText.length - 3);
-            date.innerText = formattedDate;
-        });
-
-        function filterOrders() {
-            let allOrdersDates = document.querySelectorAll('.date');
-            let startDate = document.getElementById('start_date').valueAsDate;
-            let endDate = document.getElementById('end_date').valueAsDate;
-            console.log(startDate, endDate);
-            allOrdersDates
-                .forEach(function(date) {
-                    let orderDate = date.innerText.split(" ")[1];
-                    orderDate = new Date(orderDate);
-                    console.log(orderDate, date);
-                    if (orderDate >= startDate && orderDate <= endDate) {
-                        date.closest('.order').style.display = 'block';
-                        console.log("found");
+                    if (productDetails.style.display != 'flex') {
+                        productDetails.style.display = 'flex';
                     } else {
-                        date.closest('.order').style.display = 'none';
+                        productDetails.style.display = 'none';
                     }
+
                 });
-        }
-    </script>
+            });
+            //remove last three letter from all .date 
+            document.querySelectorAll('.date').forEach(function(date) {
+                var formattedDate = date.innerText.substring(0, date.innerText.length - 3);
+                date.innerText = formattedDate;
+            });
+
+            function filterOrders() {
+                let allOrdersDates = document.querySelectorAll('.date');
+                let startDate = document.getElementById('start_date').valueAsDate;
+                let endDate = document.getElementById('end_date').valueAsDate;
+                console.log(startDate, endDate);
+                allOrdersDates
+                    .forEach(function(date) {
+                        let orderDate = date.innerText.split(" ")[1];
+                        orderDate = new Date(orderDate);
+                        console.log(orderDate, date);
+                        if (orderDate >= startDate && orderDate <= endDate) {
+                            date.closest('.order').style.display = 'block';
+                            console.log("found");
+                        } else {
+                            date.closest('.order').style.display = 'none';
+                        }
+                    });
+            }
+        </script>
 </body>
 
 </html>
