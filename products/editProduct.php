@@ -16,6 +16,7 @@ session_start();
     exit(); // Stop further execution
 }
 $id  = $_GET['id'];
+$page=$_GET['page'];
 $db = new DB();
 $db->__construct();
 $data = $db->getData("product" , "id = '$id'");
@@ -51,7 +52,7 @@ if ($result->num_rows > 0) {
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" /> -->
     <div class="container">
-    <form action="updateproduct.php?id=<?= $id; ?>" method="post" class="my-2 row g-3 needs-validation" novalidate enctype="multipart/form-data" id="addProductForm">
+    <form action="updateproduct.php?id=<?= $id; ?>&page=<?= $page; ?>" method="post" class="my-2 row g-3 needs-validation" novalidate enctype="multipart/form-data" id="addProductForm">
             <div class="row my-4">
                 <label for="validationCustom01" class="form-label">Product</label>
                 <input type="text" class="form-control" id="validationCustom01" placeholder="Product" required name="productname" value="<?= $product['name']; ?>">

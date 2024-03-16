@@ -1,13 +1,9 @@
 <?php
 include_once '../db.php'; // Include the DB class file
 $id = $_GET['id'];
+$page=$_GET['page'];
 //open connection
-// $connection = new mysqli("localhost", "php", "1234", "cafe");
 
-// if ($connection->connect_errno) {
-//     die("Connection failed...");
-    
-// }
 $db=new DB();
 $db->__construct();
 //query
@@ -19,17 +15,13 @@ try {
     $errors=[];
     $img=$_FILES["img"];
     $imgName=$img["name"];
-    // $result = $connection->query("SELECT * FROM product WHERE name = '$name' AND id != '$id'");
-    // $result = $db->getData("product", "name = '$name' AND id != '$id'");
-    // if ($result->num_rows > 0) {
-    //     $errors['name'] = "**Product name already exists";
-    // }
+    
     $result = $db->getDataSpec("*","product", "name = '$name' AND id != '$id'","*");
     if ($result->num_rows > 0) {
     $errors['name'] = "**Product name already exists";
 }
 
-    else if(strlen($name)<2){
+    else if(strlen($name)<3){
         $errors['name']='**must be more than 3 chars';
     }
   
@@ -48,7 +40,8 @@ try {
 
     // $update=$connection->query("UPDATE product SET name = '$name', price = '$price', category_id = '$category', image = '$img[name]' WHERE id = '$id'");
     $db->updateData("product" , "name = '$name', price = '$price', category_id = '$category', image = '$imgName'" ,"id = '$id'");
-    header("location: productTable.php");
+    header("location: productTable.php?page=".$page);
+
     }
 }catch (Exception $e) {
     var_dump($e->getMessage());
