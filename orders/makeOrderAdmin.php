@@ -13,7 +13,7 @@ if (isset($_SESSION['id'])) {
   exit(); // Stop further execution
 }
 
-$productData = $obj->getData("product","available=1")->fetch_all(MYSQLI_ASSOC);
+$productData = $obj->getData("product", "available=1")->fetch_all(MYSQLI_ASSOC);
 $roomsNums = $obj->getData("rooms", "1", "room_no")->fetch_all(MYSQLI_ASSOC);
 $userNames = $obj->getData("user", "role!='admin'", "name")->fetch_all(MYSQLI_ASSOC);
 
@@ -21,15 +21,17 @@ $userNames = $obj->getData("user", "role!='admin'", "name")->fetch_all(MYSQLI_AS
 
 ?>
 <style>
-  body{
+  body {
     background-color: #F4EAE0 !important;
   }
-  .productcard:hover{
+
+  .productcard:hover {
     background-color: #FAF6F0 !important;
     transform: scale(1.2);
     transition: transform 1.5s;
     z-index: 1;
   }
+
   .userimg {
     width: 50px;
     border-radius: 50%;
@@ -41,14 +43,17 @@ $userNames = $obj->getData("user", "role!='admin'", "name")->fetch_all(MYSQLI_AS
     margin: auto;
     display: inline-block;
   }
-  .quantityTd{
+
+  .quantityTd {
     text-align: center;
     width: 0% !important;
   }
-  .priceTd{
+
+  .priceTd {
     width: 20%;
   }
-  table input{
+
+  table input {
     cursor: default;
   }
 </style>
@@ -60,14 +65,11 @@ $userNames = $obj->getData("user", "role!='admin'", "name")->fetch_all(MYSQLI_AS
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-  integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-  <title>Admin Order</title>
+  <title>Manual Order</title>
 </head>
 
 <body>
@@ -78,10 +80,10 @@ $userNames = $obj->getData("user", "role!='admin'", "name")->fetch_all(MYSQLI_AS
       <div class="allproduct row g-0">
         <div class="input-group mb-3 w-50">
           <input type="text" class="form-control" placeholder="Search For Product">
-          <button class="btn btn-outline-secondary searchBtn" >
+          <button class="btn btn-outline-secondary searchBtn">
             <i class="fa-solid fa-magnifying-glass"></i>
           </button>
-          </div>
+        </div>
         <h4 class='text-center bg-dark rounded text-light p-1'>Available product </h4>
         <?php
         foreach ($productData as $row) {
@@ -105,11 +107,13 @@ $userNames = $obj->getData("user", "role!='admin'", "name")->fetch_all(MYSQLI_AS
     <div class="reset col-4">
       <div class="card">
         <div class="card-header text-center">
-        <h4 class="fw-bold">Order Details</h4>
+          <h4 class="fw-bold">Order Details</h4>
         </div>
         <div class="card-body">
           <form action="orderControl.php" method="post">
-            <div class="text-center fw-bold fs-5"><p>Add Order To</p></div>
+            <div class="text-center fw-bold fs-5">
+              <p>Add Order To</p>
+            </div>
             <select name="userNameByAdmin" class="form-select mb-2" id="select">
               <?php
               for ($i = 0; $i < count($userNames); $i++) {
@@ -162,8 +166,8 @@ $userNames = $obj->getData("user", "role!='admin'", "name")->fetch_all(MYSQLI_AS
   let cardsName = document.querySelectorAll(".productcard h4");
   let table = document.querySelector(".table tbody");
   let totalPrice = document.querySelector(".card-footer h3");
-  let searchBtn=document.querySelector(".searchBtn");
-  searchBtn.addEventListener("click",fitlerProduct);
+  let searchBtn = document.querySelector(".searchBtn");
+  searchBtn.addEventListener("click", fitlerProduct);
   cardsImg.forEach(card => {
     card.addEventListener("click", addRow, {
       once: true
@@ -253,7 +257,7 @@ $userNames = $obj->getData("user", "role!='admin'", "name")->fetch_all(MYSQLI_AS
     let quantityInputs = document.querySelectorAll(".quantity");
     let sum = 0,
       rowSum = 0;
-    
+
     for (let i = 0; i < priceInputs.length; i++) {
       for (let j = 0; j < quantityInputs.length; j++) {
         rowSum = parseFloat(priceInputs[i].value) * +quantityInputs[i].value;
@@ -262,17 +266,17 @@ $userNames = $obj->getData("user", "role!='admin'", "name")->fetch_all(MYSQLI_AS
     }
     return +sum.toFixed(3);
   }
+
   function fitlerProduct() {
-    let searchValue=this.previousElementSibling.value;
-    let regex= new RegExp(searchValue,"i");
-    for(let i=0;i<cardsName.length;i++){
-      if(cardsName[i].parentElement.classList.contains("d-none")){
+    let searchValue = this.previousElementSibling.value;
+    let regex = new RegExp(searchValue, "i");
+    for (let i = 0; i < cardsName.length; i++) {
+      if (cardsName[i].parentElement.classList.contains("d-none")) {
         cardsName[i].parentElement.classList.remove("d-none");
       }
-      if(searchValue === ""){
+      if (searchValue === "") {
 
-      }
-      else if(!(regex.test(cardsName[i].innerText)))
+      } else if (!(regex.test(cardsName[i].innerText)))
         cardsName[i].parentElement.classList.add("d-none");
     }
   }
