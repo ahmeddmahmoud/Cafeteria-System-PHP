@@ -17,13 +17,15 @@ if (isset($_GET['errors'])) {
 
 ?>
 <style>
-    body{
-background-color: #F4EAE0 !important;
-}
+    body {
+        background-color: #F4EAE0 !important;
+    }
 </style>
 
 <div class="card w-50 my-2 mx-auto">
-    <div class="card-header text-center"><h3>Add New User</h3></div>
+    <div class="card-header text-center">
+        <h3>Add New User</h3>
+    </div>
     <form action="addUser.php" method="post" enctype="multipart/form-data" id="registrationForm">
         <div class="my-2 form-floating w-75 mx-auto">
             <input type="text" name="name" id="name" class="form-control" placeholder="name" required>
@@ -43,7 +45,7 @@ background-color: #F4EAE0 !important;
         <div class="my-2 form-floating w-75 mx-auto">
             <input type="password" name="confirm_password" id="confirm_password" class="form-control" placeholder="Confirm password" required>
             <label for="password">Confirm Password</label>
-            
+
             <p class="text-danger" id="passwordError"><?php if (isset($errors['confirm_password'])) echo $errors['confirm_password']; ?></p>
         </div>
         <div class="my-2 form-floating w-75 mx-auto">
@@ -70,26 +72,26 @@ background-color: #F4EAE0 !important;
 </div>
 
 <script>
-document.getElementById('registrationForm').addEventListener('submit', function(event) {
-     var name = document.getElementById('name').value;
-    var nameError = document.getElementById('nameError');
-    var lettersRegex = /^[A-Za-z]+$/;
+    document.getElementById('registrationForm').addEventListener('submit', function(event) {
+        var name = document.getElementById('name').value;
+        var nameError = document.getElementById('nameError');
+        var lettersRegex = /^[A-Za-z\s]+$/;
 
-    var password = document.getElementById('password').value;
-    var confirmPassword = document.getElementById('confirm_password').value;
-    var passwordError = document.getElementById('passwordError');
+        var password = document.getElementById('password').value;
+        var confirmPassword = document.getElementById('confirm_password').value;
+        var passwordError = document.getElementById('passwordError');
 
-    if (password !== confirmPassword) {
-        passwordError.textContent = "Passwords do not match";
-        event.preventDefault(); // Prevent form submission
-    } else {
-        passwordError.textContent = ""; // Clear any previous error message
-    }
-    if (!name.match(lettersRegex)) {
-        nameError.textContent = "Name must contain only letters";
-        event.preventDefault(); // Prevent form submission
-    } else {
-        nameError.textContent = ""; // Clear any previous error message
-    }
-});
+        if (password !== confirmPassword) {
+            passwordError.textContent = "Passwords do not match";
+            event.preventDefault(); // Prevent form submission
+        } else {
+            passwordError.textContent = ""; // Clear any previous error message
+        }
+        if (!name.match(lettersRegex)) {
+            nameError.textContent = "Name must contain only letters";
+            event.preventDefault(); // Prevent form submission
+        } else {
+            nameError.textContent = ""; // Clear any previous error message
+        }
+    });
 </script>
