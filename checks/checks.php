@@ -1,6 +1,97 @@
 <?php
-require '../db.php';
-require './checkall.php';
+require_once '../db.php';
+try {
+    $db = new DB();
+} catch (Exception $e) {
+    // Handle the database connection error gracefully by redirecting to the login page
+    header("Location: login.php?error=Invalid_dbConnection");
+    exit();
+}
+
+// Fetch user orders data from the database
+$query = "SELECT u.id,
+u.name,
+SUM(op.quantity * p.price) AS total_price,
+MAX(o.date) AS date
+FROM `user` u
+JOIN `orders` o ON u.id = o.user_id
+JOIN `orders_product` op ON o.id = op.order_id
+JOIN `product` p ON op.product_id = p.id
+GROUP BY u.id, u.name;";
+$userOrdersResult = $db->getConnection()->query($query);
+
+// Fetch user orders based on date
+$query2= " SELECT
+u.id,
+u.name,
+o.user_id,
+o.date,
+SUM(p.price * op.quantity) AS total_price
+FROM `user` u 
+JOIN `orders` o ON u.id = o.user_id 
+JOIN orders_product op ON o.id = op.order_id 
+JOIN product p ON op.product_id = p.id 
+GROUP BY o.user_id, o.date 
+ORDER BY o.user_id, o.date;";
+$userOrdersDate = $db->getConnection()->query($query2);
+
+// Fetch order details based on date
+$query3="SELECT
+o.user_id,
+o.date,
+p.name AS product_name,
+p.price AS product_price,
+p.image AS product_image,
+op.quantity
+FROM
+orders o
+JOIN
+orders_product op ON o.id = op.order_id
+JOIN
+product p ON op.product_id = p.id
+ORDER BY
+o.date;
+";
+$orderDetails = $db->getConnection()->query($query3);
+
+// After fetching user orders data from the database
+if ($userOrdersResult) {
+    $userOrders = [];
+    while ($row = $userOrdersResult->fetch_assoc()) {
+        $userOrders[] = $row;
+    }
+} else {
+    // Handle query error if needed
+    die("Error fetching user orders: " . $db->getConnection()->error);
+}
+
+// After fetching user orders data from the database
+if ($userOrdersDate) {
+    $OrdersDate = [];
+    while ($row = $userOrdersDate->fetch_assoc()) {
+        $OrdersDate[] = $row;
+    }
+} else {
+    // Handle query error if needed
+    die("Error fetching Data: " . $db->getConnection()->error);
+}
+
+// After fetching user orders data from the database
+if ($orderDetails) {
+    $details = [];
+    while ($row = $orderDetails->fetch_assoc()) {
+        $details[] = $row;
+    }
+} else {
+    // Handle query error if needed
+    die("Error fetching Data: " . $db->getConnection()->error);
+}
+
+// Encode user orders as JSON
+$userOrdersJson = json_encode($userOrders);  // converts the array to a JSON string
+$ordersDateJson = json_encode($OrdersDate);  // converts the array to a JSON string
+$detailsJson = json_encode($details);  // converts the array to a JSON string
+
 // Check if session is started
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
@@ -17,6 +108,7 @@ if (isset($_SESSION['id'])) {
     exit(); // Stop further execution
 }
 ?>
+
 <style>
     .userimg {
         width: 50px;
@@ -47,7 +139,6 @@ if (isset($_SESSION['id'])) {
     }
     .order-full-details{
         margin-top: 5px;
-        /* border: 1px solid black; */
         justify-content: space-around;
         align-items: center;
         display: none;
@@ -56,35 +147,37 @@ if (isset($_SESSION['id'])) {
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <?PHP include "../components/nav.php" ?>
 <div class="container row justify-content-between mx-auto">
-    <div class=" card h-50 shadow p-4 col-4">
+    <div class=" card h-50 shadow px-4 mb-1 col-12">
         <!-- <div class="col-md-6 offset-md-3"> -->
             <h2 class="mx-auto">Checks</h2>
-            <form>
-                <div class="form-row">
-                    <div class="form-group col">
+            <form class="my-0">
+                <div class="form-row text-center align-items-center">
+                    <div class="form-group col-3">
                         <label for="date_from">From:</label>
-                        <input class="form-control" type="date" id="date_from">
+                        <input  type="date" id="date_from">
                     </div>
-                    <div class="form-group col">
+                    <div class="form-group col-3">
                         <label for="date_to">To:</label>
-                        <input class="form-control" type="date" id="date_to">
+                        <input  type="date" id="date_to">
                     </div>
-                </div>
-                <div class="form-group">
+                    <div class="form-group col-4">
                     <label for="user">Select User:</label>
-                    <select class="form-control" id="user">
+                    <select  id="user">
                         <option value="all" selected>Show All</option> <!-- Add the selected attribute -->
                         <?php foreach ($userOrders as $order): ?>    <!-- first query-->
                         <option value="<?php echo $order['id']; ?>"><?php echo $order['name']; ?></option>
                         <?php endforeach; ?>
                     </select>
-                </div>
-                <div><button type="button" id="filter" onclick="filterOrders()" class="btn btn-primary"
+                    </div>
+                    <div class="form-group col-2"><button type="button" id="filter" onclick="filterOrders()" class="btn btn-primary"
                         style="height: fit-content;">Filter</button></div>
+                </div>
+
+
             </form>
         <!-- </div> -->
     </div>
-    <div class=" bg-light shadow-lg col-7">
+    <div class=" bg-light shadow-lg col-6" style="overflow-y: auto; max-height: 420px;">
         
             <div class="text-center">
                 <h2 >User Orders</h2>
@@ -99,20 +192,17 @@ if (isset($_SESSION['id'])) {
                     </tbody>
                 </table>
             </div>
-            <div>
-                <div class="order-details" style="display:none;"></div>
-                <div class="order-full-details"></div>
-            </div>
     </div>
+            <div class="col-6 px-1 ">
+                <div class="order-details bg-light mb-2" style="display:none;overflow-y:auto; max-height:160px;"></div>
+                <div class="order-full-details bg-light" style="max-height:350px;"></div>
+            </div>
+
 </div>
 
 <style>
-    .order-details{
-        border: 1px solid black;
-    }
     .order-full-details{
         margin-top: 5px;
-        border: 1px solid black;
         justify-content: space-around;
         align-items: center;
         display: none;
@@ -283,7 +373,7 @@ showDetailsButtons.forEach(button => {
                     order.forEach(order => {
                         orderDetailsContent += `
                                 <div class="pt-2">
-                                <img src="../imgs/products/${order['product_image']}" style="max-width: 100px;">
+                                <img src="../imgs/products/${order['product_image']}"  style="max-width: 80px;">
                                     <p>${order['product_name']}</p>
                                     <p>Quantity: ${order['quantity']}</p>
                                     <p>Price: ${order['product_price']}</p>
