@@ -22,21 +22,8 @@ $db->__construct();
 $data = $db->getData("product" , "id = '$id'");
 $product = $data->fetch_array(MYSQLI_ASSOC);
 
-
-
-//open connection
-// $connection = new mysqli("localhost", "php", "1234", "cafe");
-// $connection->__construct();
-
-// if ($db->connect_errno) {
-//     die("Connection failed...");
-    
-// }
-// $query = "SELECT * FROM category";
-// $query->db->getData("category");
 $result=$db->getData("category");
 
-// $result = $db->query($query);
 
 $categories = [];
 
@@ -46,17 +33,15 @@ if ($result->num_rows > 0) {
     }
 }
 ?>
-
-
  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" /> -->
     <div class="container">
-    <form action="updateproduct.php?id=<?= $id; ?>&page=<?= $page; ?>" method="post" class="my-2 row g-3 needs-validation" novalidate enctype="multipart/form-data" id="addProductForm">
-            <div class="row my-4">
+            <div class="card-header text-center"><h3>Edit Product</h3></div>
+
+    <form action="updateproduct.php?id=<?= $id; ?>&page=<?= $page; ?>" method="post" class="my-2 border rounded row g-3 needs-validation w-50 justify-content-center aligm-items-center mx-auto" novalidate enctype="multipart/form-data" id="addProductForm">
+            <div class="row my-4 mx-auto">
                 <label for="validationCustom01" class="form-label">Product</label>
                 <input type="text" class="form-control" id="validationCustom01" placeholder="Product" required name="productname" value="<?= $product['name']; ?>">
-                <!-- <div class="valid-feedback">Looks good!</div> -->
                 <p class="text-danger"><?php if (isset($errors['name'])) echo $errors['name']; ?></p>
                 <div class="invalid-feedback" id="nameError">Please enter a product name.</div>
 
@@ -91,7 +76,8 @@ if ($result->num_rows > 0) {
             </div>
         <div class="row justify-content-center my-5">
             <button class="btn btn-primary w-auto" type="submit">Submit</button>
-            <button type="reset" class="btn btn-primary mx-3 w-auto">Reset</button>
+            <!-- <button type="reset" class="btn btn-danger mx-3 w-auto">Cancel</button> -->
+            <a href="productTable.php" class="btn btn-danger mx-3 w-auto">Cancel</a>
         </div>
     </form>
 </div>
