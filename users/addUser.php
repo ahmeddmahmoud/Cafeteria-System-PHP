@@ -15,7 +15,7 @@ $errors = [];
 
 
 require_once '../functions/validateSourcePage.php';
-if (!isset($_POST['name']) ) {
+if (!isset($_POST['name'])) {
     validateSourcePage('userForm.php', '../errors/err.php', 403);
     //header('Location: ../errors/err.php?err=403');
 }
@@ -42,7 +42,6 @@ echo "</br>";
 // for update
 if (isset($_POST['update'])) {
     $id = $_POST['id'];
-    
 }
 
 
@@ -83,21 +82,21 @@ try {
             header("location: updateUser.php?errors=" . $errors . "&id=" . $id);
         }
     } else {
-       
-        $checkExistRoom = $db->getData("rooms", "room_no = '$Room_No'" , "room_no");
-        
-     
+
+        $checkExistRoom = $db->getData("rooms", "room_no = '$Room_No'", "room_no");
+
+
         if (isset($_POST['add'])) {
-            if ($checkExistRoom == null){
-                
+            if (!$checkExistRoom) {
+
                 $db->insert_data("rooms", "room_no , ext", "'$Room_No' , '$Ext'");
             }
-            
+
             $db->insert_data("user", "name , email , password , room_no, image , role", "'$name' , '$email' , '$password'  , '$Room_No', '$imageName' , 'user'");
         } elseif (isset($_POST['update'])) {
             // $db->update_data("rooms", "room_no = '$Room_No' , ext = '$Ext'", "room_no = '$oldRoom'");
-            if ($checkExistRoom == null){
-                
+            if (!$checkExistRoom) {
+
                 $db->insert_data("rooms", "room_no , ext", "'$Room_No' , '$Ext'");
             }
             $db->update_data("user", "name = '$name' , email = '$email' , password = '$password' , room_no = '$Room_No' , image = '$imageName'", "id = '$id'");
@@ -106,7 +105,7 @@ try {
     }
 } catch (Exception $e) {
     if ($e->getCode() === 1062) { // MySQL error code for duplicate entry
-        
+
         if (strpos($e->getMessage(), 'email') !== false) { // Check if the error message contains 'email'
             $errors['email'] = "Email already exists";
         } else {
@@ -126,5 +125,3 @@ try {
         echo "An error occurred: " . $e->getMessage();
     }
 }
-
-

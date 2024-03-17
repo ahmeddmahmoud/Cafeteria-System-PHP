@@ -13,9 +13,9 @@ if (isset($_SESSION['id'])) {
   exit(); // Stop further execution
 }
 
-$productData = $obj->getData("product", "available=1")->fetch_all(MYSQLI_ASSOC);
-$roomsNums = $obj->getData("rooms", "1", "room_no")->fetch_all(MYSQLI_ASSOC);
-$userNames = $obj->getData("user", "role!='admin'", "name")->fetch_all(MYSQLI_ASSOC);
+$productData = $obj->getDataSpec("*", "product", "available=1")->fetch_all(MYSQLI_ASSOC);
+$roomsNums = $obj->getDataSpec("room_no", "rooms", "1")->fetch_all(MYSQLI_ASSOC);
+$userNames = $obj->getDataSpec("name", "user", "role!='admin'")->fetch_all(MYSQLI_ASSOC);
 
 
 
@@ -150,12 +150,12 @@ $userNames = $obj->getData("user", "role!='admin'", "name")->fetch_all(MYSQLI_AS
             <input type="submit" value="confirm" class="btn btn-outline-success">
           </form>
           <?php
-            if(isset($_GET["err"])){
-              echo "<h5 class='text-danger text-center'>caution: You didnt select a product</h5>";
-            }
-            ?>
+          if (isset($_GET["err"])) {
+            echo "<h5 class='text-danger text-center'>caution: You didnt select a product</h5>";
+          }
+          ?>
         </div>
-        
+
         <div class="card-footer text-center">
           <h3>Total price is 00.00</h3>
         </div>

@@ -16,7 +16,7 @@ if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin') {
     exit(); // Stop further execution
 }
 
-$result = $db->getData("category");
+$result = $db->getDataSpec("*", "category");
 ?>
 
 <!doctype html>
@@ -74,7 +74,7 @@ $result = $db->getData("category");
 
         <div class="mx-5 my-2 text-center category-container">
             <?php
-            if ($result->num_rows === 0) {
+            if ($result->num_rows == 0) {
                 echo "<p>There are no categories available.</p>";
             } else {
                 while ($row = $result->fetch_assoc()) {

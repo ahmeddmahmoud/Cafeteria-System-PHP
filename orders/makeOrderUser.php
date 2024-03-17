@@ -14,15 +14,14 @@ if (isset($_SESSION['id'])) {
   exit(); // Stop further execution
 }
 
-$productData = $obj->getData("product","available=1")->fetch_all(MYSQLI_ASSOC);
+$productData = $obj->getDataSpec("*", "product", "available=1")->fetch_all(MYSQLI_ASSOC);
 $roomsNums = $obj->getData("rooms", "1", "room_no")->fetch_all(MYSQLI_ASSOC);
 $userID = $_SESSION['id'];
 $lastOrderID = $obj->getData("orders", "user_id={$userID} order by id desc limit 1", "id");
-$lastOrderID=$lastOrderID->fetch_assoc();
-if($lastOrderID!=null){
-  $lastOrderID=$lastOrderID['id'];
-  $lastOrder = $obj->getData("orders_product as o_p, product as p", "p.id = o_p.product_id 
-  and o_p.order_id={$lastOrderID}", "p.name,p.image")->fetch_all(MYSQLI_ASSOC);
+$lastOrderID = $lastOrderID->fetch_assoc();
+if ($lastOrderID != null) {
+  $lastOrderID = $lastOrderID['id'];
+  $lastOrder = $obj->getDataSpec("p.name,p.image", "orders_product as o_p, product as p", "p.id = o_p.product_id and o_p.order_id={$lastOrderID}")->fetch_all(MYSQLI_ASSOC);
 }
 ?>
 <style>
@@ -37,14 +36,17 @@ if($lastOrderID!=null){
     margin: auto;
     display: inline-block;
   }
-  .quantityTd{
+
+  .quantityTd {
     text-align: center;
     width: 0% !important;
   }
-  .priceTd{
+
+  .priceTd {
     width: 20%;
   }
-  table input{
+
+  table input {
     cursor: default;
   }
 </style>
@@ -56,23 +58,20 @@ if($lastOrderID!=null){
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" 
-  integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <title>User Order</title>
 </head>
 
 <body>
-    <?PHP include "../components/nav.php" ?>
+  <?PHP include "../components/nav.php" ?>
   <section class="row g-0 mt-4 justify-content-evenly">
     <div class=" col-7 h-50 row ">
       <div class="last row h-50 mb-2 g-0">
         <?php
-        if(isset($lastOrder)){
+        if (isset($lastOrder)) {
           echo "<h4 class='text-center bg-dark rounded text-light py-1'>My last order was </h4>";
           for ($i = 0; $i <  count($lastOrder); $i++) {
             echo "<div class=' card col-3 mb-2  text-center'>";
@@ -84,7 +83,7 @@ if($lastOrderID!=null){
             }
             echo "</div>";
           }
-        }else{
+        } else {
           echo "<h4 class='text-center'>No last Order to Show</h4>";
         }
         ?>
@@ -92,10 +91,10 @@ if($lastOrderID!=null){
       <hr>
       <div class="allproduct row g-0">
         <div class="input-group mb-3 w-50">
-        <input type="text" class="form-control" placeholder="Search For Product">
-        <button class="btn btn-outline-secondary searchBtn" >
-          <i class="fa-solid fa-magnifying-glass"></i>
-        </button>
+          <input type="text" class="form-control" placeholder="Search For Product">
+          <button class="btn btn-outline-secondary searchBtn">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
         </div>
         <h4 class='text-center bg-dark rounded text-light p-1'>Available product </h4>
         <?php
@@ -150,13 +149,13 @@ if($lastOrderID!=null){
             </select>
             <hr>
             <input type="submit" value="confirm" class="btn btn-outline-success">
-            
+
           </form>
           <?php
-            if(isset($_GET["err"])){
-              echo "<h5 class='text-danger text-center'>caution: You didnt select a product</h5>";
-            }
-            ?>
+          if (isset($_GET["err"])) {
+            echo "<h5 class='text-danger text-center'>caution: You didnt select a product</h5>";
+          }
+          ?>
         </div>
         <div class="card-footer text-center">
           <h3>Total price is 00.00</h3>
@@ -174,8 +173,8 @@ if($lastOrderID!=null){
   let cardsName = document.querySelectorAll(".productcard h4");
   let table = document.querySelector(".table tbody");
   let totalPrice = document.querySelector(".card-footer h3");
-  let searchBtn=document.querySelector(".searchBtn");
-  searchBtn.addEventListener("click",fitlerProduct);
+  let searchBtn = document.querySelector(".searchBtn");
+  searchBtn.addEventListener("click", fitlerProduct);
   cardsImg.forEach(card => {
     card.addEventListener("click", addRow, {
       once: true
@@ -273,17 +272,17 @@ if($lastOrderID!=null){
     }
     return +sum.toFixed(3);
   }
+
   function fitlerProduct() {
-    let searchValue=this.previousElementSibling.value;
-    let regex= new RegExp(searchValue,"i");
-    for(let i=0;i<cardsName.length;i++){
-      if(cardsName[i].parentElement.classList.contains("d-none")){
+    let searchValue = this.previousElementSibling.value;
+    let regex = new RegExp(searchValue, "i");
+    for (let i = 0; i < cardsName.length; i++) {
+      if (cardsName[i].parentElement.classList.contains("d-none")) {
         cardsName[i].parentElement.classList.remove("d-none");
       }
-      if(searchValue === ""){
+      if (searchValue === "") {
 
-      }
-      else if(!(regex.test(cardsName[i].innerText)))
+      } else if (!(regex.test(cardsName[i].innerText)))
         cardsName[i].parentElement.classList.add("d-none");
     }
   }

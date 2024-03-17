@@ -73,60 +73,67 @@ $result = $db->getDataPagination("user u INNER JOIN rooms r ON u.room_no = r.roo
         <p class="fs-3 fw-bold ">All Users</p>
         <a class="btn btn-primary" href="userForm.php">Add User</a>
     </div>
-
-    <div class="mx-5 my-1 text-center rounded">
-        <table class="table  table-striped">
-            <thead class="text-center">
-                <tr>
-                    <th>Name</th>
-                    <th>Image</th>
-                    <th>Room</th>
-                    <th>Ext</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody class="text-center">
-                <?php
-                while ($row = $result->fetch_assoc()) {
-                    echo "<tr>";
-                    echo "<td>" . $row['name'] . "</td>";
-                    echo "<td><img  src='../imgs/users/{$row['image']}' class='rounded-circle' /></td>";
-                    echo "<td>" . $row['room_no'] . "</td>";
-                    echo "<td>" . $row['ext'] . "</td>";
-                    echo "<td >
+    <?php
+    if ($result->num_rows === 0) {
+        echo "<div class='text-center text-danger fs-1 fw-bold mt-5'>No users available, Add some users!</div>";
+    } else {
+    ?>
+        <div class="mx-5 my-1 text-center rounded">
+            <table class="table  table-striped">
+                <thead class="text-center">
+                    <tr>
+                        <th>Name</th>
+                        <th>Image</th>
+                        <th>Room</th>
+                        <th>Ext</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                    <?php
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<tr>";
+                        echo "<td>" . $row['name'] . "</td>";
+                        echo "<td><img  src='../imgs/users/{$row['image']}' class='rounded-circle' /></td>";
+                        echo "<td>" . $row['room_no'] . "</td>";
+                        echo "<td>" . $row['ext'] . "</td>";
+                        echo "<td >
                         <a href='updateUser.php?id={$row['id']}' class='btn btn-warning'>Edit</a>
                         <a href='deleteUser.php?id={$row['id']}&page=$page' class='btn btn-danger'>Delete</a>
                         </td>";
-                    echo "</tr>";
-                }
-                ?>
-            </tbody>
-        </table>
-
-        <!-- Pagination -->
-        <div class="mx-auto" style="width: fit-content;">
-            <nav aria-label="Page navigation example" class="text-center">
-                <ul class="pagination text-center">
-                    <?php
-                    // Previous Page link
-                    if ($page > 1) {
-                        echo '<li class="page-item"><a class="page-link" href="?page=' . ($page - 1) . '">Previous</a></li>';
-                    }
-
-                    // Page links
-                    for ($i = 1; $i <= $total_pages; $i++) {
-                        echo '<li class="page-item ' . ($page == $i ? 'active' : '') . '"><a class="page-link" href="?page=' . $i . '">' . $i . '</a></li>';
-                    }
-
-                    // Next Page link
-                    if ($page < $total_pages) {
-                        echo '<li class="page-item"><a class="page-link" href="?page=' . ($page + 1) . '">Next</a></li>';
+                        echo "</tr>";
                     }
                     ?>
-                </ul>
-            </nav>
+                </tbody>
+            </table>
+
+            <!-- Pagination -->
+            <div class="mx-auto" style="width: fit-content;">
+                <nav aria-label="Page navigation example" class="text-center">
+                    <ul class="pagination text-center">
+                        <?php
+                        // Previous Page link
+                        if ($page > 1) {
+                            echo '<li class="page-item"><a class="page-link" href="?page=' . ($page - 1) . '">Previous</a></li>';
+                        }
+
+                        // Page links
+                        for ($i = 1; $i <= $total_pages; $i++) {
+                            echo '<li class="page-item ' . ($page == $i ? 'active' : '') . '"><a class="page-link" href="?page=' . $i . '">' . $i . '</a></li>';
+                        }
+
+                        // Next Page link
+                        if ($page < $total_pages) {
+                            echo '<li class="page-item"><a class="page-link" href="?page=' . ($page + 1) . '">Next</a></li>';
+                        }
+                        ?>
+                    </ul>
+                </nav>
+            </div>
         </div>
-    </div>
+    <?php
+    }
+    ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
     </script>
 </body>
