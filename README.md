@@ -27,6 +27,7 @@ Here's how you can set it to use SMTP server smtp.gmail.com and port 587:
       Restart your web server for the changes to take effect.
 
 3. add this view so the project can work
+   
 
 ```
     CREATE VIEW order_details_view AS
