@@ -1,6 +1,22 @@
 # Cafeteria-System-PHP
 
-To configure the PHP mail() function to use SMTP with Gmail, you need to modify the php.ini configuration file.
+This repository contains a Cafeteria Management System developed using PHP. The system allows for managing orders, products, and users efficiently.
+
+## Features
+
+- **User Management**: Admin can manage user roles and permissions.
+- **Product Management**: Add, update, and delete products available in the cafeteria.
+- **Order Management**: Place, view, and manage customer orders.
+- **Authentication**: Secure login and registration system.
+
+## Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/ahmeddmahmoud/Cafeteria-System-PHP.git
+
+
+2. To configure the PHP mail() function to use SMTP with Gmail, you need to modify the php.ini configuration file.
 Here's how you can set it to use SMTP server smtp.gmail.com and port 587:
 
 Open your php.ini file in a text editor.
@@ -10,7 +26,7 @@ Update the SMTP parameter to smtp.gmail.com and the smtp_port parameter to 587.
 Save the changes to the php.ini file.
 Restart your web server for the changes to take effect.
 
-add this view so the project can work
+3.add this view so the project can work
 
 ```
     CREATE VIEW order_details_view AS
